@@ -1,0 +1,457 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>CPE Full 1 · Part 6 – Husband and Wife</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Source+Serif+4:wght@300;400;600&display=swap');
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+  body{min-height:100vh;background:linear-gradient(135deg,#0f2027,#203a43,#2c5364);font-family:'Source Serif 4',serif;color:#e8e0d5;}
+  header{background:rgba(0,0,0,0.4);border-bottom:2px solid #c9a84c;padding:16px 32px;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;z-index:100;backdrop-filter:blur(12px);}
+  .logo{font-family:'Playfair Display',serif;color:#c9a84c;letter-spacing:3px;font-size:1rem;text-transform:uppercase;}
+  .header-btn{background:transparent;border:1px solid #c9a84c;color:#c9a84c;padding:6px 18px;cursor:pointer;border-radius:3px;font-size:0.8rem;letter-spacing:1px;font-family:inherit;}
+  .header-btn:hover{background:rgba(201,168,76,0.15);}
+  .page{display:none;}.page.active{display:block;}
+  .card{background:rgba(255,255,255,0.05);border:1px solid rgba(201,168,76,0.3);border-radius:10px;padding:36px;max-width:900px;margin:40px auto;backdrop-filter:blur(8px);}
+  h1{font-family:'Playfair Display',serif;color:#c9a84c;font-size:1.7rem;margin-bottom:6px;}
+  .subtitle{color:#aaa;font-size:0.9rem;margin-bottom:28px;line-height:1.6;}
+  .home-link{display:inline-block;margin-bottom:20px;color:#c9a84c;font-size:0.85rem;text-decoration:none;letter-spacing:1px;}
+  .home-link:hover{text-decoration:underline;}
+  input[type="text"],input[type="password"]{width:100%;padding:12px 16px;background:rgba(255,255,255,0.08);border:1px solid rgba(201,168,76,0.5);border-radius:4px;color:#e8e0d5;font-size:1rem;font-family:inherit;margin-bottom:20px;}
+  input::placeholder{color:#888;}
+  .btn-primary{background:#c9a84c;color:#0f2027;border:none;padding:12px 32px;font-size:1rem;font-weight:bold;border-radius:4px;cursor:pointer;letter-spacing:1px;font-family:inherit;}
+  .btn-primary:hover{background:#d9bb6a;}
+  .passage-box{background:rgba(0,0,0,0.25);border:1px solid rgba(255,255,255,0.08);border-radius:8px;padding:24px 28px;margin-bottom:28px;line-height:2.0;font-size:0.95rem;color:#ddd;}
+  .passage-box h2{font-family:'Playfair Display',serif;color:#c9a84c;text-align:center;margin-bottom:18px;font-size:1.2rem;letter-spacing:2px;}
+  .passage-box p{margin-bottom:14px;}
+  .gap-block{display:inline-flex;align-items:center;gap:8px;margin:6px 0;background:rgba(201,168,76,0.07);border:1px dashed rgba(201,168,76,0.4);border-radius:6px;padding:6px 14px;}
+  .gap-label{color:#c9a84c;font-weight:bold;font-size:0.85rem;white-space:nowrap;}
+  .gap-select{background:#1a2a35;color:#e8e0d5;border:1px solid rgba(201,168,76,0.5);border-radius:4px;padding:5px 10px;font-family:inherit;font-size:0.88rem;cursor:pointer;}
+  .gap-select:focus{outline:none;border-color:#c9a84c;}
+  .gap-select.answered{border-color:#c9a84c;background:rgba(201,168,76,0.12);}
+  .paragraphs-box{background:rgba(0,0,0,0.2);border:1px solid rgba(255,255,255,0.07);border-radius:8px;padding:20px 24px;margin-bottom:28px;}
+  .paragraphs-box h3{font-family:'Playfair Display',serif;color:#c9a84c;font-size:1rem;margin-bottom:16px;letter-spacing:1px;}
+  .para-item{margin-bottom:14px;padding:12px 16px;background:rgba(255,255,255,0.03);border-radius:6px;border-left:3px solid rgba(201,168,76,0.4);font-size:0.9rem;line-height:1.7;color:#ccc;}
+  .para-item strong{color:#c9a84c;margin-right:8px;}
+  .progress-wrap{margin-bottom:24px;}
+  .progress-top{display:flex;justify-content:space-between;color:#aaa;font-size:0.82rem;margin-bottom:6px;}
+  .progress-bar-bg{background:rgba(255,255,255,0.06);border-radius:4px;height:4px;}
+  .progress-bar{background:#c9a84c;height:4px;border-radius:4px;transition:width 0.3s;width:0%;}
+  .score-box{text-align:center;padding:20px 0 30px;}
+  .big-score{font-family:'Playfair Display',serif;font-size:4rem;color:#c9a84c;}
+  .section-title{color:#c9a84c;font-weight:bold;letter-spacing:1px;margin-bottom:14px;font-size:0.85rem;text-transform:uppercase;}
+  .sub-card{margin-bottom:16px;padding:18px 20px;background:rgba(255,255,255,0.04);border-radius:8px;border:1px solid rgba(255,255,255,0.08);}
+  .sub-header{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:12px;flex-wrap:wrap;gap:8px;}
+  .sub-name{font-size:1rem;font-weight:bold;}
+  .sub-meta{color:#777;font-size:0.78rem;margin-top:2px;}
+  .sub-score{color:#c9a84c;font-weight:bold;font-size:1.1rem;}
+  .ans-pills{display:flex;gap:6px;flex-wrap:wrap;}
+  .pill{text-align:center;}
+  .pill-label{font-size:0.66rem;color:#777;margin-bottom:3px;}
+  .pill-val{display:inline-flex;align-items:center;justify-content:center;min-width:32px;height:32px;border-radius:16px;font-weight:bold;font-size:0.82rem;padding:0 6px;}
+  .pill-val.ok{background:rgba(111,207,151,0.2);border:2px solid #6fcf97;color:#6fcf97;}
+  .pill-val.bad{background:rgba(235,87,87,0.2);border:2px solid #eb5757;color:#eb5757;}
+  .pill-val.neutral{background:rgba(201,168,76,0.15);border:2px solid #c9a84c;color:#c9a84c;}
+  .btn-sm{background:transparent;border:1px solid #c9a84c;color:#c9a84c;padding:4px 12px;cursor:pointer;border-radius:3px;font-size:0.76rem;font-family:inherit;}
+  .btn-sm.danger{border-color:#eb5757;color:#eb5757;}
+  .btn-sm.danger:hover{background:rgba(235,87,87,0.1);}
+  .no-subs{color:#666;font-style:italic;text-align:center;padding:30px;}
+  .error-msg{color:#eb5757;margin-bottom:12px;font-size:0.9rem;}
+  .login-wrap{display:flex;align-items:center;justify-content:center;min-height:80vh;}
+  .login-card{background:rgba(255,255,255,0.05);border:1px solid rgba(201,168,76,0.3);border-radius:10px;padding:40px;max-width:380px;width:100%;text-align:center;}
+  .login-card h1{font-family:'Playfair Display',serif;color:#c9a84c;font-size:1.5rem;margin-bottom:8px;}
+  .login-card p{color:#888;font-size:0.88rem;margin-bottom:24px;}
+  .key-editor{margin-bottom:28px;padding:20px;background:rgba(201,168,76,0.05);border-radius:6px;border:1px solid rgba(201,168,76,0.25);}
+  .key-row{padding:6px 0;border-bottom:1px solid rgba(255,255,255,0.05);font-size:0.83rem;display:flex;gap:10px;align-items:center;}
+  .key-label{color:#c9a84c;font-weight:bold;min-width:50px;flex-shrink:0;}
+  .key-select{background:#1a2a35;color:#e8e0d5;border:1px solid rgba(201,168,76,0.4);border-radius:3px;padding:4px 8px;font-family:inherit;font-size:0.83rem;}
+  .review-q{margin-bottom:20px;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.08);border-radius:8px;padding:18px 20px;}
+  .review-q-num{color:#c9a84c;font-size:0.78rem;letter-spacing:1px;text-transform:uppercase;margin-bottom:10px;}
+  .review-row{display:flex;align-items:center;gap:10px;padding:8px 12px;border-radius:5px;margin-bottom:6px;font-size:0.9rem;}
+  .review-row.correct{background:rgba(111,207,151,0.15);border:1px solid rgba(111,207,151,0.35);color:#6fcf97;}
+  .review-row.wrong{background:rgba(235,87,87,0.12);border:1px solid rgba(235,87,87,0.3);color:#eb5757;}
+  .review-row.neutral{background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.06);color:#888;}
+  .review-note{font-size:0.82rem;color:#888;font-style:italic;margin-top:8px;padding-top:8px;border-top:1px solid rgba(255,255,255,0.06);}
+  .review-note .hl{color:#c9a84c;font-style:normal;}
+  @media(max-width:600px){.card{padding:20px 16px;margin:20px 12px;}}
+</style>
+</head>
+<body>
+<header>
+  <span class="logo">CPE Full 1 · Part 6</span>
+  <div id="header-right"><button class="header-btn" onclick="goTo('login')">Teacher Login</button></div>
+</header>
+<div id="login-status" style="display:none;background:rgba(0,0,0,0.3);border-bottom:1px solid rgba(201,168,76,0.2);padding:8px 32px;display:flex;justify-content:space-between;align-items:center;font-size:0.8rem;">
+  <div style="color:#888;">Signed in as <strong id="login-status-name" style="color:#c9a84c;"></strong> &nbsp;·&nbsp; <span id="login-status-class"></span></div>
+  <div style="display:flex;gap:10px;align-items:center;">
+    <a href="login.html" style="color:#888;text-decoration:none;font-size:0.75rem;letter-spacing:1px;">My Results</a>
+    <a href="index.html" style="color:#888;text-decoration:none;font-size:0.75rem;letter-spacing:1px;">Activities</a>
+    <button onclick="signOutUser()" style="background:transparent;border:1px solid rgba(235,87,87,0.4);color:#eb5757;padding:3px 10px;cursor:pointer;border-radius:3px;font-size:0.72rem;font-family:inherit;letter-spacing:1px;">Sign Out</button>
+  </div>
+</div>
+
+<!-- HOME -->
+<div id="page-home" class="page active">
+  <div class="card">
+    <a class="home-link" href="index.html">← Back to Home</a>
+    <h1>CPE · Part 6</h1>
+    <p class="subtitle">Gapped Text · <strong style="color:#c9a84c;">Husband and Wife</strong><br>Seven paragraphs have been removed from the extract. Choose from paragraphs A–H the one which fits each gap (37–43). There is one extra paragraph you do not need to use.</p>
+    <div style="margin-top:24px;">
+      <input type="text" id="student-name" placeholder="Enter your full name..." style="width:100%;max-width:400px;padding:12px 16px;background:rgba(255,255,255,0.08);border:1px solid rgba(201,168,76,0.5);border-radius:4px;color:#e8e0d5;font-size:1rem;font-family:inherit;outline:none;display:block;margin-bottom:12px;"/>
+      <button class="btn-primary" onclick="startQuiz()">Start &#8594;</button>
+    </div>
+  </div>
+</div>
+
+<!-- LOGIN -->
+<div id="page-login" class="page">
+  <div class="login-wrap">
+    <div class="login-card">
+      <h1>Teacher Login</h1><p>Enter your password</p>
+      <input type="password" id="admin-pass" placeholder="Password" style="text-align:center;letter-spacing:4px;" onkeydown="if(event.key==='Enter')adminLogin()"/>
+      <div class="error-msg" id="login-error" style="display:none;">Incorrect password</div>
+      <button class="btn-primary" onclick="adminLogin()">Login →</button>
+    </div>
+  </div>
+</div>
+
+<!-- ADMIN -->
+<div id="page-admin" class="page">
+  <div class="card">
+    <div class="section-title">Answer Key <span style="color:#777;font-size:0.75rem;font-weight:normal;">(set answers — all blank until you fill them in)</span></div>
+    <div class="key-editor" id="key-editor"></div>
+    <div class="section-title" id="sub-count-label">Student Submissions</div>
+    <div id="submissions-container"><p class="no-subs">No submissions yet.</p></div>
+  </div>
+</div>
+
+<!-- QUIZ -->
+<div id="page-quiz" class="page">
+  <div class="card">
+    <a class="home-link" href="#" onclick="goHome();return false;">← Back to Home</a>
+
+    <div class="progress-wrap">
+      <div class="progress-top"><span id="prog-text">0 of 7 answered</span><span id="prog-pct">0%</span></div>
+      <div class="progress-bar-bg"><div class="progress-bar" id="prog-bar"></div></div>
+    </div>
+
+    <!-- Removed paragraphs reference -->
+    <div class="paragraphs-box">
+      <h3>Paragraphs A–H</h3>
+      <div class="para-item"><strong>A</strong> Not very inspiring, he thought guiltily, assessing the situation in the light of Joan's projected foray into the world of work. 'I meant it, you know. You go ahead, make enquiries, find out the sort of thing you'd enjoy.' But the false heartiness in his tone did not deceive and she bit her lip, glanced away from him.</div>
+      <div class="para-item"><strong>B</strong> 'Nonsense,' he said. 'We've always said you would, when the children were old enough.' 'Oh, I know you've always said you wouldn't mind. But that's very different from not minding when it actually happens,' she replied. 'Anyway, I thought you'd more or less made up your mind to do an art course.'</div>
+      <div class="para-item"><strong>C</strong> She went back to her book. Thanet picked up the newspaper. He hadn't been reading for more than a few minutes, however, when he realised that Joan was unusually restless. Normally, when she was reading, she plunged at once into total absorption. On one occasion, Thanet had counted up to a hundred from the time he asked her a question to the moment when she looked up, eyes unfocused, and said, 'What did you say?'</div>
+      <div class="para-item"><strong>D</strong> 'I wanted to speak to you about it first. Oh, darling,' and she came to kneel before him, took his hands, 'you're sure you don't mind?' 'No,' he lied valiantly, 'I knew, of course, that the time would come, sooner or later ...'</div>
+      <div class="para-item"><strong>E</strong> He grinned. 'To be honest, yes. But I know what you mean.' 'Do you?' she said eagerly. 'You don't think I'm being stupid?'</div>
+      <div class="para-item"><strong>F</strong> And so it was that on this blustery March evening, blissfully unaware of the nasty little shock that Fate was preparing for him, he stretched his toes out to the fire, settled back into his armchair and reflected that he wouldn't change places with any man in the world.</div>
+      <div class="para-item"><strong>G</strong> And she was right, of course, he was. They had been married for eight years now and for all that time Joan had been the good little wife who stayed at home, ran the house efficiently and without fuss, coped with two children and made sure that everything was geared to Thanet's convenience. Unlike the wives of so many of his colleagues, Joan had never complained or nagged over the demands of his job, the irregular hours.</div>
+      <div class="para-item"><strong>H</strong> To his surprise, she still did not respond. 'Joan?' He was beginning to feel the first faint stirrings of alarm. She shook her head slowly then, a fierce little shake. 'Oh, it's all right. There's nothing wrong, not really. It's just that I've a nasty feeling you aren't going to like what I'm trying to pluck up the courage to say.'</div>
+    </div>
+
+    <!-- Passage with gaps -->
+    <div class="passage-box">
+      <h2>Husband and Wife</h2>
+      <p>Detective Inspector Luke Thanet was a happy man. He had an interesting job, no pressing financial worries, two healthy, lively children and, perhaps best of all, a wife who was all that any man could wish for.</p>
+
+      <div class="gap-block"><span class="gap-label">Gap 37</span><select class="gap-select" id="gap-37" onchange="selectAnswer(37,this.value)"><option value="">— choose —</option><option>A</option><option>B</option><option>C</option><option>D</option><option>E</option><option>F</option><option>G</option><option>H</option></select></div>
+
+      <p>Reaching for his pipe, he tapped it out, scraped it, inspected it, blew through it, then filled it with loving care. 'It's nine o'clock,' Joan said. 'D'you want the news?' 'I don't think so. Do you?' 'Not particularly.'</p>
+
+      <div class="gap-block"><span class="gap-label">Gap 38</span><select class="gap-select" id="gap-38" onchange="selectAnswer(38,this.value)"><option value="">— choose —</option><option>A</option><option>B</option><option>C</option><option>D</option><option>E</option><option>F</option><option>G</option><option>H</option></select></div>
+
+      <p>Now she fidgeted, crossed and re-crossed her legs, fiddled with her hair, chewed the tip of her thumb. Eventually, 'Book no good?' Thanet enquired. She looked up at once. 'Mmm? Oh, it's all right. Very interesting, in fact.' 'What's the matter, then?' She hesitated, gave him a speculative look. He laid down his newspaper. 'Come on, love. Out with it.'</p>
+
+      <p>'Oh?' he said, warily. She looked at him with something approaching desperation. 'It's just that ... oh dear ... Look, you know we've said all along that when Ben starts school I'll go back to work? Well, that's only six months away now. So I really ought to start thinking about what I want to do.' 'I see,' Thanet said slowly. 'There you are. I knew you wouldn't like it.' 'Darling, don't be silly. It's just that, well, the idea will take a bit of getting used to after all this time, that's all.' 'Don't pretend,' she said. 'You're dead against it really, aren't you? I can tell.'</p>
+
+      <div class="gap-block"><span class="gap-label">Gap 40</span><select class="gap-select" id="gap-40" onchange="selectAnswer(40,this.value)"><option value="">— choose —</option><option>A</option><option>B</option><option>C</option><option>D</option><option>E</option><option>F</option><option>G</option><option>H</option></select></div>
+
+      <p>Now, in a flash, he saw all of that changing. Uncomfortable adjustments would have to be made, there would be inconvenience, irritation, arguments. Theory and practice, he now realised, were very different matters. All very well, in the past, to contemplate with equanimity the prospect of Joan returning to work one day, but to accept that that day was almost here ... No, he didn't like it at all.</p>
+
+      <div class="gap-block"><span class="gap-label">Gap 41</span><select class="gap-select" id="gap-41" onchange="selectAnswer(41,this.value)"><option value="">— choose —</option><option>A</option><option>B</option><option>C</option><option>D</option><option>E</option><option>F</option><option>G</option><option>H</option></select></div>
+
+      <p>'No. Oh, I did consider it seriously, at one time. I'm very interested, as you know. But ... I don't know, I'd like to feel I was doing something, well, less self-indulgent, more useful. Oh, dear, does that sound horribly priggish?'</p>
+
+      <div class="gap-block"><span class="gap-label">Gap 42</span><select class="gap-select" id="gap-42" onchange="selectAnswer(42,this.value)"><option value="">— choose —</option><option>A</option><option>B</option><option>C</option><option>D</option><option>E</option><option>F</option><option>G</option><option>H</option></select></div>
+
+      <p>'Not in the least. What sort of thing did you have in mind?' 'Well, that's the trouble. I'm just not qualified for anything. That's why I feel I ought to start thinking about it now, so that if I have to do a course, or any special training, I can get organised for September.' 'Yes, I can see that. You haven't gone into it yet, then?'</p>
+
+      <div class="gap-block"><span class="gap-label">Gap 43</span><select class="gap-select" id="gap-43" onchange="selectAnswer(43,this.value)"><option value="">— choose —</option><option>A</option><option>B</option><option>C</option><option>D</option><option>E</option><option>F</option><option>G</option><option>H</option></select></div>
+
+      <p>Very much later, he told himself, as he drove to work next morning. And preferably not at all.</p>
+    </div>
+
+    <button class="btn-primary" onclick="submitQuiz()" style="margin-top:10px;">Submit Answers</button>
+  </div>
+</div>
+
+<!-- SUBMITTED -->
+<div id="page-submitted" class="page">
+  <div class="card">
+    <div class="score-box">
+      <div style="color:#aaa;font-size:0.9rem;margin-bottom:8px;">Well done, <span id="done-name"></span>!</div>
+      <div class="big-score" id="done-score"></div>
+      <div style="color:#aaa;margin-top:10px;" id="done-msg"></div>
+      <div style="color:#666;font-size:0.85rem;margin-top:6px;" id="done-note"></div>
+    </div>
+    <div id="done-breakdown"></div>
+    <div style="display:flex;gap:12px;flex-wrap:wrap;margin-top:24px;">
+      <button class="btn-primary" onclick="openReview()">Review Answers</button>
+      <button class="header-btn" onclick="goHome()">Try Again</button>
+    </div>
+  </div>
+</div>
+
+<!-- REVIEW -->
+<div id="page-review" class="page">
+  <div class="card">
+    <a class="home-link" href="#" onclick="goTo('submitted');return false;">← Back to Results</a>
+    <h1 style="margin-bottom:20px;">Answer Review</h1>
+    <div id="review-container"></div>
+    <button class="header-btn" style="margin-top:20px;" onclick="goHome()">Start Over</button>
+  </div>
+</div>
+
+<script>
+const STORAGE_KEY = 'cpe1_p6_subs';
+const QUESTIONS = [
+  {n:37},{n:38},{n:40},{n:41},{n:42},{n:43}
+];
+const OPTS = ['A','B','C','D','E','F','G','H'];
+
+let currentStudent='', answers={}, submitted=false;
+let submissions=JSON.parse(localStorage.getItem(STORAGE_KEY)||'[]');
+const DEFAULT_KEY={37:'F',38:'C',40:'G',41:'B',42:'E',43:'D'};
+let answerKey=JSON.parse(localStorage.getItem(STORAGE_KEY+'_key')||'null')||{...DEFAULT_KEY};
+
+function saveData(){localStorage.setItem(STORAGE_KEY,JSON.stringify(submissions));}
+function saveKey(){localStorage.setItem(STORAGE_KEY+'_key',JSON.stringify(answerKey));}
+
+function goTo(page){
+  document.querySelectorAll('.page').forEach(function(p){p.classList.remove('active');});
+  document.getElementById('page-'+page).classList.add('active');
+  var hr=document.getElementById('header-right');
+  var btn=document.createElement('button');
+  btn.className='header-btn';
+  if(page==='admin'){btn.textContent='Logout';btn.onclick=function(){goTo('home');};}
+  else if(page==='login'){btn.textContent='← Back';btn.onclick=function(){goTo('home');};}
+  else{btn.textContent='Teacher Login';btn.onclick=function(){goTo('login');};}
+  hr.innerHTML='';hr.appendChild(btn);
+}
+
+function goHome(){
+  currentStudent='';answers={};submitted=false;
+  document.getElementById('student-name').value='';
+  QUESTIONS.forEach(q=>{
+    const el=document.getElementById('gap-'+q.n);
+    if(el){el.value='';el.classList.remove('answered');}
+  });
+  goTo('home');
+}
+
+function startQuiz(){
+  const name=document.getElementById('student-name').value.trim();
+  if(!name){alert('Please enter your name.');return;}
+  currentStudent=name;answers={};submitted=false;
+  QUESTIONS.forEach(q=>{
+    const el=document.getElementById('gap-'+q.n);
+    if(el){el.value='';el.classList.remove('answered');}
+  });
+  updateProgress();
+  goTo('quiz');
+}
+
+function selectAnswer(qn,val){
+  if(submitted)return;
+  if(val){
+    answers[qn]=val;
+    const el=document.getElementById('gap-'+qn);
+    if(el) el.classList.add('answered');
+  } else {
+    delete answers[qn];
+    const el=document.getElementById('gap-'+qn);
+    if(el) el.classList.remove('answered');
+  }
+  updateProgress();
+}
+
+function updateProgress(){
+  const filled=Object.keys(answers).length;
+  const total=QUESTIONS.length;
+  const pct=Math.round(filled/total*100);
+  document.getElementById('prog-text').textContent=filled+' of '+total+' answered';
+  document.getElementById('prog-pct').textContent=pct+'%';
+  document.getElementById('prog-bar').style.width=pct+'%';
+}
+
+function submitQuiz(){
+  const unanswered=QUESTIONS.filter(q=>!answers[q.n]).length;
+  if(unanswered&&!confirm(unanswered+' gap(s) unanswered. Submit anyway?'))return;
+  submitted=true;
+  const hasKey=Object.keys(answerKey).length>0;
+  let score=0,total=QUESTIONS.length;
+  if(hasKey){
+    QUESTIONS.forEach(q=>{if(answerKey[q.n]&&answers[q.n]===answerKey[q.n])score++;});
+  }
+  const sub={id:Date.now(),name:currentStudent,cls:(function(){try{var u=JSON.parse(localStorage.getItem("cam_user")||"null");return u?u.cls:"";}catch(e){return"";}})(),answers:{...answers},score:hasKey?score:undefined,total,submittedAt:new Date().toLocaleString()};
+  submissions.push(sub);saveData();
+  saveToSupabase({
+    student_name:sub.name||'',
+    class_code:sub.cls||'',
+    activity:'CPE Full 1 · Part 6',
+    storage_key:STORAGE_KEY,
+    score:typeof sub.score==='number'?sub.score:null,
+    total:sub.total||null,
+    answers:JSON.stringify(sub.answers||{}),
+    submitted_at:sub.submittedAt||new Date().toLocaleString()
+  });
+  document.getElementById('done-name').textContent=currentStudent;
+  if(hasKey){
+    document.getElementById('done-score').textContent=score+'/'+total;
+    document.getElementById('done-msg').textContent=score>=6?'Excellent work!':score>=4?'Good effort!':'Keep practising!';
+    document.getElementById('done-note').textContent='';
+    showResultBreakdown(sub);
+  } else {
+    document.getElementById('done-score').textContent='✓';
+    document.getElementById('done-msg').textContent='Submitted! Your teacher will mark your answers.';
+    document.getElementById('done-note').textContent='The answer key has not been set yet.';
+    document.getElementById('done-breakdown').innerHTML='';
+  }
+  goTo('submitted');
+}
+
+function showResultBreakdown(sub){
+  let html='<div style="display:flex;flex-wrap:wrap;gap:8px;margin-top:8px;">';
+  QUESTIONS.forEach(q=>{
+    const k=answerKey[q.n];const s=sub.answers[q.n]||'?';
+    const cls=k?(s===k?'ok':'bad'):'neutral';
+    html+=`<div class="pill"><div class="pill-label">Gap ${q.n}</div><div class="pill-val ${cls}">${s}</div></div>`;
+  });
+  html+='</div>';
+  document.getElementById('done-breakdown').innerHTML=html;
+}
+
+function adminLogin(){
+  if(document.getElementById('admin-pass').value==='1996'){
+    document.getElementById('login-error').style.display='none';
+    document.getElementById('admin-pass').value='';
+    renderAdmin();goTo('admin');
+  } else document.getElementById('login-error').style.display='block';
+}
+
+function renderAdmin(){
+  let khtml='';
+  QUESTIONS.forEach(q=>{
+    const cur=answerKey[q.n]||'';
+    const opts=OPTS.map(o=>`<option value="${o}" ${cur===o?'selected':''}>${o}</option>`).join('');
+    khtml+=`<div class="key-row"><span class="key-label">Gap ${q.n}:</span><select class="key-select" id="key-${q.n}"><option value="">— not set —</option>${opts}</select></div>`;
+  });
+  document.getElementById('key-editor').innerHTML=khtml+`<button class="btn-sm" style="margin-top:10px;" onclick="saveKeyFromEditor()">Save Key</button>`;
+  renderSubmissions();
+}
+
+function saveKeyFromEditor(){
+  QUESTIONS.forEach(q=>{const el=document.getElementById('key-'+q.n);if(el&&el.value)answerKey[q.n]=el.value;else delete answerKey[q.n];});
+  saveKey();renderSubmissions();alert('Answer key saved!');
+}
+
+function renderSubmissions(){
+  const cnt=document.getElementById('submissions-container');
+  document.getElementById('sub-count-label').textContent='STUDENT SUBMISSIONS ('+submissions.length+')';
+  if(!submissions.length){cnt.innerHTML='<p class="no-subs">No submissions yet.</p>';return;}
+  const hasKey=Object.keys(answerKey).length>0;
+  let html='';
+  submissions.sort((a,b)=>b.id-a.id).forEach(sub=>{
+    let score=0;
+    if(hasKey) QUESTIONS.forEach(q=>{if(answerKey[q.n]&&sub.answers[q.n]===answerKey[q.n])score++;});
+    const scoreDisplay=hasKey?score+'/'+sub.total:'Pending key';
+    let pills='<div class="ans-pills">';
+    QUESTIONS.forEach(q=>{
+      const k=answerKey[q.n];const s=sub.answers[q.n]||'?';
+      const cls=k?(s===k?'ok':'bad'):'neutral';
+      pills+=`<div class="pill"><div class="pill-label">Gap ${q.n}</div><div class="pill-val ${cls}">${s}</div></div>`;
+    });
+    pills+='</div>';
+    html+=`<div class="sub-card"><div class="sub-header"><div><div class="sub-name">${sub.name}</div><div class="sub-meta">${sub.submittedAt}</div></div><div style="display:flex;align-items:center;gap:10px;"><span class="sub-score">${scoreDisplay}</span><button class="btn-sm danger" onclick="deleteSub(${sub.id})">Delete</button></div></div>${pills}</div>`;
+  });
+  cnt.innerHTML=html;
+}
+
+function deleteSub(id){
+  if(!confirm('Delete this submission?'))return;
+  submissions=submissions.filter(s=>s.id!==id);saveData();renderSubmissions();
+}
+
+function openReview(){
+  const hasKey=Object.keys(answerKey).length>0;
+  let html='';
+  QUESTIONS.forEach(q=>{
+    const qn=q.n;
+    const student=answers[qn]||null;
+    const correct=answerKey[qn]||null;
+    html+=`<div class="review-q"><div class="review-q-num">Gap ${qn}</div>`;
+    OPTS.forEach(o=>{
+      const isCorrect=correct&&o===correct;
+      const isStudent=student&&o===student;
+      const isWrong=isStudent&&correct&&o!==correct;
+      if(isCorrect||isStudent){
+        let cls='neutral',icon='·';
+        if(isCorrect&&isStudent){cls='correct';icon='✓';}
+        else if(isCorrect){cls='correct';icon='✓';}
+        else if(isWrong){cls='wrong';icon='✗';}
+        html+=`<div class="review-row ${cls}"><span>${icon}</span><strong>${o}</strong></div>`;
+      }
+    });
+    if(correct&&student&&student!==correct){
+      html+=`<div class="review-note">You chose <span class="hl">${student}</span> · Correct answer: <span class="hl">${correct}</span></div>`;
+    } else if(correct&&student===correct){
+      html+=`<div class="review-note" style="color:#6fcf97;">Correct!</div>`;
+    } else if(!hasKey){
+      html+=`<div class="review-note">Answer key not set yet — your teacher will review.</div>`;
+    } else if(!student){
+      html+=`<div class="review-note">Not answered.</div>`;
+    }
+    html+='</div>';
+  });
+  document.getElementById('review-container').innerHTML=html;
+  goTo('review');
+}
+
+function signOutUser(){
+  if(confirm('Sign out? Your submitted answers are already saved.')){
+    localStorage.removeItem('cam_user');
+    document.getElementById('login-status').style.display='none';
+    const inp=document.getElementById('student-name');
+    if(inp) inp.value='';
+  }
+}
+
+const SUPA_URL='https://dhvzvhdefhrfsbjmnnbz.supabase.co';
+const SUPA_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRodnp2aGRlZmhyZnNiam1ubmJ6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzMwODk1OTEsImV4cCI6MjA4ODY2NTU5MX0.SSkscvxvvgsbGaSfJT_1BbJSVbIzfxUMJaE03OQj5Xg';
+async function saveToSupabase(rec){
+  try{
+    const r=await fetch(SUPA_URL+'/rest/v1/submissions',{method:'POST',headers:{'Content-Type':'application/json','apikey':SUPA_KEY,'Authorization':'Bearer '+SUPA_KEY,'Prefer':'return=minimal'},body:JSON.stringify(rec)});
+    return r.ok;
+  }catch(e){return false;}
+}
+</script>
+
+<script>
+(function(){
+  try{
+    const u=JSON.parse(localStorage.getItem('cam_user')||'null');
+    const bar=document.getElementById('login-status');
+    const inp=document.getElementById('student-name');
+    if(!u){if(bar)bar.style.display='none';return;}
+    if(inp&&!inp.value)inp.value=u.name;
+    if(bar){
+      bar.style.display='flex';
+      const nm=document.getElementById('login-status-name');
+      const cl=document.getElementById('login-status-class');
+      if(nm)nm.textContent=u.name;
+      if(cl)cl.textContent='Class: '+u.cls;
+    }
+  }catch(e){}
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>CPE Full 1 · Part 7 – Kents Cavern</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Source+Serif+4:wght@300;400;600&display=swap');
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+  body{min-height:100vh;background:linear-gradient(135deg,#0f2027,#203a43,#2c5364);font-family:'Source Serif 4',serif;color:#e8e0d5;}
+  header{background:rgba(0,0,0,0.4);border-bottom:2px solid #c9a84c;padding:16px 32px;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;z-index:100;backdrop-filter:blur(12px);}
+  .logo{font-family:'Playfair Display',serif;color:#c9a84c;letter-spacing:3px;font-size:1rem;text-transform:uppercase;}
+  .header-btn{background:transparent;border:1px solid #c9a84c;color:#c9a84c;padding:6px 18px;cursor:pointer;border-radius:3px;font-size:0.8rem;letter-spacing:1px;font-family:inherit;}
+  .header-btn:hover{background:rgba(201,168,76,0.15);}
+  .page{display:none;}.page.active{display:block;}
+  .card{background:rgba(255,255,255,0.05);border:1px solid rgba(201,168,76,0.3);border-radius:10px;padding:36px;max-width:900px;margin:40px auto;backdrop-filter:blur(8px);}
+  h1{font-family:'Playfair Display',serif;color:#c9a84c;font-size:1.7rem;margin-bottom:6px;}
+  .subtitle{color:#aaa;font-size:0.9rem;margin-bottom:28px;line-height:1.6;}
+  .home-link{display:inline-block;margin-bottom:20px;color:#c9a84c;font-size:0.85rem;text-decoration:none;letter-spacing:1px;}
+  .home-link:hover{text-decoration:underline;}
+  input[type="text"],input[type="password"]{width:100%;padding:12px 16px;background:rgba(255,255,255,0.08);border:1px solid rgba(201,168,76,0.5);border-radius:4px;color:#e8e0d5;font-size:1rem;font-family:inherit;margin-bottom:20px;}
+  input::placeholder{color:#888;}
+  .btn-primary{background:#c9a84c;color:#0f2027;border:none;padding:12px 32px;font-size:1rem;font-weight:bold;border-radius:4px;cursor:pointer;letter-spacing:1px;font-family:inherit;}
+  .btn-primary:hover{background:#d9bb6a;}
+  .passage-box{background:rgba(0,0,0,0.25);border:1px solid rgba(255,255,255,0.08);border-radius:8px;padding:24px 28px;margin-bottom:28px;line-height:2.0;font-size:0.95rem;color:#ddd;}
+  .passage-box h2{font-family:'Playfair Display',serif;color:#c9a84c;text-align:center;margin-bottom:18px;font-size:1.2rem;letter-spacing:2px;}
+  .section-heading{color:#c9a84c;font-weight:bold;font-size:1rem;margin:20px 0 8px;font-family:'Playfair Display',serif;}
+  .passage-box p{margin-bottom:12px;}
+  .progress-wrap{margin-bottom:24px;}
+  .progress-top{display:flex;justify-content:space-between;color:#aaa;font-size:0.82rem;margin-bottom:6px;}
+  .progress-bar-bg{background:rgba(255,255,255,0.06);border-radius:4px;height:4px;}
+  .progress-bar{background:#c9a84c;height:4px;border-radius:4px;transition:width 0.3s;width:0%;}
+  .q-block{margin-bottom:12px;padding:14px 18px;background:rgba(255,255,255,0.04);border-radius:6px;border:1px solid rgba(255,255,255,0.07);display:flex;align-items:center;gap:16px;flex-wrap:wrap;}
+  .q-num{color:#c9a84c;font-weight:bold;font-size:0.85rem;min-width:28px;flex-shrink:0;}
+  .q-text{color:#ddd;font-size:0.92rem;flex:1;line-height:1.5;}
+  .gap-select{background:#1a2a35;color:#e8e0d5;border:1px solid rgba(201,168,76,0.5);border-radius:4px;padding:6px 12px;font-family:inherit;font-size:0.88rem;cursor:pointer;flex-shrink:0;}
+  .gap-select:focus{outline:none;border-color:#c9a84c;}
+  .gap-select.answered{border-color:#c9a84c;background:rgba(201,168,76,0.12);}
+  .score-box{text-align:center;padding:20px 0 30px;}
+  .big-score{font-family:'Playfair Display',serif;font-size:4rem;color:#c9a84c;}
+  .section-title{color:#c9a84c;font-weight:bold;letter-spacing:1px;margin-bottom:14px;font-size:0.85rem;text-transform:uppercase;}
+  .sub-card{margin-bottom:16px;padding:18px 20px;background:rgba(255,255,255,0.04);border-radius:8px;border:1px solid rgba(255,255,255,0.08);}
+  .sub-header{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:12px;flex-wrap:wrap;gap:8px;}
+  .sub-name{font-size:1rem;font-weight:bold;}
+  .sub-meta{color:#777;font-size:0.78rem;margin-top:2px;}
+  .sub-score{color:#c9a84c;font-weight:bold;font-size:1.1rem;}
+  .ans-pills{display:flex;gap:6px;flex-wrap:wrap;}
+  .pill{text-align:center;}
+  .pill-label{font-size:0.66rem;color:#777;margin-bottom:3px;}
+  .pill-val{display:inline-flex;align-items:center;justify-content:center;min-width:32px;height:32px;border-radius:16px;font-weight:bold;font-size:0.82rem;padding:0 6px;}
+  .pill-val.ok{background:rgba(111,207,151,0.2);border:2px solid #6fcf97;color:#6fcf97;}
+  .pill-val.bad{background:rgba(235,87,87,0.2);border:2px solid #eb5757;color:#eb5757;}
+  .pill-val.neutral{background:rgba(201,168,76,0.15);border:2px solid #c9a84c;color:#c9a84c;}
+  .btn-sm{background:transparent;border:1px solid #c9a84c;color:#c9a84c;padding:4px 12px;cursor:pointer;border-radius:3px;font-size:0.76rem;font-family:inherit;}
+  .btn-sm.danger{border-color:#eb5757;color:#eb5757;}
+  .btn-sm.danger:hover{background:rgba(235,87,87,0.1);}
+  .no-subs{color:#666;font-style:italic;text-align:center;padding:30px;}
+  .error-msg{color:#eb5757;margin-bottom:12px;font-size:0.9rem;}
+  .login-wrap{display:flex;align-items:center;justify-content:center;min-height:80vh;}
+  .login-card{background:rgba(255,255,255,0.05);border:1px solid rgba(201,168,76,0.3);border-radius:10px;padding:40px;max-width:380px;width:100%;text-align:center;}
+  .login-card h1{font-family:'Playfair Display',serif;color:#c9a84c;font-size:1.5rem;margin-bottom:8px;}
+  .login-card p{color:#888;font-size:0.88rem;margin-bottom:24px;}
+  .key-editor{margin-bottom:28px;padding:20px;background:rgba(201,168,76,0.05);border-radius:6px;border:1px solid rgba(201,168,76,0.25);}
+  .key-row{padding:6px 0;border-bottom:1px solid rgba(255,255,255,0.05);font-size:0.83rem;display:flex;gap:10px;align-items:center;}
+  .key-label{color:#c9a84c;font-weight:bold;min-width:50px;flex-shrink:0;}
+  .key-select{background:#1a2a35;color:#e8e0d5;border:1px solid rgba(201,168,76,0.4);border-radius:3px;padding:4px 8px;font-family:inherit;font-size:0.83rem;}
+  .review-q{margin-bottom:16px;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.08);border-radius:8px;padding:16px 20px;display:flex;align-items:center;gap:14px;flex-wrap:wrap;}
+  .review-q-num{color:#c9a84c;font-size:0.8rem;font-weight:bold;min-width:28px;}
+  .review-q-text{color:#ccc;font-size:0.88rem;flex:1;}
+  .review-badge{display:inline-flex;align-items:center;gap:6px;padding:4px 12px;border-radius:4px;font-weight:bold;font-size:0.88rem;}
+  .review-badge.correct{background:rgba(111,207,151,0.15);border:1px solid rgba(111,207,151,0.35);color:#6fcf97;}
+  .review-badge.wrong{background:rgba(235,87,87,0.12);border:1px solid rgba(235,87,87,0.3);color:#eb5757;}
+  .review-badge.neutral{background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.1);color:#888;}
+  .review-note{font-size:0.8rem;color:#888;font-style:italic;width:100%;padding-top:6px;border-top:1px solid rgba(255,255,255,0.05);}
+  .review-note .hl{color:#c9a84c;font-style:normal;}
+  @media(max-width:600px){.card{padding:20px 16px;margin:20px 12px;}.q-block{flex-direction:column;align-items:flex-start;}}
+</style>
+</head>
+<body>
+<header>
+  <span class="logo">CPE Full 1 · Part 7</span>
+  <div id="header-right"><button class="header-btn" onclick="goTo('login')">Teacher Login</button></div>
+</header>
+<div id="login-status" style="display:none;background:rgba(0,0,0,0.3);border-bottom:1px solid rgba(201,168,76,0.2);padding:8px 32px;display:flex;justify-content:space-between;align-items:center;font-size:0.8rem;">
+  <div style="color:#888;">Signed in as <strong id="login-status-name" style="color:#c9a84c;"></strong> &nbsp;·&nbsp; <span id="login-status-class"></span></div>
+  <div style="display:flex;gap:10px;align-items:center;">
+    <a href="login.html" style="color:#888;text-decoration:none;font-size:0.75rem;letter-spacing:1px;">My Results</a>
+    <a href="index.html" style="color:#888;text-decoration:none;font-size:0.75rem;letter-spacing:1px;">Activities</a>
+    <button onclick="signOutUser()" style="background:transparent;border:1px solid rgba(235,87,87,0.4);color:#eb5757;padding:3px 10px;cursor:pointer;border-radius:3px;font-size:0.72rem;font-family:inherit;letter-spacing:1px;">Sign Out</button>
+  </div>
+</div>
+
+<!-- HOME -->
+<div id="page-home" class="page active">
+  <div class="card">
+    <a class="home-link" href="index.html">← Back to Home</a>
+    <h1>CPE · Part 7</h1>
+    <p class="subtitle">Multiple Matching · <strong style="color:#c9a84c;">Kents Cavern: Inside the Cave of Stone-Age Secrets</strong><br>Read the text and answer questions 44–53. For each question, choose from sections A–F. Sections may be chosen more than once.</p>
+    <div style="margin-top:24px;">
+      <input type="text" id="student-name" placeholder="Enter your full name..." style="width:100%;max-width:400px;padding:12px 16px;background:rgba(255,255,255,0.08);border:1px solid rgba(201,168,76,0.5);border-radius:4px;color:#e8e0d5;font-size:1rem;font-family:inherit;outline:none;display:block;margin-bottom:12px;"/>
+      <button class="btn-primary" onclick="startQuiz()">Start &#8594;</button>
+    </div>
+  </div>
+</div>
+
+<!-- LOGIN -->
+<div id="page-login" class="page">
+  <div class="login-wrap">
+    <div class="login-card">
+      <h1>Teacher Login</h1><p>Enter your password</p>
+      <input type="password" id="admin-pass" placeholder="Password" style="text-align:center;letter-spacing:4px;" onkeydown="if(event.key==='Enter')adminLogin()"/>
+      <div class="error-msg" id="login-error" style="display:none;">Incorrect password</div>
+      <button class="btn-primary" onclick="adminLogin()">Login →</button>
+    </div>
+  </div>
+</div>
+
+<!-- ADMIN -->
+<div id="page-admin" class="page">
+  <div class="card">
+    <div class="section-title">Answer Key <span style="color:#777;font-size:0.75rem;font-weight:normal;">(set answers — all blank until you fill them in)</span></div>
+    <div class="key-editor" id="key-editor"></div>
+    <div class="section-title" id="sub-count-label">Student Submissions</div>
+    <div id="submissions-container"><p class="no-subs">No submissions yet.</p></div>
+  </div>
+</div>
+
+<!-- QUIZ -->
+<div id="page-quiz" class="page">
+  <div class="card">
+    <a class="home-link" href="#" onclick="goHome();return false;">← Back to Home</a>
+
+    <div class="progress-wrap">
+      <div class="progress-top"><span id="prog-text">0 of 10 answered</span><span id="prog-pct">0%</span></div>
+      <div class="progress-bar-bg"><div class="progress-bar" id="prog-bar"></div></div>
+    </div>
+
+    <!-- Passage -->
+    <div class="passage-box">
+      <h2>Kents Cavern: Inside the Cave of Stone-Age Secrets</h2>
+
+      <div class="section-heading">A</div>
+      <p>The entrance to the cave was narrow and no more than 1.5 metres high. Only one person at a time could enter, head stooped, a flickering light held in one hand, pickaxe in the other. They were a group of 12 explorers on that summer's day in 1825, including local coastguards, a man determined to discover an ancient Roman temple, and a young Roman Catholic priest with an interest in fossils. Father John MacEnery had recently arrived from Limerick as private chaplain to the Cary family at nearby Torre Abbey. He was the last to enter this strange world of darkness — of vast chambers, narrow fissures and magical stalactites that formed crystalline chandeliers and pillars, glinting in the lantern light.</p>
+
+      <div class="section-heading">B</div>
+      <p>Breaking off from the rest of the party, who were vainly trying to break through the calcified floor, Father MacEnery investigated areas of the cave where the ground had already been disturbed. Beneath the stalagmites, in reddish brown earth, the priest saw something gleam. His candle reflected off the enamel of fossil teeth. He wrote later: 'As I laid my hand on these relics of distant races … I shrank back involuntarily … I am not ashamed to own that, in the presence of these remains, I felt more awe than joy.' The priest continued his search in silence, keeping 'my good fortune a secret, fearing that amidst the press and avidity of the party to possess some fossil memorial of the day, my discoveries would be damaged.'</p>
+
+      <div class="section-heading">C</div>
+      <p>If he had known what he had stumbled upon, he might have held his finds even closer. For the teeth and other remains found in the cave are rewriting human prehistory. It is now known that this cave, called Kents Cavern, outside Torquay in Devon, had been home to prehistoric hominids and animals extinct for half a million years. In 2011, Professor Chris Stringer of the Natural History Museum announced that a human jaw found in the cave in 1927 is 7,000 years older than was thought and, at 42,000 years, this makes it the oldest Homo sapiens in northwest Europe. This is yet more evidence that modern humans must have lived side-by-side with Neanderthals, an extinct cousin species, for tens of thousands of years.</p>
+
+      <div class="section-heading">D</div>
+      <p>But back in the 1820s, science knew nothing of humanity's origins — or of what Britain was like millennia ago. Between 1825 and 1829, Father MacEnery made more astonishing discoveries. He unearthed the bones of extinct and exotic creatures, among them elephants, rhinos, sabre-tooth tigers, cave lions, bears and hyenas, from beneath the stalagmite cave floor. For the early 19th century, this was momentous. It was just four years since the professor of the new science of geology at Oxford, William Buckland, had discovered similar fauna in a cave in Yorkshire. Science — and society as a whole — were barely coming to grips with the idea that animals which now existed only in tropical countries could once have tramped over the Dales in northern England. Now it seemed they had also lived in the south of the country.</p>
+
+      <div class="section-heading">E</div>
+      <p>But Father MacEnery found something even more astonishing. As he dug, he discovered, on a bed of dirty red colour, 'the singular phenomenon of flint instruments intermingled with fossil bones!' They were the unmistakeable tools of Stone Age humans. 'This,' he wrote — his intellectual shock palpable — 'electrified me'. Father MacEnery was enthused by his momentous discovery and his realisation that it implied the co-existence of man and extinct beasts.</p>
+
+      <div class="section-heading">F</div>
+      <p>The 19th century was a frenzy of the new. Rapid developments in transport, industry and technology were paralleled by radical new philosophies and a revolution in the understanding of the age and nature of the Earth. The belief that our planet was just 6,000 years old was fatally undermined by the geologists who were revealing the great antiquity of our world. Now it is acknowledged that Kents Cavern is one of the most important archaeological and palaeontological sites in Britain. Furthermore, although now a splendid show cave, it is still producing wonders. With the advance of new dating techniques, this vast warren that has already revealed astonishing fossils and artefacts may again revolutionise our understanding of our origins.</p>
+    </div>
+
+    <!-- Questions -->
+    <div style="margin-bottom:8px;color:#aaa;font-size:0.85rem;font-style:italic;">In which section (A–F) are the following mentioned?</div>
+    <div id="questions-container"></div>
+    <button class="btn-primary" onclick="submitQuiz()" style="margin-top:16px;">Submit Answers</button>
+  </div>
+</div>
+
+<!-- SUBMITTED -->
+<div id="page-submitted" class="page">
+  <div class="card">
+    <div class="score-box">
+      <div style="color:#aaa;font-size:0.9rem;margin-bottom:8px;">Well done, <span id="done-name"></span>!</div>
+      <div class="big-score" id="done-score"></div>
+      <div style="color:#aaa;margin-top:10px;" id="done-msg"></div>
+      <div style="color:#666;font-size:0.85rem;margin-top:6px;" id="done-note"></div>
+    </div>
+    <div id="done-breakdown"></div>
+    <div style="display:flex;gap:12px;flex-wrap:wrap;margin-top:24px;">
+      <button class="btn-primary" onclick="openReview()">Review Answers</button>
+      <button class="header-btn" onclick="goHome()">Try Again</button>
+    </div>
+  </div>
+</div>
+
+<!-- REVIEW -->
+<div id="page-review" class="page">
+  <div class="card">
+    <a class="home-link" href="#" onclick="goTo('submitted');return false;">← Back to Results</a>
+    <h1 style="margin-bottom:20px;">Answer Review</h1>
+    <div id="review-container"></div>
+    <button class="header-btn" style="margin-top:20px;" onclick="goHome()">Start Over</button>
+  </div>
+</div>
+
+<script>
+const STORAGE_KEY = 'cpe1_p7_subs';
+const OPTS = ['A','B','C','D','E','F'];
+const QUESTIONS = [
+  {n:44, text:'surprise about the location of some findings'},
+  {n:45, text:'the present and possible future significance of the cave'},
+  {n:46, text:'the danger of drawing attention to certain contents of the cave'},
+  {n:47, text:'subjects that people previously had no information on'},
+  {n:48, text:'a reaction to what the presence of something in the cave indicated'},
+  {n:49, text:'a revised assessment of something found in the cave'},
+  {n:50, text:'the different aims of people investigating the cave'},
+  {n:51, text:'the disproving of a theory by a body of evidence'},
+  {n:52, text:'a sign of previous activity in the cave'},
+  {n:53, text:'the physical appearance of the cave'},
+];
+
+let currentStudent='', answers={}, submitted=false;
+let submissions=JSON.parse(localStorage.getItem(STORAGE_KEY)||'[]');
+const DEFAULT_KEY={44:'D',45:'F',46:'B',47:'D',48:'E',49:'C',50:'A',51:'F',52:'B',53:'A'};
+let answerKey=JSON.parse(localStorage.getItem(STORAGE_KEY+'_key')||'null')||{...DEFAULT_KEY};
+
+function saveData(){localStorage.setItem(STORAGE_KEY,JSON.stringify(submissions));}
+function saveKey(){localStorage.setItem(STORAGE_KEY+'_key',JSON.stringify(answerKey));}
+
+function goTo(page){
+  document.querySelectorAll('.page').forEach(function(p){p.classList.remove('active');});
+  document.getElementById('page-'+page).classList.add('active');
+  var hr=document.getElementById('header-right');
+  var btn=document.createElement('button');
+  btn.className='header-btn';
+  if(page==='admin'){btn.textContent='Logout';btn.onclick=function(){goTo('home');};}
+  else if(page==='login'){btn.textContent='← Back';btn.onclick=function(){goTo('home');};}
+  else{btn.textContent='Teacher Login';btn.onclick=function(){goTo('login');};}
+  hr.innerHTML='';hr.appendChild(btn);
+}
+
+function goHome(){
+  currentStudent='';answers={};submitted=false;
+  document.getElementById('student-name').value='';
+  QUESTIONS.forEach(q=>{
+    const el=document.getElementById('gap-'+q.n);
+    if(el){el.value='';el.classList.remove('answered');}
+  });
+  goTo('home');
+}
+
+function startQuiz(){
+  const name=document.getElementById('student-name').value.trim();
+  if(!name){alert('Please enter your name.');return;}
+  currentStudent=name;answers={};submitted=false;
+  renderQuestions();
+  updateProgress();
+  goTo('quiz');
+}
+
+function renderQuestions(){
+  const c=document.getElementById('questions-container');c.innerHTML='';
+  QUESTIONS.forEach(q=>{
+    const div=document.createElement('div');div.className='q-block';
+    const selOpts=OPTS.map(o=>`<option value="${o}">${o}</option>`).join('');
+    div.innerHTML=`<span class="q-num">${q.n}</span><span class="q-text">${q.text}</span><select class="gap-select" id="gap-${q.n}" onchange="selectAnswer(${q.n},this.value)"><option value="">— choose —</option>${selOpts}</select>`;
+    c.appendChild(div);
+  });
+}
+
+function selectAnswer(qn,val){
+  if(submitted)return;
+  const el=document.getElementById('gap-'+qn);
+  if(val){answers[qn]=val;if(el)el.classList.add('answered');}
+  else{delete answers[qn];if(el)el.classList.remove('answered');}
+  updateProgress();
+}
+
+function updateProgress(){
+  const filled=Object.keys(answers).length;
+  const total=QUESTIONS.length;
+  const pct=Math.round(filled/total*100);
+  document.getElementById('prog-text').textContent=filled+' of '+total+' answered';
+  document.getElementById('prog-pct').textContent=pct+'%';
+  document.getElementById('prog-bar').style.width=pct+'%';
+}
+
+function submitQuiz(){
+  const unanswered=QUESTIONS.filter(q=>!answers[q.n]).length;
+  if(unanswered&&!confirm(unanswered+' question(s) unanswered. Submit anyway?'))return;
+  submitted=true;
+  const hasKey=Object.keys(answerKey).length>0;
+  let score=0,total=QUESTIONS.length;
+  if(hasKey){QUESTIONS.forEach(q=>{if(answerKey[q.n]&&answers[q.n]===answerKey[q.n])score++;});}
+  const sub={id:Date.now(),name:currentStudent,cls:(function(){try{var u=JSON.parse(localStorage.getItem("cam_user")||"null");return u?u.cls:"";}catch(e){return"";}})(),answers:{...answers},score:hasKey?score:undefined,total,submittedAt:new Date().toLocaleString()};
+  submissions.push(sub);saveData();
+  saveToSupabase({
+    student_name:sub.name||'',
+    class_code:sub.cls||'',
+    activity:'CPE Full 1 · Part 7',
+    storage_key:STORAGE_KEY,
+    score:typeof sub.score==='number'?sub.score:null,
+    total:sub.total||null,
+    answers:JSON.stringify(sub.answers||{}),
+    submitted_at:sub.submittedAt||new Date().toLocaleString()
+  });
+  document.getElementById('done-name').textContent=currentStudent;
+  if(hasKey){
+    document.getElementById('done-score').textContent=score+'/'+total;
+    document.getElementById('done-msg').textContent=score>=8?'Excellent work!':score>=5?'Good effort!':'Keep practising!';
+    document.getElementById('done-note').textContent='';
+    showResultBreakdown(sub);
+  } else {
+    document.getElementById('done-score').textContent='✓';
+    document.getElementById('done-msg').textContent='Submitted! Your teacher will mark your answers.';
+    document.getElementById('done-note').textContent='The answer key has not been set yet.';
+    document.getElementById('done-breakdown').innerHTML='';
+  }
+  goTo('submitted');
+}
+
+function showResultBreakdown(sub){
+  let html='<div style="display:flex;flex-wrap:wrap;gap:8px;margin-top:8px;">';
+  QUESTIONS.forEach(q=>{
+    const k=answerKey[q.n];const s=sub.answers[q.n]||'?';
+    const cls=k?(s===k?'ok':'bad'):'neutral';
+    html+=`<div class="pill"><div class="pill-label">Q${q.n}</div><div class="pill-val ${cls}">${s}</div></div>`;
+  });
+  html+='</div>';
+  document.getElementById('done-breakdown').innerHTML=html;
+}
+
+function adminLogin(){
+  if(document.getElementById('admin-pass').value==='1996'){
+    document.getElementById('login-error').style.display='none';
+    document.getElementById('admin-pass').value='';
+    renderAdmin();goTo('admin');
+  } else document.getElementById('login-error').style.display='block';
+}
+
+function renderAdmin(){
+  let khtml='';
+  QUESTIONS.forEach(q=>{
+    const cur=answerKey[q.n]||'';
+    const opts=OPTS.map(o=>`<option value="${o}" ${cur===o?'selected':''}>${o}</option>`).join('');
+    khtml+=`<div class="key-row"><span class="key-label">Q${q.n}:</span><select class="key-select" id="key-${q.n}"><option value="">— not set —</option>${opts}</select></div>`;
+  });
+  document.getElementById('key-editor').innerHTML=khtml+`<button class="btn-sm" style="margin-top:10px;" onclick="saveKeyFromEditor()">Save Key</button>`;
+  renderSubmissions();
+}
+
+function saveKeyFromEditor(){
+  QUESTIONS.forEach(q=>{const el=document.getElementById('key-'+q.n);if(el&&el.value)answerKey[q.n]=el.value;else delete answerKey[q.n];});
+  saveKey();renderSubmissions();alert('Answer key saved!');
+}
+
+function renderSubmissions(){
+  const cnt=document.getElementById('submissions-container');
+  document.getElementById('sub-count-label').textContent='STUDENT SUBMISSIONS ('+submissions.length+')';
+  if(!submissions.length){cnt.innerHTML='<p class="no-subs">No submissions yet.</p>';return;}
+  const hasKey=Object.keys(answerKey).length>0;
+  let html='';
+  submissions.sort((a,b)=>b.id-a.id).forEach(sub=>{
+    let score=0;
+    if(hasKey) QUESTIONS.forEach(q=>{if(answerKey[q.n]&&sub.answers[q.n]===answerKey[q.n])score++;});
+    const scoreDisplay=hasKey?score+'/'+sub.total:'Pending key';
+    let pills='<div class="ans-pills">';
+    QUESTIONS.forEach(q=>{
+      const k=answerKey[q.n];const s=sub.answers[q.n]||'?';
+      const cls=k?(s===k?'ok':'bad'):'neutral';
+      pills+=`<div class="pill"><div class="pill-label">Q${q.n}</div><div class="pill-val ${cls}">${s}</div></div>`;
+    });
+    pills+='</div>';
+    html+=`<div class="sub-card"><div class="sub-header"><div><div class="sub-name">${sub.name}</div><div class="sub-meta">${sub.submittedAt}</div></div><div style="display:flex;align-items:center;gap:10px;"><span class="sub-score">${scoreDisplay}</span><button class="btn-sm danger" onclick="deleteSub(${sub.id})">Delete</button></div></div>${pills}</div>`;
+  });
+  cnt.innerHTML=html;
+}
+
+function deleteSub(id){
+  if(!confirm('Delete this submission?'))return;
+  submissions=submissions.filter(s=>s.id!==id);saveData();renderSubmissions();
+}
+
+function openReview(){
+  const hasKey=Object.keys(answerKey).length>0;
+  let html='';
+  QUESTIONS.forEach(q=>{
+    const qn=q.n;
+    const student=answers[qn]||null;
+    const correct=answerKey[qn]||null;
+    const isCorrect=correct&&student===correct;
+    const isWrong=student&&correct&&student!==correct;
+    let badgeCls='neutral',icon='·',badgeText=student||'—';
+    if(isCorrect){badgeCls='correct';icon='✓';}
+    else if(isWrong){badgeCls='wrong';icon='✗';}
+    html+=`<div class="review-q"><span class="review-q-num">${qn}</span><span class="review-q-text">${q.text}</span><span class="review-badge ${badgeCls}">${icon} ${badgeText}</span>`;
+    if(isWrong){html+=`<div class="review-note">You chose <span class="hl">${student}</span> · Correct answer: <span class="hl">${correct}</span></div>`;}
+    else if(isCorrect){html+=`<div class="review-note" style="color:#6fcf97;">Correct!</div>`;}
+    else if(!hasKey){html+=`<div class="review-note">Answer key not set yet — your teacher will review.</div>`;}
+    else if(!student){html+=`<div class="review-note">Not answered. Correct answer: <span class="hl">${correct}</span></div>`;}
+    html+='</div>';
+  });
+  document.getElementById('review-container').innerHTML=html;
+  goTo('review');
+}
+
+function signOutUser(){
+  if(confirm('Sign out? Your submitted answers are already saved.')){
+    localStorage.removeItem('cam_user');
+    document.getElementById('login-status').style.display='none';
+    const inp=document.getElementById('student-name');
+    if(inp) inp.value='';
+  }
+}
+
+const SUPA_URL='https://dhvzvhdefhrfsbjmnnbz.supabase.co';
+const SUPA_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRodnp2aGRlZmhyZnNiam1ubmJ6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzMwODk1OTEsImV4cCI6MjA4ODY2NTU5MX0.SSkscvxvvgsbGaSfJT_1BbJSVbIzfxUMJaE03OQj5Xg';
+async function saveToSupabase(rec){
+  try{
+    const r=await fetch(SUPA_URL+'/rest/v1/submissions',{method:'POST',headers:{'Content-Type':'application/json','apikey':SUPA_KEY,'Authorization':'Bearer '+SUPA_KEY,'Prefer':'return=minimal'},body:JSON.stringify(rec)});
+    return r.ok;
+  }catch(e){return false;}
+}
+</script>
+
+<script>
+(function(){
+  try{
+    const u=JSON.parse(localStorage.getItem('cam_user')||'null');
+    const bar=document.getElementById('login-status');
+    const inp=document.getElementById('student-name');
+    if(!u){if(bar)bar.style.display='none';return;}
+    if(inp&&!inp.value)inp.value=u.name;
+    if(bar){
+      bar.style.display='flex';
+      const nm=document.getElementById('login-status-name');
+      const cl=document.getElementById('login-status-class');
+      if(nm)nm.textContent=u.name;
+      if(cl)cl.textContent='Class: '+u.cls;
+    }
+  }catch(e){}
+})();
+</script>
+</body>
+</html>

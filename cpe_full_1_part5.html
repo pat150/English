@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>CPE Full 1 · Part 5 – Comedians</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Source+Serif+4:wght@300;400;600&display=swap');
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+  body{min-height:100vh;background:linear-gradient(135deg,#0f2027,#203a43,#2c5364);font-family:'Source Serif 4',serif;color:#e8e0d5;}
+  header{background:rgba(0,0,0,0.4);border-bottom:2px solid #c9a84c;padding:16px 32px;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;z-index:100;backdrop-filter:blur(12px);}
+  .logo{font-family:'Playfair Display',serif;color:#c9a84c;letter-spacing:3px;font-size:1rem;text-transform:uppercase;}
+  .header-btn{background:transparent;border:1px solid #c9a84c;color:#c9a84c;padding:6px 18px;cursor:pointer;border-radius:3px;font-size:0.8rem;letter-spacing:1px;font-family:inherit;}
+  .header-btn:hover{background:rgba(201,168,76,0.15);}
+  .page{display:none;}.page.active{display:block;}
+  .card{background:rgba(255,255,255,0.05);border:1px solid rgba(201,168,76,0.3);border-radius:10px;padding:36px;max-width:860px;margin:40px auto;backdrop-filter:blur(8px);}
+  h1{font-family:'Playfair Display',serif;color:#c9a84c;font-size:1.7rem;margin-bottom:6px;}
+  .subtitle{color:#aaa;font-size:0.9rem;margin-bottom:28px;line-height:1.6;}
+  .home-link{display:inline-block;margin-bottom:20px;color:#c9a84c;font-size:0.85rem;text-decoration:none;letter-spacing:1px;}
+  .home-link:hover{text-decoration:underline;}
+  input[type="text"],input[type="password"]{width:100%;padding:12px 16px;background:rgba(255,255,255,0.08);border:1px solid rgba(201,168,76,0.5);border-radius:4px;color:#e8e0d5;font-size:1rem;font-family:inherit;margin-bottom:20px;}
+  input::placeholder{color:#888;}
+  .btn-primary{background:#c9a84c;color:#0f2027;border:none;padding:12px 32px;font-size:1rem;font-weight:bold;border-radius:4px;cursor:pointer;letter-spacing:1px;font-family:inherit;}
+  .btn-primary:hover{background:#d9bb6a;}
+  .passage-box{background:rgba(0,0,0,0.25);border:1px solid rgba(255,255,255,0.08);border-radius:8px;padding:24px 28px;margin-bottom:28px;line-height:2.1;font-size:0.95rem;color:#ddd;}
+  .passage-box h2{font-family:'Playfair Display',serif;color:#c9a84c;text-align:center;margin-bottom:18px;font-size:1.2rem;letter-spacing:2px;}
+  .progress-wrap{margin-bottom:24px;}
+  .progress-top{display:flex;justify-content:space-between;color:#aaa;font-size:0.82rem;margin-bottom:6px;}
+  .progress-bar-bg{background:rgba(255,255,255,0.06);border-radius:4px;height:4px;}
+  .progress-bar{background:#c9a84c;height:4px;border-radius:4px;transition:width 0.3s;width:0%;}
+  .q-block{margin-bottom:14px;padding:14px 18px;background:rgba(255,255,255,0.04);border-radius:6px;border:1px solid rgba(255,255,255,0.07);}
+  .q-num{color:#c9a84c;font-weight:bold;font-size:0.85rem;margin-bottom:10px;}
+  .q-text{color:#ddd;font-size:0.92rem;margin-bottom:12px;line-height:1.6;}
+  .options{display:grid;grid-template-columns:1fr 1fr;gap:8px;}
+  .opt-btn{background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.12);color:#ccc;padding:9px 14px;border-radius:5px;cursor:pointer;font-family:inherit;font-size:0.88rem;text-align:left;transition:all 0.18s;}
+  .opt-btn:hover{border-color:#c9a84c;color:#e8e0d5;background:rgba(201,168,76,0.08);}
+  .opt-btn.selected{border-color:#c9a84c;background:rgba(201,168,76,0.18);color:#c9a84c;font-weight:bold;}
+  .opt-btn.correct{border-color:#6fcf97;background:rgba(111,207,151,0.15);color:#6fcf97;}
+  .opt-btn.wrong{border-color:#eb5757;background:rgba(235,87,87,0.12);color:#eb5757;}
+  .score-box{text-align:center;padding:20px 0 30px;}
+  .big-score{font-family:'Playfair Display',serif;font-size:4rem;color:#c9a84c;}
+  .section-title{color:#c9a84c;font-weight:bold;letter-spacing:1px;margin-bottom:14px;font-size:0.85rem;text-transform:uppercase;}
+  .sub-card{margin-bottom:16px;padding:18px 20px;background:rgba(255,255,255,0.04);border-radius:8px;border:1px solid rgba(255,255,255,0.08);}
+  .sub-header{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:12px;flex-wrap:wrap;gap:8px;}
+  .sub-name{font-size:1rem;font-weight:bold;}
+  .sub-meta{color:#777;font-size:0.78rem;margin-top:2px;}
+  .sub-score{color:#c9a84c;font-weight:bold;font-size:1.1rem;}
+  .ans-pills{display:flex;gap:6px;flex-wrap:wrap;}
+  .pill{text-align:center;}
+  .pill-label{font-size:0.66rem;color:#777;margin-bottom:3px;}
+  .pill-val{display:inline-flex;align-items:center;justify-content:center;min-width:32px;height:32px;border-radius:16px;font-weight:bold;font-size:0.82rem;padding:0 6px;}
+  .pill-val.ok{background:rgba(111,207,151,0.2);border:2px solid #6fcf97;color:#6fcf97;}
+  .pill-val.bad{background:rgba(235,87,87,0.2);border:2px solid #eb5757;color:#eb5757;}
+  .pill-val.neutral{background:rgba(201,168,76,0.15);border:2px solid #c9a84c;color:#c9a84c;}
+  .btn-sm{background:transparent;border:1px solid #c9a84c;color:#c9a84c;padding:4px 12px;cursor:pointer;border-radius:3px;font-size:0.76rem;font-family:inherit;}
+  .btn-sm.danger{border-color:#eb5757;color:#eb5757;}
+  .btn-sm.danger:hover{background:rgba(235,87,87,0.1);}
+  .no-subs{color:#666;font-style:italic;text-align:center;padding:30px;}
+  .error-msg{color:#eb5757;margin-bottom:12px;font-size:0.9rem;}
+  .login-wrap{display:flex;align-items:center;justify-content:center;min-height:80vh;}
+  .login-card{background:rgba(255,255,255,0.05);border:1px solid rgba(201,168,76,0.3);border-radius:10px;padding:40px;max-width:380px;width:100%;text-align:center;}
+  .login-card h1{font-family:'Playfair Display',serif;color:#c9a84c;font-size:1.5rem;margin-bottom:8px;}
+  .login-card p{color:#888;font-size:0.88rem;margin-bottom:24px;}
+  .key-editor{margin-bottom:28px;padding:20px;background:rgba(201,168,76,0.05);border-radius:6px;border:1px solid rgba(201,168,76,0.25);}
+  .key-row{padding:6px 0;border-bottom:1px solid rgba(255,255,255,0.05);font-size:0.83rem;display:flex;gap:10px;align-items:center;}
+  .key-label{color:#c9a84c;font-weight:bold;min-width:50px;flex-shrink:0;}
+  .key-select{background:#1a2a35;color:#e8e0d5;border:1px solid rgba(201,168,76,0.4);border-radius:3px;padding:4px 8px;font-family:inherit;font-size:0.83rem;}
+  @media(max-width:600px){.card{padding:20px 16px;margin:20px 12px;}.options{grid-template-columns:1fr;}}
+  .review-q{margin-bottom:20px;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.08);border-radius:8px;padding:18px 20px;}
+  .review-q-num{color:#c9a84c;font-size:0.78rem;letter-spacing:1px;text-transform:uppercase;margin-bottom:10px;}
+  .review-opt{display:flex;align-items:center;gap:10px;padding:8px 12px;border-radius:5px;margin-bottom:6px;font-size:0.9rem;}
+  .review-opt.correct{background:rgba(111,207,151,0.15);border:1px solid rgba(111,207,151,0.35);color:#6fcf97;}
+  .review-opt.wrong{background:rgba(235,87,87,0.12);border:1px solid rgba(235,87,87,0.3);color:#eb5757;}
+  .review-opt.neutral{background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.06);color:#888;}
+  .review-icon{font-size:1rem;min-width:18px;}
+  .review-note{font-size:0.82rem;color:#888;font-style:italic;margin-top:8px;padding-top:8px;border-top:1px solid rgba(255,255,255,0.06);}
+  .review-note .hl{color:#c9a84c;font-style:normal;}
+</style>
+</head>
+<body>
+<header>
+  <span class="logo">CPE Full 1 · Part 5</span>
+  <div id="header-right"><button class="header-btn" onclick="goTo('login')">Teacher Login</button></div>
+</header>
+<div id="login-status" style="display:none;background:rgba(0,0,0,0.3);border-bottom:1px solid rgba(201,168,76,0.2);padding:8px 32px;display:flex;justify-content:space-between;align-items:center;font-size:0.8rem;">
+  <div style="color:#888;">Signed in as <strong id="login-status-name" style="color:#c9a84c;"></strong> &nbsp;·&nbsp; <span id="login-status-class"></span></div>
+  <div style="display:flex;gap:10px;align-items:center;">
+    <a href="login.html" style="color:#888;text-decoration:none;font-size:0.75rem;letter-spacing:1px;">My Results</a>
+    <a href="index.html" style="color:#888;text-decoration:none;font-size:0.75rem;letter-spacing:1px;">Activities</a>
+    <button onclick="signOutUser()" style="background:transparent;border:1px solid rgba(235,87,87,0.4);color:#eb5757;padding:3px 10px;cursor:pointer;border-radius:3px;font-size:0.72rem;font-family:inherit;letter-spacing:1px;">Sign Out</button>
+  </div>
+</div>
+
+<!-- HOME -->
+<div id="page-home" class="page active">
+  <div class="card">
+    <a class="home-link" href="index.html">← Back to Home</a>
+    <h1>CPE · Part 5</h1>
+    <p class="subtitle">Multiple Choice · <strong style="color:#c9a84c;">Comedians</strong><br>Read the text and choose the best answer (A, B, C or D) for each question. 6 questions.</p>
+    <div style="margin-top:24px;">
+      <input type="text" id="student-name" placeholder="Enter your full name..." style="width:100%;max-width:400px;padding:12px 16px;background:rgba(255,255,255,0.08);border:1px solid rgba(201,168,76,0.5);border-radius:4px;color:#e8e0d5;font-size:1rem;font-family:inherit;outline:none;display:block;margin-bottom:12px;"/>
+      <button class="btn-primary" onclick="startQuiz()">Start &#8594;</button>
+    </div>
+  </div>
+</div>
+
+<!-- LOGIN -->
+<div id="page-login" class="page">
+  <div class="login-wrap">
+    <div class="login-card">
+      <h1>Teacher Login</h1><p>Enter your password</p>
+      <input type="password" id="admin-pass" placeholder="Password" style="text-align:center;letter-spacing:4px;" onkeydown="if(event.key==='Enter')adminLogin()"/>
+      <div class="error-msg" id="login-error" style="display:none;">Incorrect password</div>
+      <button class="btn-primary" onclick="adminLogin()">Login →</button>
+    </div>
+  </div>
+</div>
+
+<!-- ADMIN -->
+<div id="page-admin" class="page">
+  <div class="card">
+    <div class="section-title">Answer Key <span style="color:#777;font-size:0.75rem;font-weight:normal;">(set answers — all blank until you fill them in)</span></div>
+    <div class="key-editor" id="key-editor"></div>
+    <div class="section-title" id="sub-count-label">Student Submissions</div>
+    <div id="submissions-container"><p class="no-subs">No submissions yet.</p></div>
+  </div>
+</div>
+
+<!-- QUIZ -->
+<div id="page-quiz" class="page">
+  <div class="card">
+    <a class="home-link" href="#" onclick="goHome();return false;">← Back to Home</a>
+    <div class="passage-box">
+      <h2>Comedians</h2>
+      <p>What drives moderately intelligent persons to put themselves up for acceptance or disparagement? In short, what sort of individual wants to be a comedian? When we hear the very word, what does the label suggest? Other professions, callings and occupations attract separate and distinct types of practitioner. Some stereotypes are so familiar as to be cheaply laughable examples from the world of travesty, among them absent-minded professors, venal lawyers, gloomy detectives and cynical reporters. But what corny characteristics do we attribute to comedians? To a man or woman, are they generally parsimonious, vulgar, shallow, arrogant, introspective, hysterically insecure, smug, autocratic, amoral, and selfish? Read their superficial stories in the tabloids and so they would appear.</p>
+      <br>
+      <p>Rather than look at the complete image, perhaps we need to explore the initial motives behind a choice of career. Consider first those who prefer a sort of anonymity in life, the ones who'd rather wear a uniform. The psychological make-up of individuals who actively seek to resign their individuality is apparent among those who surrender to the discipline of a military life. The emotional and intellectual course taken by those who are drawn to anonymity is easily observed but not easily deflected. They want to be told what to do and then be required to do it over and over again in the safety of a routine, often behind the disguises of a number of livery. If their egos ache with the need for recognition and praise, it's a pain that must be contained, frustrated or satisfied within the rut they occupy. The mere idea of standing up in front of an audience and demanding attention is abhorrent.</p>
+      <br>
+      <p>Nor will we find our comics among the doormats and dormice, the meek. There's precious little comedy in the lives of quiet hobbyists, bashful scholars, hermits, anchorites and recluses, the discreet and the modest, ones who deliberately select a position of obscurity and seclusion. Abiding quietly in this stratum of society, somewhere well below public attention level, there is humour, yes, since humour can endure in the least favourable circumstances, persisting like lichen in Antarctica. And jokes. Many lesser-known comedy writers compose their material in the secret corners of an unassuming existence. I know of two, both content to be minor figures in the civil service, who send in topical jokes to radio and TV shows on condition that their real names are not revealed.</p>
+      <br>
+      <p>In both cases I've noticed that their comic invention, though clever, is based upon wordplay, puns and similar equivoques, never an aggressive comic observation of life. Just as there may be a certain sterility in the self-effacement of a humble life, so it seems feasible that the selection process of what's funny is emasculated before it even commences. If you have no ginger and snap in your daily round, with little familiarity with strong emotions, it seems likely that your sense of fun will be limited by timidity to a simple juggling with language.</p>
+      <br>
+      <p>If the comedian's genesis is unlikely to be founded in social submission, it's also improbable among the top echelons of our civilisation. Once again, humour can be found among the majestic. Nobles and royals, statesmen and lawmakers, have their wits. Jokes and jokers circulate at the loftiest level of every advanced nation, but being high-born seems to carry no compulsion to make the hoi polloi laugh. Some of our rulers do make us laugh but that's not what they're paid to do. And, so with the constricted comedy of those who live a constricted life, that which amuses them may lack the common touch.</p>
+      <br>
+      <p>Having eliminated the parts of society unlikely to breed funnymen, it's to the middle ranks of humanity, beneath the exalted and above the invisible, that we must look to see where comics come from and why. And are they, like nurses and nuns, called to their vocation? As the mountain calls to the mountaineer and the pentameter to the poet, does the need of the mirthless masses summon forth funsters, ready to administer relief as their sole raison d'être? We've often heard it said that someone's a 'born comedian' but will it do for all of them or even most of them? Perhaps we like to think of our greatest jesters as we do our greatest painters and composers, preferring to believe that their gifts are inescapably driven to expression. But in our exploration of the comedy mind, hopefully finding some such, we are sure to find some quite otherwise.</p>
+    </div>
+    <div class="progress-wrap">
+      <div class="progress-top"><span id="prog-text">0 of 6 answered</span><span id="prog-pct">0%</span></div>
+      <div class="progress-bar-bg"><div class="progress-bar" id="prog-bar"></div></div>
+    </div>
+    <div id="questions-container"></div>
+    <button class="btn-primary" onclick="submitQuiz()" style="margin-top:10px;">Submit Answers</button>
+  </div>
+</div>
+
+<!-- SUBMITTED -->
+<div id="page-submitted" class="page">
+  <div class="card">
+    <div class="score-box">
+      <div style="color:#aaa;font-size:0.9rem;margin-bottom:8px;">Well done, <span id="done-name"></span>!</div>
+      <div class="big-score" id="done-score"></div>
+      <div style="color:#aaa;margin-top:10px;" id="done-msg"></div>
+      <div style="color:#666;font-size:0.85rem;margin-top:6px;" id="done-note"></div>
+    </div>
+    <div id="done-breakdown"></div>
+    <div style="display:flex;gap:12px;flex-wrap:wrap;margin-top:24px;">
+      <button class="btn-primary" onclick="openReview()">Review Answers</button>
+      <button class="header-btn" onclick="goHome()">Try Again</button>
+    </div>
+  </div>
+</div>
+
+<!-- REVIEW -->
+<div id="page-review" class="page">
+  <div class="card">
+    <a class="home-link" href="#" onclick="goTo('submitted');return false;">← Back to Results</a>
+    <h1 style="margin-bottom:20px;">Answer Review</h1>
+    <div id="review-container"></div>
+    <button class="header-btn" style="margin-top:20px;" onclick="goHome()">Start Over</button>
+  </div>
+</div>
+
+<script>
+const STORAGE_KEY = 'cpe1_p5_subs';
+const QUESTIONS = [
+  {n:31, text:"What does the writer imply about comedians in the first paragraph?",
+   opts:[{l:'A',w:'People in certain other professions generally have a better image than them.'},{l:'B',w:'It is possible that they are seen as possessing only negative characteristics.'},{l:'C',w:'It is harder to generalise about them than about people in other professions.'},{l:'D',w:'They often cannot understand why people make negative judgements of them.'}]},
+  {n:32, text:"What does the writer say about people who wear uniforms?",
+   opts:[{l:'A',w:'They criticise performers for craving attention.'},{l:'B',w:'It is unusual for them to break their normal patterns of thought.'},{l:'C',w:'They are more aware of their inadequacies than others may think.'},{l:'D',w:'The desires they have are never met when they are at work.'}]},
+  {n:33, text:"The writer says in the third paragraph that shy people",
+   opts:[{l:'A',w:'may be able to write humorous material but could not perform it.'},{l:'B',w:'are capable of being more humorous than they realise.'},{l:'C',w:'fear that what they find humorous would not amuse others.'},{l:'D',w:'do not get the recognition they deserve even if they are good at comedy.'}]},
+  {n:34, text:"In the fourth paragraph, the writer criticises the kind of comedy he describes for its lack of",
+   opts:[{l:'A',w:'originality.'},{l:'B',w:'coherence.'},{l:'C',w:'sophistication.'},{l:'D',w:'spirit.'}]},
+  {n:35, text:"The writer says that people at the top of society",
+   opts:[{l:'A',w:'have contempt for the humour of those at lower levels of society.'},{l:'B',w:'take themselves too seriously to wish to amuse anybody.'},{l:'C',w:'are unaware of how ridiculous they appear to others.'},{l:'D',w:'would not be capable of becoming comedians even if they wanted to.'}]},
+  {n:36, text:"What does the writer wonder in the last paragraph?",
+   opts:[{l:'A',w:"whether people's expectations of comedians are too high"},{l:'B',w:'whether comedians can be considered great in the way that other people in the arts can'},{l:'C',w:'whether it is inevitable that some people will become comedians'},{l:'D',w:'whether comedians realise how significant they are in the lives of ordinary people'}]},
+];
+
+let currentStudent='', answers={}, submitted=false;
+let submissions=JSON.parse(localStorage.getItem(STORAGE_KEY)||'[]');
+const DEFAULT_KEY={31:'B',32:'B',33:'A',34:'D',35:'D',36:'C'};
+let answerKey=JSON.parse(localStorage.getItem(STORAGE_KEY+'_key')||'null')||{...DEFAULT_KEY};
+
+function saveData(){localStorage.setItem(STORAGE_KEY,JSON.stringify(submissions));}
+function saveKey(){localStorage.setItem(STORAGE_KEY+'_key',JSON.stringify(answerKey));}
+
+function goTo(page){
+  document.querySelectorAll('.page').forEach(function(p){p.classList.remove('active');});
+  document.getElementById('page-'+page).classList.add('active');
+  var hr=document.getElementById('header-right');
+  var btn=document.createElement('button');
+  btn.className='header-btn';
+  if(page==='admin'){btn.textContent='Logout';btn.onclick=function(){goTo('home');};}
+  else if(page==='login'){btn.textContent='← Back';btn.onclick=function(){goTo('home');};}
+  else{btn.textContent='Teacher Login';btn.onclick=function(){goTo('login');};}
+  hr.innerHTML='';
+  hr.appendChild(btn);
+}
+function goHome(){currentStudent='';answers={};submitted=false;document.getElementById('student-name').value='';goTo('home');}
+
+function startQuiz(){
+  const name=document.getElementById('student-name').value.trim();
+  if(!name){alert('Please enter your name.');return;}
+  currentStudent=name;answers={};submitted=false;renderQuestions();goTo('quiz');
+}
+
+function renderQuestions(){
+  const c=document.getElementById('questions-container');c.innerHTML='';
+  QUESTIONS.forEach(q=>{
+    const div=document.createElement('div');div.className='q-block';
+    const opts=q.opts.map(o=>`<button class="opt-btn" id="opt-${q.n}-${o.l}" onclick="selectAnswer(${q.n},'${o.l}')">${o.l} &nbsp; ${o.w}</button>`).join('');
+    div.innerHTML=`<div class="q-num">Question ${q.n}</div><div class="q-text">${q.text}</div><div class="options">${opts}</div>`;
+    c.appendChild(div);
+  });
+}
+
+function selectAnswer(qn,letter){
+  if(submitted)return;
+  answers[qn]=letter;
+  QUESTIONS.find(q=>q.n===qn).opts.forEach(o=>{
+    const btn=document.getElementById('opt-'+qn+'-'+o.l);
+    if(btn) btn.classList.toggle('selected',o.l===letter);
+  });
+  updateProgress();
+}
+
+function updateProgress(){
+  const filled=Object.keys(answers).length;
+  const pct=Math.round(filled/QUESTIONS.length*100);
+  document.getElementById('prog-text').textContent=filled+' of '+QUESTIONS.length+' answered';
+  document.getElementById('prog-pct').textContent=pct+'%';
+  document.getElementById('prog-bar').style.width=pct+'%';
+}
+
+function submitQuiz(){
+  const unanswered=QUESTIONS.filter(q=>!answers[q.n]).length;
+  if(unanswered&&!confirm(unanswered+' question(s) unanswered. Submit anyway?'))return;
+  submitted=true;
+  const hasKey=Object.keys(answerKey).length>0;
+  let score=0,total=QUESTIONS.length;
+  if(hasKey){
+    QUESTIONS.forEach(q=>{
+      const correct=answerKey[q.n];
+      const student=answers[q.n]||'';
+      if(correct&&student===correct)score++;
+    });
+  }
+  const sub={id:Date.now(),name:currentStudent,cls:(function(){try{var u=JSON.parse(localStorage.getItem("cam_user")||"null");return u?u.cls:"";}catch(e){return"";}})(),answers:{...answers},score:hasKey?score:undefined,total,submittedAt:new Date().toLocaleString()};
+  submissions.push(sub);saveData();
+  saveToSupabase({
+    student_name: sub.name||'',
+    class_code: sub.cls||'',
+    activity: 'CPE Full 1 · Part 5',
+    storage_key: STORAGE_KEY,
+    score: typeof sub.score==='number'?sub.score:null,
+    total: sub.total||null,
+    answers: JSON.stringify(sub.answers||{}),
+    submitted_at: sub.submittedAt||new Date().toLocaleString()
+  });
+  document.getElementById('done-name').textContent=currentStudent;
+  if(hasKey){
+    document.getElementById('done-score').textContent=score+'/'+total;
+    document.getElementById('done-msg').textContent=score>=5?'Excellent work!':score>=3?'Good effort!':'Keep practising!';
+    document.getElementById('done-note').textContent='';
+    showResultBreakdown(sub);
+  } else {
+    document.getElementById('done-score').textContent='✓';
+    document.getElementById('done-msg').textContent='Submitted! Your teacher will mark your answers.';
+    document.getElementById('done-note').textContent='The answer key has not been set yet.';
+    document.getElementById('done-breakdown').innerHTML='';
+  }
+  goTo('submitted');
+}
+
+function showResultBreakdown(sub){
+  let html='<div style="display:flex;flex-wrap:wrap;gap:8px;margin-top:8px;">';
+  QUESTIONS.forEach(q=>{
+    const k=answerKey[q.n];const s=sub.answers[q.n]||'?';
+    const cls=k?(s===k?'ok':'bad'):'neutral';
+    html+=`<div class="pill"><div class="pill-label">Q${q.n}</div><div class="pill-val ${cls}">${s}</div></div>`;
+  });
+  html+='</div>';
+  document.getElementById('done-breakdown').innerHTML=html;
+}
+
+function adminLogin(){
+  if(document.getElementById('admin-pass').value==='1996'){
+    document.getElementById('login-error').style.display='none';
+    document.getElementById('admin-pass').value='';
+    renderAdmin();goTo('admin');
+  } else document.getElementById('login-error').style.display='block';
+}
+
+function renderAdmin(){
+  let khtml='';
+  QUESTIONS.forEach(q=>{
+    const cur=answerKey[q.n]||'';
+    const opts=q.opts.map(o=>`<option value="${o.l}" ${cur===o.l?'selected':''}>${o.l} — ${o.w}</option>`).join('');
+    khtml+=`<div class="key-row"><span class="key-label">Q${q.n}:</span><select class="key-select" id="key-${q.n}"><option value="">— not set —</option>${opts}</select></div>`;
+  });
+  document.getElementById('key-editor').innerHTML=khtml+`<button class="btn-sm" style="margin-top:10px;" onclick="saveKeyFromEditor()">Save Key</button>`;
+  renderSubmissions();
+}
+
+function saveKeyFromEditor(){
+  QUESTIONS.forEach(q=>{const el=document.getElementById('key-'+q.n);if(el&&el.value)answerKey[q.n]=el.value;else delete answerKey[q.n];});
+  saveKey();renderSubmissions();alert('Answer key saved!');
+}
+
+function renderSubmissions(){
+  const cnt=document.getElementById('submissions-container');
+  document.getElementById('sub-count-label').textContent='STUDENT SUBMISSIONS ('+submissions.length+')';
+  if(!submissions.length){cnt.innerHTML='<p class="no-subs">No submissions yet.</p>';return;}
+  const hasKey=Object.keys(answerKey).length>0;
+  let html='';
+  submissions.sort((a,b)=>b.id-a.id).forEach(sub=>{
+    let score=0;
+    if(hasKey) QUESTIONS.forEach(q=>{if(answerKey[q.n]&&sub.answers[q.n]===answerKey[q.n])score++;});
+    const scoreDisplay=hasKey?score+'/'+sub.total:'Pending key';
+    let pills='<div class="ans-pills">';
+    QUESTIONS.forEach(q=>{
+      const k=answerKey[q.n];const s=sub.answers[q.n]||'?';
+      const cls=k?(s===k?'ok':'bad'):'neutral';
+      pills+=`<div class="pill"><div class="pill-label">Q${q.n}</div><div class="pill-val ${cls}">${s}</div></div>`;
+    });
+    pills+='</div>';
+    html+=`<div class="sub-card"><div class="sub-header"><div><div class="sub-name">${sub.name}</div><div class="sub-meta">${sub.submittedAt}</div></div><div style="display:flex;align-items:center;gap:10px;"><span class="sub-score">${scoreDisplay}</span><button class="btn-sm danger" onclick="deleteSub(${sub.id})">Delete</button></div></div>${pills}</div>`;
+  });
+  cnt.innerHTML=html;
+}
+
+function deleteSub(id){
+  if(!confirm('Delete this submission?'))return;
+  submissions=submissions.filter(s=>s.id!==id);saveData();renderSubmissions();
+}
+
+function openReview(){
+  const hasKey=Object.keys(answerKey).length>0;
+  let html='';
+  QUESTIONS.forEach(q=>{
+    const qn=q.n;
+    const student=answers[qn]||null;
+    const correct=answerKey[qn]||null;
+    html+=`<div class="review-q"><div class="review-q-num">Question ${qn} — ${q.text}</div>`;
+    q.opts.forEach(o=>{
+      const isCorrect=correct&&o.l===correct;
+      const isStudent=student&&o.l===student;
+      const isWrong=isStudent&&correct&&o.l!==correct;
+      let cls='neutral',icon='·';
+      if(isCorrect){cls='correct';icon='✓';}
+      if(isWrong){cls='wrong';icon='✗';}
+      if(isCorrect||isWrong||isStudent){
+        html+=`<div class="review-opt ${cls}"><span class="review-icon">${icon}</span><strong>${o.l}</strong> &nbsp; ${o.w}</div>`;
+      } else {
+        html+=`<div class="review-opt neutral"><span class="review-icon">·</span>${o.l} &nbsp; ${o.w}</div>`;
+      }
+    });
+    if(correct&&student&&student!==correct){
+      const cw=q.opts.find(o=>o.l===correct);
+      const sw=q.opts.find(o=>o.l===student);
+      html+=`<div class="review-note">You chose <span class="hl">${student}${sw?' — '+sw.w:''}</span> · Correct answer: <span class="hl">${correct}${cw?' — '+cw.w:''}</span></div>`;
+    } else if(!hasKey){
+      html+=`<div class="review-note">Answer key not set yet — your teacher will review.</div>`;
+    } else if(!student){
+      html+=`<div class="review-note">Not answered.</div>`;
+    }
+    html+='</div>';
+  });
+  document.getElementById('review-container').innerHTML=html;
+  goTo('review');
+}
+
+function signOutUser(){
+  if(confirm('Sign out? Your submitted answers are already saved.')){
+    localStorage.removeItem('cam_user');
+    document.getElementById('login-status').style.display='none';
+    const inp=document.getElementById('student-name');
+    if(inp) inp.value='';
+  }
+}
+
+// ── Supabase ──────────────────────────────────────────────────────────
+const SUPA_URL='https://dhvzvhdefhrfsbjmnnbz.supabase.co';
+const SUPA_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRodnp2aGRlZmhyZnNiam1ubmJ6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzMwODk1OTEsImV4cCI6MjA4ODY2NTU5MX0.SSkscvxvvgsbGaSfJT_1BbJSVbIzfxUMJaE03OQj5Xg';
+async function saveToSupabase(rec){
+  try{
+    const r=await fetch(SUPA_URL+'/rest/v1/submissions',{
+      method:'POST',
+      headers:{'Content-Type':'application/json','apikey':SUPA_KEY,'Authorization':'Bearer '+SUPA_KEY,'Prefer':'return=minimal'},
+      body:JSON.stringify(rec)
+    });
+    return r.ok;
+  }catch(e){return false;}
+}
+// ─────────────────────────────────────────────────────────────────────
+</script>
+
+<script>
+(function(){
+  try {
+    const u = JSON.parse(localStorage.getItem('cam_user') || 'null');
+    const bar = document.getElementById('login-status');
+    const inp = document.getElementById('student-name');
+    if (!u) { if(bar) bar.style.display='none'; return; }
+    if (inp && !inp.value) inp.value = u.name;
+    if (bar) {
+      bar.style.display = 'flex';
+      const nm = document.getElementById('login-status-name');
+      const cl = document.getElementById('login-status-class');
+      if (nm) nm.textContent = u.name;
+      if (cl) cl.textContent = 'Class: ' + u.cls;
+    }
+  } catch(e) {}
+})();
+</script>
+</body>
+</html>
