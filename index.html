@@ -386,12 +386,16 @@ function applyFilter(level){
 
 // ── NAVIGATION ──
 function goTo(page){
-  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.page').forEach(function(p){p.classList.remove('active');});
   document.getElementById('page-'+page).classList.add('active');
-  const ha=document.getElementById('header-actions');
-  if(page==='admin') ha.innerHTML='<button class="teacher-btn" onclick="goTo(\'home\')">← Back to Site</button>';
-  else if(page==='login') ha.innerHTML='<button class="teacher-btn" onclick="goTo(\'home\')">← Back</button>';
-  else ha.innerHTML='<button class="teacher-btn" onclick="goTo(\'login\')">Teacher Login</button>';
+  var hr=document.getElementById('header-right');
+  var btn=document.createElement('button');
+  btn.className='header-btn';
+  if(page==='admin'){btn.textContent='Logout';btn.onclick=function(){goTo('home');};}
+  else if(page==='login'){btn.textContent='← Back';btn.onclick=function(){goTo('home');};}
+  else{btn.textContent='Teacher Login';btn.onclick=function(){goTo('login');};}
+  hr.innerHTML='';
+  hr.appendChild(btn);
 }
 
 // ── LOGIN ──

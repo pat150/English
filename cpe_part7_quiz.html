@@ -1,332 +1,287 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>CPE Part 7 – Kents Cavern Quiz</title>
+<meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>CPE · Part 7</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Source+Serif+4:wght@300;400;600&display=swap" rel="stylesheet"/>
 <style>
-  @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Source+Serif+4:wght@300;400;600&display=swap');
-
-  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
-  body {
-    min-height: 100vh;
-    background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
-    font-family: 'Source Serif 4', serif;
-    color: #e8e0d5;
-  }
-
-  header {
-    background: rgba(0,0,0,0.4);
-    border-bottom: 2px solid #c9a84c;
-    padding: 16px 32px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-  }
-
-  .logo {
-    font-family: 'Playfair Display', serif;
-    color: #c9a84c;
-    letter-spacing: 3px;
-    font-size: 1rem;
-    text-transform: uppercase;
-  }
-
-  .header-btn {
-    background: transparent;
-    border: 1px solid #c9a84c;
-    color: #c9a84c;
-    padding: 6px 18px;
-    cursor: pointer;
-    border-radius: 3px;
-    font-size: 0.8rem;
-    letter-spacing: 1px;
-    font-family: inherit;
-  }
-  .header-btn:hover { background: rgba(201,168,76,0.15); }
-
-  .card {
-    background: rgba(255,255,255,0.05);
-    border: 1px solid rgba(201,168,76,0.3);
-    border-radius: 10px;
-    padding: 36px;
-    max-width: 780px;
-    margin: 40px auto;
-    backdrop-filter: blur(8px);
-  }
-
-  h1 { font-family: 'Playfair Display', serif; color: #c9a84c; font-size: 1.7rem; margin-bottom: 6px; }
-  .subtitle { color: #aaa; font-size: 0.9rem; margin-bottom: 28px; }
-
-  input[type="text"], input[type="password"] {
-    width: 100%;
-    padding: 12px 16px;
-    background: rgba(255,255,255,0.08);
-    border: 1px solid rgba(201,168,76,0.5);
-    border-radius: 4px;
-    color: #e8e0d5;
-    font-size: 1rem;
-    font-family: inherit;
-    margin-bottom: 20px;
-  }
-  input::placeholder { color: #888; }
-
-  .btn-primary {
-    background: #c9a84c;
-    color: #0f2027;
-    border: none;
-    padding: 12px 32px;
-    font-size: 1rem;
-    font-weight: bold;
-    border-radius: 4px;
-    cursor: pointer;
-    letter-spacing: 1px;
-    font-family: inherit;
-  }
-  .btn-primary:hover { background: #d9bb6a; }
-
-  .question-block {
-    margin-bottom: 20px;
-    background: rgba(255,255,255,0.04);
-    border-radius: 6px;
-    padding: 18px 20px;
-    border: 1px solid rgba(255,255,255,0.08);
-  }
-
-  .q-num { color: #c9a84c; font-weight: bold; font-size: 0.8rem; letter-spacing: 2px; margin-bottom: 8px; }
-  .q-text { font-size: 0.97rem; margin-bottom: 14px; line-height: 1.6; }
-
-  .options-row {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 8px;
-  }
-
-  .option {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 44px;
-    height: 44px;
-    border-radius: 50%;
-    cursor: pointer;
-    background: rgba(255,255,255,0.04);
-    border: 1px solid rgba(255,255,255,0.15);
-    transition: all 0.2s;
-    font-weight: bold;
-    font-size: 1rem;
-    color: #aaa;
-  }
-  .option:hover { background: rgba(201,168,76,0.15); border-color: #c9a84c; color: #c9a84c; }
-  .option.selected { background: rgba(201,168,76,0.25); border-color: #c9a84c; color: #c9a84c; }
-
-  .instruction-box {
-    background: rgba(201,168,76,0.07);
-    border: 1px solid rgba(201,168,76,0.25);
-    border-radius: 6px;
-    padding: 14px 18px;
-    margin-bottom: 24px;
-    font-size: 0.87rem;
-    color: #bbb;
-    line-height: 1.7;
-  }
-  .instruction-box strong { color: #c9a84c; }
-
-  .score-box { text-align: center; padding: 30px 10px; }
-  .big-score { font-family: 'Playfair Display', serif; font-size: 4.5rem; color: #c9a84c; }
-  .result-row {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 9px 0;
-    border-bottom: 1px solid rgba(255,255,255,0.07);
-    font-size: 0.9rem;
-    text-align: left;
-  }
-  .result-row span:first-child { min-width: 40px; }
-  .correct { color: #6fcf97; font-weight: bold; }
-  .wrong { color: #eb5757; font-weight: bold; }
-  .gold { color: #c9a84c; font-weight: bold; }
-
-  .key-editor {
-    margin-bottom: 28px;
-    padding: 20px;
-    background: rgba(201,168,76,0.06);
-    border-radius: 6px;
-    border: 1px solid rgba(201,168,76,0.3);
-  }
-  .key-row { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; font-size: 0.92rem; flex-wrap: wrap; }
-  .key-opt {
-    cursor: pointer;
-    padding: 4px 12px;
-    border-radius: 4px;
-    border: 1px solid #555;
-    color: #aaa;
-    transition: all 0.15s;
-    font-family: inherit;
-    font-size: 0.88rem;
-    background: transparent;
-  }
-  .key-opt.active { border: 2px solid #c9a84c; color: #c9a84c; font-weight: bold; }
-
-  .sub-card {
-    margin-bottom: 22px;
-    padding: 20px;
-    background: rgba(255,255,255,0.04);
-    border-radius: 6px;
-    border: 1px solid rgba(255,255,255,0.1);
-  }
-  .sub-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; flex-wrap: wrap; gap: 8px; }
-  .sub-name { font-size: 1.05rem; font-weight: bold; }
-  .sub-score { color: #c9a84c; font-weight: bold; margin-left: 12px; }
-  .sub-time { color: #777; font-size: 0.8rem; margin-left: 12px; }
-
-  .ans-pills { display: flex; gap: 10px; flex-wrap: wrap; }
-  .pill { text-align: center; min-width: 55px; }
-  .pill-label { font-size: 0.7rem; color: #888; margin-bottom: 4px; }
-  .pill-val {
-    display: inline-flex; align-items: center; justify-content: center;
-    width: 34px; height: 34px;
-    border-radius: 50%;
-    font-weight: bold;
-    font-size: 0.9rem;
-  }
-  .pill-val.ok { background: rgba(111,207,151,0.2); border: 2px solid #6fcf97; color: #6fcf97; }
-  .pill-val.bad { background: rgba(235,87,87,0.2); border: 2px solid #eb5757; color: #eb5757; }
-
-  .edit-sel {
-    background: #1a2a35;
-    color: #e8e0d5;
-    border: 1px solid #c9a84c;
-    border-radius: 3px;
-    padding: 4px 6px;
-    font-family: inherit;
-    width: auto;
-  }
-
-  .btn-sm {
-    background: transparent;
-    border: 1px solid #c9a84c;
-    color: #c9a84c;
-    padding: 5px 14px;
-    cursor: pointer;
-    border-radius: 3px;
-    font-size: 0.8rem;
-    font-family: inherit;
-  }
-  .btn-sm:hover { background: rgba(201,168,76,0.15); }
-  .btn-sm.danger { border-color: #eb5757; color: #eb5757; }
-  .btn-sm.danger:hover { background: rgba(235,87,87,0.15); }
-  .btn-sm.success { border-color: #6fcf97; color: #6fcf97; }
-
-  .section-title { color: #c9a84c; font-weight: bold; letter-spacing: 1px; margin-bottom: 16px; font-size: 0.9rem; }
-  .hint { color: #888; font-size: 0.8rem; margin-top: 14px; }
-  .error-msg { color: #eb5757; margin-bottom: 12px; font-size: 0.9rem; }
-  .progress { color: #aaa; font-size: 0.85rem; }
-
-  .page { display: none; }
-  .page.active { display: block; }
-
-  .note { color: #888; font-size: 0.82rem; margin-top: 10px; font-style: italic; }
-
-  /* ── Review mode ── */
-  .review-q{margin-bottom:20px;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.08);border-radius:8px;padding:18px 20px;}
-  .review-q-num{color:#c9a84c;font-size:0.78rem;letter-spacing:1px;text-transform:uppercase;margin-bottom:10px;}
-  .review-opt{display:flex;align-items:center;gap:10px;padding:8px 12px;border-radius:5px;margin-bottom:6px;font-size:0.9rem;}
-  .review-opt.correct{background:rgba(111,207,151,0.15);border:1px solid rgba(111,207,151,0.35);color:#6fcf97;}
-  .review-opt.wrong{background:rgba(235,87,87,0.12);border:1px solid rgba(235,87,87,0.3);color:#eb5757;}
-  .review-opt.neutral{background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.06);color:#888;}
-  .review-icon{font-size:1rem;min-width:18px;}
-  .review-note{font-size:0.82rem;color:#888;font-style:italic;margin-top:8px;padding-top:8px;border-top:1px solid rgba(255,255,255,0.06);}
-  .review-note .hl{color:#c9a84c;font-style:normal;}
-
-  .login-bar{background:rgba(0,0,0,0.3);border-bottom:1px solid rgba(201,168,76,0.2);padding:8px 32px;display:none;justify-content:space-between;align-items:center;font-size:0.8rem;}
-  .login-bar-left{color:#888;}
-  .login-bar-left strong{color:#c9a84c;}
-  .login-bar-right{display:flex;gap:10px;align-items:center;}
-  .bar-link{color:#888;text-decoration:none;font-size:0.75rem;letter-spacing:1px;}
-  .bar-link:hover{color:#c9a84c;}
-  .bar-signout{background:transparent;border:1px solid rgba(235,87,87,0.4);color:#eb5757;padding:3px 10px;cursor:pointer;border-radius:3px;font-size:0.72rem;font-family:inherit;letter-spacing:1px;}
-  .bar-signout:hover{background:rgba(235,87,87,0.1);}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+body{min-height:100vh;background:linear-gradient(135deg,#0f2027,#203a43,#2c5364);font-family:'Source Serif 4',serif;color:#e8e0d5;}
+header{background:rgba(0,0,0,0.4);border-bottom:2px solid #c9a84c;padding:14px 32px;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;z-index:100;backdrop-filter:blur(12px);}
+.logo{font-family:'Playfair Display',serif;color:#c9a84c;letter-spacing:2px;font-size:0.85rem;text-transform:uppercase;}
+.header-btn{background:transparent;border:1px solid #c9a84c;color:#c9a84c;padding:6px 16px;cursor:pointer;border-radius:3px;font-size:0.78rem;letter-spacing:1px;font-family:inherit;}
+.header-btn:hover{background:rgba(201,168,76,0.15);}
+/* Login status bar */
+#login-status{background:rgba(0,0,0,0.3);border-bottom:1px solid rgba(201,168,76,0.2);padding:7px 32px;display:none;justify-content:space-between;align-items:center;font-size:0.8rem;}
+.bar-name{color:#888;}
+.bar-name strong{color:#c9a84c;}
+.bar-links{display:flex;gap:10px;align-items:center;}
+.bar-link{color:#888;text-decoration:none;font-size:0.75rem;letter-spacing:1px;}
+.bar-link:hover{color:#c9a84c;}
+.bar-signout{background:transparent;border:1px solid rgba(235,87,87,0.4);color:#eb5757;padding:3px 10px;cursor:pointer;border-radius:3px;font-size:0.72rem;font-family:inherit;}
+/* Pages */
+.page{display:none;}.page.active{display:block;}
+/* Cards */
+.card{background:rgba(255,255,255,0.05);border:1px solid rgba(201,168,76,0.3);border-radius:10px;padding:36px;max-width:860px;margin:40px auto;backdrop-filter:blur(8px);}
+@media(max-width:600px){.card{padding:20px 16px;margin:20px 12px;}}
+.home-link{color:#888;font-size:0.8rem;text-decoration:none;letter-spacing:1px;display:inline-block;margin-bottom:20px;}
+.home-link:hover{color:#c9a84c;}
+h1{font-family:'Playfair Display',serif;color:#c9a84c;font-size:1.6rem;margin-bottom:10px;}
+.subtitle{color:#aaa;font-size:0.9rem;margin-bottom:28px;line-height:1.6;}
+/* Name input */
+.name-wrap{margin-top:24px;}
+.name-input{width:100%;max-width:400px;padding:12px 16px;background:rgba(255,255,255,0.08);border:1px solid rgba(201,168,76,0.5);border-radius:4px;color:#e8e0d5;font-size:1rem;font-family:inherit;outline:none;display:block;margin-bottom:12px;}
+.btn-primary{background:#c9a84c;color:#0f2027;border:none;padding:12px 32px;font-size:1rem;font-weight:bold;border-radius:4px;cursor:pointer;letter-spacing:1px;font-family:inherit;}
+.btn-primary:hover{background:#d9bb6a;}
+.btn-outline{background:transparent;border:1px solid #c9a84c;color:#c9a84c;padding:10px 24px;font-size:0.9rem;border-radius:4px;cursor:pointer;font-family:inherit;letter-spacing:1px;}
+.btn-outline:hover{background:rgba(201,168,76,0.1);}
+/* Progress */
+.progress-wrap{margin-bottom:24px;}
+.progress-top{display:flex;justify-content:space-between;font-size:0.78rem;color:#888;margin-bottom:6px;}
+.progress-bar-bg{height:4px;background:rgba(255,255,255,0.1);border-radius:2px;}
+.progress-bar{height:4px;background:#c9a84c;border-radius:2px;width:0%;transition:width 0.3s;}
+/* Passage */
+.passage-box{background:rgba(0,0,0,0.25);border-left:3px solid #c9a84c;border-radius:4px;padding:20px 24px;margin-bottom:28px;line-height:1.8;font-size:0.95rem;}
+.passage-box h2{font-family:'Playfair Display',serif;color:#c9a84c;font-size:1rem;letter-spacing:2px;margin-bottom:14px;}
+.gn{background:rgba(201,168,76,0.15);border:1px solid rgba(201,168,76,0.3);border-radius:3px;padding:1px 6px;font-size:0.85rem;}
+.example-note{font-size:0.8rem;color:#888;letter-spacing:1px;margin-bottom:20px;}
+/* Questions */
+.q-block{margin-bottom:20px;}
+.q-num{font-size:0.75rem;color:#888;letter-spacing:2px;text-transform:uppercase;margin-bottom:8px;}
+.options{display:grid;grid-template-columns:1fr 1fr;gap:8px;}
+@media(max-width:500px){.options{grid-template-columns:1fr;}}
+.opt-btn{background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.12);color:#ccc;padding:10px 14px;cursor:pointer;border-radius:4px;text-align:left;font-family:inherit;font-size:0.9rem;transition:all 0.15s;}
+.opt-btn:hover{border-color:#c9a84c;color:#e8e0d5;background:rgba(201,168,76,0.08);}
+.opt-btn.selected{border-color:#c9a84c;background:rgba(201,168,76,0.15);color:#c9a84c;font-weight:bold;}
+/* Submit */
+.submit-wrap{margin-top:24px;display:flex;gap:12px;align-items:center;flex-wrap:wrap;}
+.unanswered-msg{color:#eb5757;font-size:0.85rem;display:none;}
+/* Results */
+.result-score{font-size:3.5rem;font-family:'Playfair Display',serif;color:#c9a84c;font-weight:700;margin:20px 0 6px;}
+.result-name{font-size:1.1rem;color:#aaa;margin-bottom:4px;}
+.result-msg{color:#888;font-size:0.9rem;margin-bottom:24px;}
+.result-grid{display:flex;flex-wrap:wrap;gap:8px;margin:20px 0;}
+.pill{background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:6px;padding:6px 12px;text-align:center;min-width:60px;}
+.pill-label{font-size:0.7rem;color:#888;letter-spacing:1px;}
+.pill-val{font-size:1rem;font-weight:bold;color:#c9a84c;margin-top:2px;}
+.pill-val.ok{color:#6fcf97;}
+.pill-val.bad{color:#eb5757;}
+.result-btns{display:flex;gap:12px;flex-wrap:wrap;margin-top:8px;}
+/* Review */
+.review-q{margin-bottom:20px;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.08);border-radius:8px;padding:18px 20px;}
+.review-q-num{color:#c9a84c;font-size:0.78rem;letter-spacing:1px;text-transform:uppercase;margin-bottom:10px;}
+.review-opt{display:flex;align-items:center;gap:10px;padding:8px 12px;border-radius:5px;margin-bottom:6px;font-size:0.9rem;}
+.review-opt.correct{background:rgba(111,207,151,0.15);border:1px solid rgba(111,207,151,0.35);color:#6fcf97;}
+.review-opt.wrong{background:rgba(235,87,87,0.12);border:1px solid rgba(235,87,87,0.3);color:#eb5757;}
+.review-opt.neutral{background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.06);color:#888;}
+.review-icon{font-size:1rem;min-width:18px;}
+.review-note{font-size:0.82rem;color:#888;font-style:italic;margin-top:8px;padding-top:8px;border-top:1px solid rgba(255,255,255,0.06);}
+.review-note .hl{color:#c9a84c;font-style:normal;}
+/* Teacher */
+.section-title{font-size:0.72rem;letter-spacing:2px;color:#c9a84c;text-transform:uppercase;margin-bottom:14px;padding-bottom:8px;border-bottom:1px solid rgba(201,168,76,0.2);}
+.key-editor{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:24px;}
+.key-item{display:flex;align-items:center;gap:6px;font-size:0.85rem;}
+.key-item label{color:#888;min-width:32px;}
+.key-select{background:rgba(255,255,255,0.08);border:1px solid rgba(201,168,76,0.4);color:#e8e0d5;padding:4px 8px;border-radius:3px;font-family:inherit;cursor:pointer;}
+.sub-card{margin-bottom:14px;padding:16px 18px;background:rgba(255,255,255,0.04);border-radius:8px;border:1px solid rgba(255,255,255,0.08);}
+.sub-header{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:10px;}
+.sub-name{font-weight:bold;color:#e8e0d5;}
+.sub-meta{font-size:0.75rem;color:#666;margin-top:2px;}
+.sub-score{color:#c9a84c;font-weight:bold;font-size:0.9rem;}
+.btn-sm{background:transparent;border:1px solid rgba(235,87,87,0.4);color:#eb5757;padding:4px 10px;cursor:pointer;border-radius:3px;font-size:0.75rem;font-family:inherit;}
+.btn-sm:hover{background:rgba(235,87,87,0.1);}
+.no-subs{color:#555;font-style:italic;font-size:0.85rem;}
+.login-card{background:rgba(255,255,255,0.05);border:1px solid rgba(201,168,76,0.3);border-radius:10px;padding:40px;max-width:380px;width:100%;text-align:center;margin:80px auto;}
+.login-card h1{font-family:'Playfair Display',serif;color:#c9a84c;font-size:1.4rem;margin-bottom:8px;}
+.login-card p{color:#888;font-size:0.88rem;margin-bottom:24px;}
+.pass-input{width:100%;padding:12px 16px;background:rgba(255,255,255,0.08);border:1px solid rgba(201,168,76,0.5);border-radius:4px;color:#e8e0d5;font-size:1rem;font-family:inherit;outline:none;text-align:center;letter-spacing:4px;margin-bottom:16px;}
+.error-msg{color:#eb5757;font-size:0.85rem;margin-bottom:12px;display:none;}
 </style>
 </head>
 <body>
-
 <header>
   <span class="logo">CPE · Paper 1 · Part 7</span>
-  <div id="header-right">
-    <button class="header-btn" onclick="goTo('login')">Teacher Login</button>
-  </div>
+  <div id="header-right"><button class="header-btn" id="header-btn-init">Teacher Login</button></div>
 </header>
-<div id="login-status" style="display:none;background:rgba(0,0,0,0.3);border-bottom:1px solid rgba(201,168,76,0.2);padding:8px 32px;display:flex;justify-content:space-between;align-items:center;font-size:0.8rem;">
-  <div style="color:#888;">Signed in as <strong id="login-status-name" style="color:#c9a84c;"></strong> &nbsp;·&nbsp; <span id="login-status-class"></span></div>
-  <div style="display:flex;gap:10px;align-items:center;">
-    <a href="login.html" style="color:#888;text-decoration:none;font-size:0.75rem;letter-spacing:1px;">My Results</a>
-    <a href="index.html" style="color:#888;text-decoration:none;font-size:0.75rem;letter-spacing:1px;">Activities</a>
-    <button onclick="signOutUser()" style="background:transparent;border:1px solid rgba(235,87,87,0.4);color:#eb5757;padding:3px 10px;cursor:pointer;border-radius:3px;font-size:0.72rem;font-family:inherit;letter-spacing:1px;">Sign Out</button>
+<div id="login-status">
+  <div class="bar-name">Signed in as <strong id="bar-name"></strong> &nbsp;·&nbsp; <span id="bar-class"></span></div>
+  <div class="bar-links">
+    <a href="login.html" class="bar-link">My Results</a>
+    <a href="index.html" class="bar-link">Activities</a>
+    <button class="bar-signout" onclick="signOut()">Sign Out</button>
   </div>
 </div>
 
-<!-- HOME -->
 <div id="page-home" class="page active">
   <div class="card">
-    <h1>Multiple Matching Exercise</h1>
-    <p class="subtitle">Kents Cavern — Questions 44–53 &nbsp;·&nbsp; Match each question to a section (A–F)</p>
-
-    <div style="margin-top:24px;">
-      <input type="text" id="student-name" placeholder="Enter your full name..." style="width:100%;max-width:400px;padding:12px 16px;background:rgba(255,255,255,0.08);border:1px solid rgba(201,168,76,0.5);border-radius:4px;color:#e8e0d5;font-size:1rem;font-family:inherit;outline:none;display:block;margin-bottom:12px;"/>
-      <button class="btn-primary" onclick="startQuiz()">Start &#8594;</button>
+    <a class="home-link" href="index.html">&#8592; Back to Home</a>
+    <h1>CPE &middot; Part 7</h1>
+    <p class="subtitle">SUBCPE &middot; Part 7</p>
+    <input class="name-input" type="text" id="student-name" placeholder="Enter your full name..."/>
+    <button class="btn-primary" onclick="startQuiz()">Start &#8594;</button>
+  </div>
+</div>
+<div id="page-quiz" class="page">
+  <div class="card">
+    <div style="margin-bottom:16px;">
+      <div style="display:flex;justify-content:space-between;font-size:0.78rem;color:#888;margin-bottom:6px;"><span id="prog-text">0 answered</span><span id="prog-pct">0%</span></div>
+      <div style="height:4px;background:rgba(255,255,255,0.1);border-radius:2px;"><div id="prog-bar" style="height:4px;background:#c9a84c;border-radius:2px;width:0%;transition:width 0.3s;"></div></div>
+    </div>
+    <div class="passage-box">
+<h2>KENT'S CAVERN</h2>
+<p>For questions 44&ndash;53, choose from sections A&ndash;F. The sections may be chosen more than once.</p>
+<p style="margin-top:12px;color:#bbb;font-style:italic;">The text consists of multiple sections about Kent's Cavern, a prehistoric cave in Devon, England. Match each question to the section where the information appears.</p>
+</div>
+    <div id="questions-container"></div>
+    <div class="submit-wrap">
+      <button class="btn-primary" onclick="submitQuiz()">Submit Answers &#8594;</button>
+      <span class="unanswered-msg" id="unanswered-msg">Please answer all questions first.</span>
+    </div>
+  </div>
+</div>
+<div id="page-submitted" class="page">
+  <div class="card" style="text-align:center;">
+    <div class="result-name" id="done-name"></div>
+    <div class="result-score" id="done-score"></div>
+    <div class="result-msg" id="done-msg"></div>
+    <div id="done-breakdown"></div>
+    <div class="result-btns" style="justify-content:center;">
+      <button class="btn-outline" onclick="openReview()">Review Answers &#8594;</button>
+      <button class="btn-primary" onclick="goHome()">Back to Home</button>
+    </div>
+  </div>
+</div>
+<div id="page-review" class="page">
+  <div class="card">
+    <h1 style="margin-bottom:20px;">Answer Review</h1>
+    <div id="review-container"></div>
+    <div style="margin-top:16px;display:flex;gap:12px;flex-wrap:wrap;">
+      <button class="btn-outline" onclick="goTo('submitted')">&#8592; Back to Score</button>
+      <button class="btn-primary" onclick="goHome()">Back to Home</button>
     </div>
   </div>
 </div>
 <div id="page-login" class="page">
-  <div class="card" style="max-width:420px;">
+  <div class="login-card">
     <h1>Teacher Login</h1>
-    <p class="subtitle" style="margin-bottom:20px;">Enter your password to view submissions</p>
-    <input type="password" id="admin-pass" placeholder="Password..." onkeydown="if(event.key==='Enter')adminLogin()" />
-    <div class="error-msg" id="login-error" style="display:none;"></div>
-    <button class="btn-primary" onclick="adminLogin()">Login</button>
-    <p class="hint">Default password: <strong>teacher123</strong></p>
+    <p>Enter your password to view submissions</p>
+    <input class="pass-input" type="password" id="admin-pass" placeholder="Password" onkeydown="if(event.key==='Enter')adminLogin()"/>
+    <div class="error-msg" id="login-error">Incorrect password</div>
+    <button class="btn-primary" onclick="adminLogin()">Login &#8594;</button>
   </div>
 </div>
-
-<!-- ADMIN -->
 <div id="page-admin" class="page">
   <div class="card">
-    <div class="section-title">ANSWER KEY</div>
+    <div class="section-title">Answer Key</div>
     <div class="key-editor" id="key-editor"></div>
-    <div class="section-title" id="sub-count-label">STUDENT SUBMISSIONS</div>
-    <div id="submissions-container"><p style="color:#888;">No submissions yet.</p></div>
+    <button class="btn-primary" style="margin-bottom:28px;" onclick="saveKey()">Save Key</button>
+    <div class="section-title" id="sub-count-label">Student Submissions</div>
+    <div id="submissions-container"><p class="no-subs">No submissions yet.</p></div>
   </div>
 </div>
-
 <script>
-  const QUESTIONS = [
-    { num: 44, text: "surprise about the location of some findings" },
-    { num: 45, text: "the present and possible future significance of the cave" },
-    { num: 46, text: "the danger of drawing attention to certain contents of the cave" },
-    { num: 47, text: "subjects that people previously had no information on" },
-    { num: 48, text: "a reaction to what the presence of something in the cave indicated" },
-    { num: 49, text: "a revised assessment of something found in the cave" },
-    { num: 50, text: "the different aims of people investigating the cave" },
-    { num: 51, text: "the disproving of a theory by a body of evidence" },
-    { num: 52, text: "a sign of previous activity in the cave" },
-    { num: 53, text: "the physical appearance of the cave" },
-  ];
 
-  const OPTIONS = ["A", "B", "C", "D", "E", "F"];
+const QUESTIONS=[
+  {n:44,text:"surprise about the location of some findings"},
+  {n:45,text:"the present and possible future significance of the cave"},
+  {n:46,text:"the danger of drawing attention to certain contents of the cave"},
+  {n:47,text:"subjects that people previously had no information on"},
+  {n:48,text:"a reaction to what the presence of something in the cave indicated"},
+  {n:49,text:"a revised assessment of something found in the cave"},
+  {n:50,text:"the different aims of people investigating the cave"},
+  {n:51,text:"the disproving of a theory by a body of evidence"},
+  {n:52,text:"a sign of previous activity in the cave"},
+  {n:53,text:"the physical appearance of the cave"}
+];
+const SECTIONS=['A','B','C','D','E','F'];
+const STORAGE_KEY='cpe_p7_submissions';
+const ACTIVITY='CPE Part 7';
+const ANSWER_KEY={44:"D",45:"F",46:"B",47:"D",48:"E",49:"C",50:"A",51:"C",52:"B",53:"A"};
+let submissions=JSON.parse(localStorage.getItem(STORAGE_KEY)||'[]');
+let currentStudent='',answers={},submitted=false;
+function saveData(){localStorage.setItem(STORAGE_KEY,JSON.stringify(submissions));}
+function startQuiz(){
+  var name=document.getElementById('student-name').value.trim();
+  if(!name){alert('Please enter your name.');return;}
+  currentStudent=name;answers={};submitted=false;renderQuestions();goTo('quiz');
+}
+function renderQuestions(){
+  var c=document.getElementById('questions-container');c.innerHTML='';
+  QUESTIONS.forEach(function(q){
+    var opts=SECTIONS.map(function(l){return '<button class="opt-btn" id="opt-'+q.n+'-'+l+'" onclick="selectAnswer('+q.n+',\''+l+'\')">'+l+'</button>';}).join('');
+    c.innerHTML+='<div class="q-block"><div class="q-num">Question '+q.n+'</div><p style="color:#ddd;font-size:0.9rem;margin-bottom:10px;">'+q.text+'</p><div class="options" style="grid-template-columns:repeat(3,1fr);">'+opts+'</div></div>';
+  });
+}
+function selectAnswer(qn,letter){
+  if(submitted)return;
+  answers[qn]=letter;
+  SECTIONS.forEach(function(l){var btn=document.getElementById('opt-'+qn+'-'+l);if(btn)btn.className='opt-btn'+(l===letter?' selected':'');});
+  updateProgress();
+}
+function updateProgress(){
+  var done=Object.keys(answers).length,total=QUESTIONS.length;
+  var pt=document.getElementById('prog-text');var pp=document.getElementById('prog-pct');var pb=document.getElementById('prog-bar');
+  if(pt)pt.textContent=done+' of '+total+' answered';if(pp)pp.textContent=Math.round(done/total*100)+'%';if(pb)pb.style.width=(done/total*100)+'%';
+}
+function submitQuiz(){
+  if(QUESTIONS.filter(function(q){return !answers[q.n];}).length){document.getElementById('unanswered-msg').style.display='inline';return;}
+  submitted=true;
+  var score=0;QUESTIONS.forEach(function(q){if(answers[q.n]===ANSWER_KEY[q.n])score++;});
+  var cls=(function(){try{var u=JSON.parse(localStorage.getItem('cam_user')||'null');return u?u.cls:'';}catch(e){return '';}}());
+  var sub={id:Date.now(),name:currentStudent,cls:cls,answers:Object.assign({},answers),score:score,total:QUESTIONS.length,submittedAt:new Date().toLocaleString()};
+  submissions.push(sub);saveData();
+  saveToSupabase({student_name:sub.name,class_code:sub.cls,activity:ACTIVITY,storage_key:STORAGE_KEY,score:score,total:QUESTIONS.length,answers:JSON.stringify(answers),submitted_at:sub.submittedAt});
+  var pct=Math.round(score/QUESTIONS.length*100);
+  document.getElementById('done-name').textContent=currentStudent;
+  document.getElementById('done-score').textContent=score+'/'+QUESTIONS.length;
+  document.getElementById('done-msg').textContent=pct>=75?'Excellent!':pct>=50?'Good effort!':'Keep practising!';
+  var html='<div class="result-grid">';QUESTIONS.forEach(function(q){var s=answers[q.n]||'?';var k=ANSWER_KEY[q.n];html+='<div class="pill"><div class="pill-label">Q'+q.n+'</div><div class="pill-val '+(s===k?'ok':'bad')+'">'+s+'</div></div>';});html+='</div>';
+  document.getElementById('done-breakdown').innerHTML=html;goTo('submitted');
+}
+function openReview(){
+  var html='';
+  QUESTIONS.forEach(function(q){
+    var student=answers[q.n]||null,correct=ANSWER_KEY[q.n]||null;
+    html+='<div class="review-q"><div class="review-q-num">Question '+q.n+'</div><p style="color:#ddd;font-size:0.9rem;margin-bottom:8px;">'+q.text+'</p>';
+    if(correct){
+      if(student===correct){html+='<div class="review-answer correct">&#10003; Section '+student+' — Correct!</div>';}
+      else{html+='<div class="review-answer wrong">&#10007; You chose: '+student+' — Correct: '+correct+'</div>';}
+    }
+    html+='</div>';
+  });
+  document.getElementById('review-container').innerHTML=html;goTo('review');
+}
+function renderKeyEditor(){
+  var ke=document.getElementById('key-editor');ke.innerHTML='';
+  QUESTIONS.forEach(function(q){
+    var sel='<select class="key-select" id="ks-'+q.n+'" onchange="ANSWER_KEY['+q.n+']=this.value"><option value="">-</option>'+SECTIONS.map(function(l){return '<option value="'+l+'"'+(ANSWER_KEY[q.n]===l?' selected':'')+'>'+l+'</option>';}).join('')+'</select>';
+    ke.innerHTML+='<div class="key-item"><label>Q'+q.n+'</label>'+sel+'</div>';
+  });
+}
+function saveKey(){localStorage.setItem(STORAGE_KEY+'_key',JSON.stringify(ANSWER_KEY));alert('Key saved!');renderAdmin();}
+function renderAdmin(){
+  renderKeyEditor();
+  var cnt=document.getElementById('submissions-container');
+  document.getElementById('sub-count-label').textContent='Student Submissions ('+submissions.length+')';
+  if(!submissions.length){cnt.innerHTML='<p class="no-subs">No submissions yet.</p>';return;}
+  var html='';
+  submissions.forEach(function(sub,idx){
+    var score=0;QUESTIONS.forEach(function(q){if(sub.answers[q.n]===ANSWER_KEY[q.n])score++;});
+    var pills='<div class="result-grid">';QUESTIONS.forEach(function(q){var s=sub.answers[q.n]||'?';var k=ANSWER_KEY[q.n];pills+='<div class="pill"><div class="pill-label">Q'+q.n+'</div><div class="pill-val '+(s===k?'ok':'bad')+'">'+s+'</div></div>';});pills+='</div>';
+    html+='<div class="sub-card"><div class="sub-header"><div><div class="sub-name">'+sub.name+'</div><div class="sub-meta">'+(sub.cls||'')+' '+(sub.submittedAt||'')+'</div></div><div style="display:flex;gap:10px;"><span class="sub-score">'+score+'/'+QUESTIONS.length+'</span><button class="btn-sm" onclick="deleteSub('+idx+')">Delete</button></div></div>'+pills+'</div>';
+  });
+  cnt.innerHTML=html;
+}
+function deleteSub(idx){if(!confirm('Delete?'))return;submissions.splice(idx,1);saveData();renderAdmin();}
 
-  let correctAnswers = { 44:"D", 45:"F", 46:"B", 47:"D", 48:"E", 49:"C", 50:"A", 51:"C", 52:"B", 53:"A" };
-  let studentAnswers = {};
-  let currentStudent = "";
-  let submissions = JSON.parse(localStorage.getItem("cpe_p7_submissions") || "[]");
-  let editingId = null;
-  let editTemp = {};
 
-  function saveData() { localStorage.setItem("cpe_p7_submissions", JSON.stringify(submissions)); }
-
-  function goTo(page){
+const SUPA_URL='https://dhvzvhdefhrfsbjmnnbz.supabase.co';
+const SUPA_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRodnp2aGRlZmhyZnNiam1ubmJ6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzMwODk1OTEsImV4cCI6MjA4ODY2NTU5MX0.SSkscvxvvgsbGaSfJT_1BbJSVbIzfxUMJaE03OQj5Xg';
+async function saveToSupabase(rec){
+  try{var r=await fetch(SUPA_URL+'/rest/v1/submissions',{method:'POST',headers:{'Content-Type':'application/json','apikey':SUPA_KEY,'Authorization':'Bearer '+SUPA_KEY,'Prefer':'return=minimal'},body:JSON.stringify(rec)});if(!r.ok)console.error('Supabase:',r.status);}catch(e){console.error(e);}
+}
+function goTo(page){
   document.querySelectorAll('.page').forEach(function(p){p.classList.remove('active');});
   document.getElementById('page-'+page).classList.add('active');
   var hr=document.getElementById('header-right');
@@ -338,88 +293,15 @@
   hr.innerHTML='';
   hr.appendChild(btn);
 }
-
-function openReview(){
-  let html='';
-  QUESTIONS.forEach(function(q){
-    var qn=q.num;
-    var student=studentAnswers[qn]||null;
-    var correct=correctAnswers[qn]||null;
-    html+='<div class="review-q"><div class="review-q-num">Question '+qn+'</div>';
-    (q.options||q.opts||[]).forEach(function(o){
-      var letter=o.letter||o.l||o[0]||'';
-      var word=o.text||o.w||o[1]||o||'';
-      if(typeof word==='object') word='';
-      var isCorrect=correct&&letter===correct;
-      var isStudent=student&&letter===student;
-      var isWrong=isStudent&&letter!==correct;
-      var cls='neutral',icon='·';
-      if(isCorrect){cls='correct';icon='✓';}
-      if(isWrong){cls='wrong';icon='✗';}
-      if(isCorrect||isWrong||isStudent){
-        html+='<div class="review-opt '+cls+'"><span class="review-icon">'+icon+'</span><strong>'+letter+'</strong> &nbsp; '+word+'</div>';
-      } else {
-        html+='<div class="review-opt neutral"><span class="review-icon">·</span>'+letter+' &nbsp; '+word+'</div>';
-      }
-    });
-    if(correct&&student&&student!==correct){
-      var cw=(q.options||q.opts||[]).find(function(o){return (o.letter||o.l||o[0])===correct;});
-      var sw=(q.options||q.opts||[]).find(function(o){return (o.letter||o.l||o[0])===student;});
-      html+='<div class="review-note">You chose <span class="hl">'+student+(sw?' — '+(sw.text||sw.w||sw[1]||''):'')+'</span> · Correct answer: <span class="hl">'+correct+(cw?' — '+(cw.text||cw.w||cw[1]||''):'')+'</span></div>';
-    } else if(!correct){
-      html+='<div class="review-note">Answer key not set yet.</div>';
-    } else if(!student){
-      html+='<div class="review-note">Not answered.</div>';
-    }
-    html+='</div>';
-  });
-  document.getElementById('review-container').innerHTML=html;
-  goTo('review');
+function goHome(){currentStudent='';answers={};submitted=false;document.getElementById('student-name').value='';goTo('home');}
+function signOut(){if(confirm('Sign out?')){localStorage.removeItem('cam_user');document.getElementById('login-status').style.display='none';var i=document.getElementById('student-name');if(i)i.value='';}}
+function adminLogin(){
+  if(document.getElementById('admin-pass').value==='1996'){document.getElementById('login-error').style.display='none';document.getElementById('admin-pass').value='';renderAdmin();goTo('admin');}
+  else{document.getElementById('login-error').style.display='block';}
 }
+document.getElementById('header-btn-init').onclick=function(){goTo('login');};
+(function(){try{var u=JSON.parse(localStorage.getItem('cam_user')||'null');if(!u)return;var i=document.getElementById('student-name');if(i)i.value=u.name;var b=document.getElementById('login-status');if(b)b.style.display='flex';var bn=document.getElementById('bar-name');var bc=document.getElementById('bar-class');if(bn)bn.textContent=u.name;if(bc)bc.textContent='Class: '+u.cls;}catch(e){}}());
 
-function signOutUser(){
-  if(confirm('Sign out? Your submitted answers are already saved.')){
-    localStorage.removeItem('cam_user');
-    document.getElementById('login-status').style.display='none';
-    const inp=document.getElementById('student-name');
-    if(inp) inp.value='';
-  }
-}
-
-// ── Supabase ─────────────────────────────────────────────────────────
-const SUPA_URL='https://dhvzvhdefhrfsbjmnnbz.supabase.co';
-const SUPA_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRodnp2aGRlZmhyZnNiam1ubmJ6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzMwODk1OTEsImV4cCI6MjA4ODY2NTU5MX0.SSkscvxvvgsbGaSfJT_1BbJSVbIzfxUMJaE03OQj5Xg';
-async function saveToSupabase(rec){
-  try{
-    const r=await fetch(SUPA_URL+'/rest/v1/submissions',{
-      method:'POST',
-      headers:{'Content-Type':'application/json','apikey':SUPA_KEY,'Authorization':'Bearer '+SUPA_KEY,'Prefer':'return=minimal'},
-      body:JSON.stringify(rec)
-    });
-    return r.ok;
-  }catch(e){return false;}
-}
-// ─────────────────────────────────────────────────────────────────────
-</script>
-
-<script>
-// Pre-fill student name and class from login session
-(function(){
-  try {
-    const u = JSON.parse(localStorage.getItem('cam_user') || 'null');
-    const bar = document.getElementById('login-status');
-    const inp = document.getElementById('student-name');
-    if (!u) { if(bar) bar.style.display='none'; return; }
-    if (inp && !inp.value) inp.value = u.name;
-    if (bar) {
-      bar.style.display = 'flex';
-      const nm = document.getElementById('login-status-name');
-      const cl = document.getElementById('login-status-class');
-      if (nm) nm.textContent = u.name;
-      if (cl) cl.textContent = 'Class: ' + u.cls;
-    }
-  } catch(e) {}
-})();
 </script>
 </body>
 </html>
