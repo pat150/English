@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>CAE Part 1 – Multiple Choice Cloze</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Source+Serif+4:wght@300;400;600&display=swap');
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body { min-height: 100vh; background: linear-gradient(135deg, #0f2027, #203a43, #2c5364); font-family: 'Source Serif 4', serif; color: #e8e0d5; }
+  header { background: rgba(0,0,0,0.4); border-bottom: 2px solid #c9a84c; padding: 16px 32px; display: flex; justify-content: space-between; align-items: center; }
+  .logo { font-family: 'Playfair Display', serif; color: #c9a84c; letter-spacing: 3px; font-size: 1rem; text-transform: uppercase; }
+  .header-btn { background: transparent; border: 1px solid #c9a84c; color: #c9a84c; padding: 6px 18px; cursor: pointer; border-radius: 3px; font-size: 0.8rem; letter-spacing: 1px; font-family: inherit; }
+  .header-btn:hover { background: rgba(201,168,76,0.15); }
+  .card { background: rgba(255,255,255,0.05); border: 1px solid rgba(201,168,76,0.3); border-radius: 10px; padding: 36px; max-width: 780px; margin: 40px auto; backdrop-filter: blur(8px); }
+  h1 { font-family: 'Playfair Display', serif; color: #c9a84c; font-size: 1.7rem; margin-bottom: 6px; }
+  .subtitle { color: #aaa; font-size: 0.9rem; margin-bottom: 28px; }
+  input[type="text"], input[type="password"] { width: 100%; padding: 12px 16px; background: rgba(255,255,255,0.08); border: 1px solid rgba(201,168,76,0.5); border-radius: 4px; color: #e8e0d5; font-size: 1rem; font-family: inherit; margin-bottom: 20px; }
+  input::placeholder { color: #888; }
+  .btn-primary { background: #c9a84c; color: #0f2027; border: none; padding: 12px 32px; font-size: 1rem; font-weight: bold; border-radius: 4px; cursor: pointer; letter-spacing: 1px; font-family: inherit; }
+  .btn-primary:hover { background: #d9bb6a; }
+  .passage-box { background: rgba(255,255,255,0.06); border: 1px solid rgba(201,168,76,0.2); border-radius: 6px; padding: 20px 24px; margin-bottom: 28px; font-size: 0.95rem; line-height: 1.9; color: #ddd; }
+  .passage-box h3 { font-family: 'Playfair Display', serif; color: #c9a84c; margin-bottom: 14px; font-size: 1.1rem; }
+  .blank { display: inline-block; min-width: 110px; border-bottom: 2px solid #c9a84c; text-align: center; color: #c9a84c; font-weight: bold; font-size: 0.85rem; padding: 0 6px; vertical-align: middle; }
+  .question-block { margin-bottom: 24px; background: rgba(255,255,255,0.04); border-radius: 6px; padding: 18px 20px; border: 1px solid rgba(255,255,255,0.08); }
+  .q-num { color: #c9a84c; font-weight: bold; font-size: 0.8rem; letter-spacing: 2px; margin-bottom: 10px; }
+  .options-row { display: flex; flex-wrap: wrap; gap: 8px; }
+  .option { display: flex; align-items: center; gap: 8px; padding: 8px 16px; border-radius: 4px; cursor: pointer; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); transition: all 0.2s; font-size: 0.92rem; color: #ccc; }
+  .option:hover { background: rgba(201,168,76,0.1); border-color: #c9a84c; }
+  .option.selected { background: rgba(201,168,76,0.2); border-color: #c9a84c; color: #fff; }
+  .option-letter { font-weight: bold; color: #888; min-width: 16px; }
+  .option.selected .option-letter { color: #c9a84c; }
+  .score-box { text-align: center; padding: 30px 10px; }
+  .big-score { font-family: 'Playfair Display', serif; font-size: 4.5rem; color: #c9a84c; }
+  .result-row { display: flex; justify-content: space-between; align-items: center; padding: 9px 0; border-bottom: 1px solid rgba(255,255,255,0.07); font-size: 0.9rem; }
+  .correct { color: #6fcf97; font-weight: bold; }
+  .wrong { color: #eb5757; font-weight: bold; }
+  .gold { color: #c9a84c; font-weight: bold; }
+  .key-editor { margin-bottom: 28px; padding: 20px; background: rgba(201,168,76,0.06); border-radius: 6px; border: 1px solid rgba(201,168,76,0.3); }
+  .key-row { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; font-size: 0.92rem; }
+  .key-opt { cursor: pointer; padding: 4px 12px; border-radius: 4px; border: 1px solid #555; color: #aaa; font-family: inherit; font-size: 0.88rem; background: transparent; }
+  .key-opt.active { border: 2px solid #c9a84c; color: #c9a84c; font-weight: bold; }
+  .sub-card { margin-bottom: 22px; padding: 20px; background: rgba(255,255,255,0.04); border-radius: 6px; border: 1px solid rgba(255,255,255,0.1); }
+  .sub-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; flex-wrap: wrap; gap: 8px; }
+  .sub-name { font-size: 1.05rem; font-weight: bold; }
+  .sub-score { color: #c9a84c; font-weight: bold; margin-left: 12px; }
+  .sub-time { color: #777; font-size: 0.8rem; margin-left: 12px; }
+  .ans-pills { display: flex; gap: 10px; flex-wrap: wrap; }
+  .pill { text-align: center; min-width: 55px; }
+  .pill-label { font-size: 0.7rem; color: #888; margin-bottom: 4px; }
+  .pill-val { display: inline-flex; align-items: center; justify-content: center; width: 34px; height: 34px; border-radius: 50%; font-weight: bold; font-size: 0.9rem; }
+  .pill-val.ok { background: rgba(111,207,151,0.2); border: 2px solid #6fcf97; color: #6fcf97; }
+  .pill-val.bad { background: rgba(235,87,87,0.2); border: 2px solid #eb5757; color: #eb5757; }
+  .edit-sel { background: #1a2a35; color: #e8e0d5; border: 1px solid #c9a84c; border-radius: 3px; padding: 4px 6px; font-family: inherit; }
+  .btn-sm { background: transparent; border: 1px solid #c9a84c; color: #c9a84c; padding: 5px 14px; cursor: pointer; border-radius: 3px; font-size: 0.8rem; font-family: inherit; }
+  .btn-sm:hover { background: rgba(201,168,76,0.15); }
+  .btn-sm.danger { border-color: #eb5757; color: #eb5757; }
+  .btn-sm.success { border-color: #6fcf97; color: #6fcf97; }
+  .section-title { color: #c9a84c; font-weight: bold; letter-spacing: 1px; margin-bottom: 16px; font-size: 0.9rem; }
+  .hint { color: #888; font-size: 0.8rem; margin-top: 14px; }
+  .error-msg { color: #eb5757; margin-bottom: 12px; font-size: 0.9rem; }
+  .progress { color: #aaa; font-size: 0.85rem; }
+  .page { display: none; }
+  .page.active { display: block; }
+  .home-link { display: inline-block; margin-bottom: 20px; color: #c9a84c; font-size: 0.85rem; text-decoration: none; letter-spacing: 1px; }
+  .home-link:hover { text-decoration: underline; }
+
+  /* ── Review mode ── */
+  .review-q{margin-bottom:20px;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.08);border-radius:8px;padding:18px 20px;}
+  .review-q-num{color:#c9a84c;font-size:0.78rem;letter-spacing:1px;text-transform:uppercase;margin-bottom:10px;}
+  .review-opt{display:flex;align-items:center;gap:10px;padding:8px 12px;border-radius:5px;margin-bottom:6px;font-size:0.9rem;}
+  .review-opt.correct{background:rgba(111,207,151,0.15);border:1px solid rgba(111,207,151,0.35);color:#6fcf97;}
+  .review-opt.wrong{background:rgba(235,87,87,0.12);border:1px solid rgba(235,87,87,0.3);color:#eb5757;}
+  .review-opt.neutral{background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.06);color:#888;}
+  .review-icon{font-size:1rem;min-width:18px;}
+  .review-note{font-size:0.82rem;color:#888;font-style:italic;margin-top:8px;padding-top:8px;border-top:1px solid rgba(255,255,255,0.06);}
+  .review-note .hl{color:#c9a84c;font-style:normal;}
+
+  .login-bar{background:rgba(0,0,0,0.3);border-bottom:1px solid rgba(201,168,76,0.2);padding:8px 32px;display:none;justify-content:space-between;align-items:center;font-size:0.8rem;}
+  .login-bar-left{color:#888;}
+  .login-bar-left strong{color:#c9a84c;}
+  .login-bar-right{display:flex;gap:10px;align-items:center;}
+  .bar-link{color:#888;text-decoration:none;font-size:0.75rem;letter-spacing:1px;}
+  .bar-link:hover{color:#c9a84c;}
+  .bar-signout{background:transparent;border:1px solid rgba(235,87,87,0.4);color:#eb5757;padding:3px 10px;cursor:pointer;border-radius:3px;font-size:0.72rem;font-family:inherit;letter-spacing:1px;}
+  .bar-signout:hover{background:rgba(235,87,87,0.1);}
+</style>
+</head>
+<body>
+<header>
+  <span class="logo">CAE · Paper 1 · Part 1</span>
+  <div id="header-right">
+    <button class="header-btn" onclick="goTo('login')">Teacher Login</button>
+  </div>
+</header>
+<div id="login-status" style="display:none;background:rgba(0,0,0,0.3);border-bottom:1px solid rgba(201,168,76,0.2);padding:8px 32px;display:flex;justify-content:space-between;align-items:center;font-size:0.8rem;">
+  <div style="color:#888;">Signed in as <strong id="login-status-name" style="color:#c9a84c;"></strong> &nbsp;·&nbsp; <span id="login-status-class"></span></div>
+  <div style="display:flex;gap:10px;align-items:center;">
+    <a href="login.html" style="color:#888;text-decoration:none;font-size:0.75rem;letter-spacing:1px;">My Results</a>
+    <a href="index.html" style="color:#888;text-decoration:none;font-size:0.75rem;letter-spacing:1px;">Activities</a>
+    <button onclick="signOutUser()" style="background:transparent;border:1px solid rgba(235,87,87,0.4);color:#eb5757;padding:3px 10px;cursor:pointer;border-radius:3px;font-size:0.72rem;font-family:inherit;letter-spacing:1px;">Sign Out</button>
+  </div>
+</div>
+
+<!-- HOME -->
+<div id="page-home" class="page active">
+  <div class="card">
+    <a class="home-link" href="index.html">← Back to Home</a>
+    <h1>Multiple Choice Cloze</h1>
+    <p class="subtitle">Beauty is in the eye of the beholder — Questions 1–8 · Choose A, B, C or D</p>
+
+    <div style="margin-top:24px;">
+      <input type="text" id="student-name" placeholder="Enter your full name..." style="width:100%;max-width:400px;padding:12px 16px;background:rgba(255,255,255,0.08);border:1px solid rgba(201,168,76,0.5);border-radius:4px;color:#e8e0d5;font-size:1rem;font-family:inherit;outline:none;display:block;margin-bottom:12px;"/>
+      <button class="btn-primary" onclick="startQuiz()">Start &#8594;</button>
+    </div>
+  </div>
+</div>
+<div id="page-login" class="page">
+  <div class="card" style="max-width:420px;">
+    <h1>Teacher Login</h1>
+    <p class="subtitle" style="margin-bottom:20px;">Enter your password to view submissions</p>
+    <input type="password" id="admin-pass" placeholder="Password..." onkeydown="if(event.key==='Enter')adminLogin()"/>
+    <div class="error-msg" id="login-error" style="display:none;"></div>
+    <button class="btn-primary" onclick="adminLogin()">Login</button>
+    <p class="hint">Default password: <strong>teacher123</strong></p>
+  </div>
+</div>
+
+<!-- ADMIN -->
+<div id="page-admin" class="page">
+  <div class="card">
+    <div class="section-title">ANSWER KEY</div>
+    <div class="key-editor" id="key-editor"></div>
+    <div class="section-title" id="sub-count-label">STUDENT SUBMISSIONS</div>
+    <div id="submissions-container"><p style="color:#888;">No submissions yet.</p></div>
+  </div>
+</div>
+
+<script>
+  const QUESTIONS = [
+    { num: 1, options: { A: "argued", B: "decided", C: "disputed", D: "questioned" } },
+    { num: 2, options: { A: "concurred", B: "agreed", C: "debated", D: "written" } },
+    { num: 3, options: { A: "judged", B: "appreciated", C: "awarded", D: "viewed" } },
+    { num: 4, options: { A: "appearance", B: "sight", C: "eye", D: "vision" } },
+    { num: 5, options: { A: "equality", B: "reflection", C: "opposition", D: "similarity" } },
+    { num: 6, options: { A: "voted", B: "rated", C: "selected", D: "valued" } },
+    { num: 7, options: { A: "constitutes", B: "contains", C: "involves", D: "comprises" } },
+    { num: 8, options: { A: "reason", B: "one", C: "role", D: "factor" } },
+  ];
+  const OPTIONS = ["A","B","C","D"];
+  let correctAnswers = {1:"D",2:"B",3:"A",4:"C",5:"D",6:"B",7:"A",8:"D"};
+  let studentAnswers = {}, currentStudent = "";
+  let submissions = JSON.parse(localStorage.getItem("cae_p1_subs") || "[]");
+  let editingId = null, editTemp = {};
+
+  function saveData() { localStorage.setItem("cae_p1_subs", JSON.stringify(submissions)); }
+  function goTo(page){
+  document.querySelectorAll('.page').forEach(function(p){p.classList.remove('active');});
+  document.getElementById('page-'+page).classList.add('active');
+  var hr=document.getElementById('header-right');
+  var btn=document.createElement('button');
+  btn.className='header-btn';
+  if(page==='admin'){btn.textContent='Logout';btn.onclick=function(){goTo('home');};}
+  else if(page==='login'){btn.textContent='← Back';btn.onclick=function(){goTo('home');};}
+  else{btn.textContent='Teacher Login';btn.onclick=function(){goTo('login');};}
+  hr.innerHTML='';
+  hr.appendChild(btn);
+}
+
+function openReview(){
+  let html='';
+  QUESTIONS.forEach(function(q){
+    var qn=q.num;
+    var student=studentAnswers[qn]||null;
+    var correct=correctAnswers[qn]||null;
+    html+='<div class="review-q"><div class="review-q-num">Question '+qn+'</div>';
+    (q.options||q.opts||[]).forEach(function(o){
+      var letter=o.letter||o.l||o[0]||'';
+      var word=o.text||o.w||o[1]||o||'';
+      if(typeof word==='object') word='';
+      var isCorrect=correct&&letter===correct;
+      var isStudent=student&&letter===student;
+      var isWrong=isStudent&&letter!==correct;
+      var cls='neutral',icon='·';
+      if(isCorrect){cls='correct';icon='✓';}
+      if(isWrong){cls='wrong';icon='✗';}
+      if(isCorrect||isWrong||isStudent){
+        html+='<div class="review-opt '+cls+'"><span class="review-icon">'+icon+'</span><strong>'+letter+'</strong> &nbsp; '+word+'</div>';
+      } else {
+        html+='<div class="review-opt neutral"><span class="review-icon">·</span>'+letter+' &nbsp; '+word+'</div>';
+      }
+    });
+    if(correct&&student&&student!==correct){
+      var cw=(q.options||q.opts||[]).find(function(o){return (o.letter||o.l||o[0])===correct;});
+      var sw=(q.options||q.opts||[]).find(function(o){return (o.letter||o.l||o[0])===student;});
+      html+='<div class="review-note">You chose <span class="hl">'+student+(sw?' — '+(sw.text||sw.w||sw[1]||''):'')+'</span> · Correct answer: <span class="hl">'+correct+(cw?' — '+(cw.text||cw.w||cw[1]||''):'')+'</span></div>';
+    } else if(!correct){
+      html+='<div class="review-note">Answer key not set yet.</div>';
+    } else if(!student){
+      html+='<div class="review-note">Not answered.</div>';
+    }
+    html+='</div>';
+  });
+  document.getElementById('review-container').innerHTML=html;
+  goTo('review');
+}
+
+function signOutUser(){
+  if(confirm('Sign out? Your submitted answers are already saved.')){
+    localStorage.removeItem('cam_user');
+    document.getElementById('login-status').style.display='none';
+    const inp=document.getElementById('student-name');
+    if(inp) inp.value='';
+  }
+}
+
+// ── Supabase ─────────────────────────────────────────────────────────
+const SUPA_URL='https://dhvzvhdefhrfsbjmnnbz.supabase.co';
+const SUPA_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRodnp2aGRlZmhyZnNiam1ubmJ6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzMwODk1OTEsImV4cCI6MjA4ODY2NTU5MX0.SSkscvxvvgsbGaSfJT_1BbJSVbIzfxUMJaE03OQj5Xg';
+async function saveToSupabase(rec){
+  try{
+    const r=await fetch(SUPA_URL+'/rest/v1/submissions',{
+      method:'POST',
+      headers:{'Content-Type':'application/json','apikey':SUPA_KEY,'Authorization':'Bearer '+SUPA_KEY,'Prefer':'return=minimal'},
+      body:JSON.stringify(rec)
+    });
+    return r.ok;
+  }catch(e){return false;}
+}
+// ─────────────────────────────────────────────────────────────────────
+</script>
+
+<script>
+// Pre-fill student name and class from login session
+(function(){
+  try {
+    const u = JSON.parse(localStorage.getItem('cam_user') || 'null');
+    const bar = document.getElementById('login-status');
+    const inp = document.getElementById('student-name');
+    if (!u) { if(bar) bar.style.display='none'; return; }
+    if (inp && !inp.value) inp.value = u.name;
+    if (bar) {
+      bar.style.display = 'flex';
+      const nm = document.getElementById('login-status-name');
+      const cl = document.getElementById('login-status-class');
+      if (nm) nm.textContent = u.name;
+      if (cl) cl.textContent = 'Class: ' + u.cls;
+    }
+  } catch(e) {}
+})();
+</script>
+</body>
+</html>

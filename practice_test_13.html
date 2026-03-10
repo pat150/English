@@ -1,0 +1,560 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CPE Use of English – Practice Test 13</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Source+Serif+4:ital,wght@0,300;0,400;0,600;1,300&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #eef4f0;
+    --card: #f8fcf9;
+    --ink: #0e2018;
+    --accent: #1a6644;
+    --accent2: #c4762a;
+    --muted: #4a6455;
+    --border: #bcd4c4;
+    --correct: #2d7a4f;
+    --wrong: #c0392b;
+    --radius: 10px;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: var(--bg); background-image: radial-gradient(ellipse at 10% 60%, rgba(26,102,68,0.08) 0%, transparent 55%), radial-gradient(ellipse at 85% 20%, rgba(196,118,42,0.07) 0%, transparent 50%); font-family: 'Source Serif 4', serif; color: var(--ink); min-height: 100vh; }
+  header { background: var(--ink); color: #fff; padding: 28px 40px; display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; z-index: 100; box-shadow: 0 2px 20px rgba(0,0,0,0.3); }
+  header h1 { font-family: 'Playfair Display', serif; font-size: 1.5rem; letter-spacing: 0.02em; }
+  header span { font-size: 0.85rem; color: var(--accent2); font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; }
+  .progress-bar { height: 4px; background: rgba(255,255,255,0.15); }
+  .progress-fill { height: 100%; background: linear-gradient(90deg, var(--accent), var(--accent2)); transition: width 0.5s ease; }
+  .screen { display: none; } .screen.active { display: block; }
+  .name-screen { display: flex; align-items: center; justify-content: center; min-height: calc(100vh - 72px); padding: 40px 20px; }
+  .name-card { background: var(--card); border: 1px solid var(--border); border-radius: 16px; padding: 60px 50px; max-width: 500px; width: 100%; text-align: center; box-shadow: 0 8px 40px rgba(0,0,0,0.08); }
+  .name-card .badge { display: inline-block; background: var(--accent); color: #fff; font-size: 0.72rem; letter-spacing: 0.15em; text-transform: uppercase; padding: 5px 14px; border-radius: 20px; margin-bottom: 20px; }
+  .name-card h2 { font-family: 'Playfair Display', serif; font-size: 2rem; margin-bottom: 10px; }
+  .name-card p { color: var(--muted); font-size: 0.95rem; margin-bottom: 32px; line-height: 1.6; }
+  .name-card input { width: 100%; padding: 14px 18px; border: 2px solid var(--border); border-radius: var(--radius); font-family: 'Source Serif 4', serif; font-size: 1rem; color: var(--ink); background: var(--bg); transition: border-color 0.2s; margin-bottom: 20px; }
+  .name-card input:focus { outline: none; border-color: var(--accent); }
+  .btn { background: var(--accent); color: #fff; border: none; padding: 14px 36px; border-radius: var(--radius); font-family: 'Playfair Display', serif; font-size: 1rem; cursor: pointer; transition: transform 0.15s, box-shadow 0.15s; box-shadow: 0 4px 15px rgba(26,102,68,0.3); }
+  .btn:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(26,102,68,0.4); }
+  .btn-secondary { background: transparent; color: var(--accent); border: 2px solid var(--accent); box-shadow: none; }
+  .btn-secondary:hover { background: var(--accent); color: #fff; }
+  .btn-gold { background: var(--accent2); box-shadow: 0 4px 15px rgba(196,118,42,0.3); }
+  .btn-gold:hover { box-shadow: 0 6px 20px rgba(196,118,42,0.4); }
+  .part-screen { max-width: 860px; margin: 0 auto; padding: 40px 24px 80px; }
+  .part-header { display: flex; align-items: center; gap: 16px; margin-bottom: 28px; }
+  .part-badge { background: var(--accent); color: #fff; font-family: 'Playfair Display', serif; font-size: 0.9rem; padding: 8px 20px; border-radius: 30px; }
+  .part-header h2 { font-family: 'Playfair Display', serif; font-size: 1.5rem; }
+  .part-instructions { background: rgba(26,102,68,0.07); border-left: 3px solid var(--accent); padding: 14px 18px; border-radius: 0 var(--radius) var(--radius) 0; font-style: italic; color: var(--muted); font-size: 0.92rem; margin-bottom: 28px; line-height: 1.6; }
+  .passage-card { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); padding: 32px 36px; margin-bottom: 28px; box-shadow: 0 2px 12px rgba(0,0,0,0.05); line-height: 1.9; font-size: 0.97rem; }
+  .passage-card h3 { font-family: 'Playfair Display', serif; font-size: 1.1rem; text-align: center; margin-bottom: 20px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--accent); }
+  .gap-input { display: inline-block; border: none; border-bottom: 2px solid var(--accent); background: transparent; font-family: 'Source Serif 4', serif; font-size: 0.95rem; color: var(--ink); width: 130px; padding: 2px 4px; text-align: center; transition: border-color 0.2s; vertical-align: baseline; }
+  .gap-input:focus { outline: none; border-color: var(--accent2); }
+  .gap-input.correct { border-color: var(--correct); background: rgba(45,122,79,0.08); color: var(--correct); }
+  .gap-input.wrong { border-color: var(--wrong); background: rgba(192,57,43,0.08); color: var(--wrong); }
+  .gap-num { font-size: 0.72rem; font-weight: 600; color: var(--accent); vertical-align: super; margin-right: 2px; }
+  .p2-row { display: grid; grid-template-columns: 1fr auto; gap: 16px; align-items: baseline; padding: 10px 0; border-bottom: 1px solid var(--border); }
+  .p2-row:last-child { border-bottom: none; }
+  .p2-line { font-size: 0.95rem; line-height: 1.8; }
+  .p2-keyword { font-size: 0.78rem; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--accent2); white-space: nowrap; align-self: center; }
+  .p4-item { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); padding: 22px 26px; margin-bottom: 16px; box-shadow: 0 1px 6px rgba(0,0,0,0.04); }
+  .p4-num { font-family: 'Playfair Display', serif; font-size: 1.1rem; color: var(--accent); margin-bottom: 10px; }
+  .p4-sentence { font-size: 0.95rem; line-height: 1.7; margin-bottom: 10px; }
+  .p4-keyword { display: inline-block; background: var(--accent2); color: #fff; font-size: 0.75rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; padding: 3px 10px; border-radius: 4px; margin-bottom: 10px; }
+  .p4-rewrite { font-size: 0.95rem; line-height: 1.7; }
+  .p4-input { border: none; border-bottom: 2px solid var(--accent); background: transparent; font-family: 'Source Serif 4', serif; font-size: 0.95rem; color: var(--ink); width: 280px; padding: 2px 4px; text-align: center; transition: border-color 0.2s; }
+  .p4-input:focus { outline: none; border-color: var(--accent2); }
+  .p4-input.correct { border-color: var(--correct); background: rgba(45,122,79,0.08); color: var(--correct); }
+  .p4-input.wrong { border-color: var(--wrong); background: rgba(192,57,43,0.08); color: var(--wrong); }
+  .nav-row { display: flex; justify-content: space-between; align-items: center; margin-top: 40px; padding-top: 24px; border-top: 1px solid var(--border); }
+  .nav-row .step-info { font-size: 0.85rem; color: var(--muted); font-style: italic; }
+  .results-screen { max-width: 700px; margin: 0 auto; padding: 60px 24px; text-align: center; }
+  .results-card { background: var(--card); border: 1px solid var(--border); border-radius: 16px; padding: 50px 40px; box-shadow: 0 8px 40px rgba(0,0,0,0.08); }
+  .score-ring { width: 140px; height: 140px; border-radius: 50%; background: conic-gradient(var(--accent) 0deg, var(--bg) 0deg); display: flex; align-items: center; justify-content: center; margin: 0 auto 28px; }
+  .score-inner { width: 100px; height: 100px; border-radius: 50%; background: var(--card); display: flex; flex-direction: column; align-items: center; justify-content: center; }
+  .score-num { font-family: 'Playfair Display', serif; font-size: 2rem; color: var(--accent); line-height: 1; }
+  .score-total { font-size: 0.75rem; color: var(--muted); }
+  .results-card h2 { font-family: 'Playfair Display', serif; font-size: 1.8rem; margin-bottom: 8px; }
+  .student-name { color: var(--accent); font-style: italic; }
+  .breakdown { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin: 28px 0; }
+  .breakdown-item { background: var(--bg); border-radius: var(--radius); padding: 16px 10px; border: 1px solid var(--border); }
+  .b-score { font-family: 'Playfair Display', serif; font-size: 1.4rem; color: var(--accent); }
+  .b-label { font-size: 0.75rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.08em; }
+  .netlify-notice { font-size: 0.78rem; color: var(--muted); margin-top: 16px; font-style: italic; }
+  .teacher-bar { position: fixed; bottom: 0; left: 0; right: 0; background: var(--ink); color: #fff; padding: 10px 24px; display: flex; align-items: center; justify-content: space-between; font-size: 0.82rem; z-index: 200; transform: translateY(100%); transition: transform 0.3s; }
+  .teacher-bar.visible { transform: translateY(0); }
+  .t-label { color: var(--accent2); font-weight: 700; letter-spacing: 0.08em; }
+  .teacher-btn { background: var(--accent2); color: #fff; border: none; padding: 6px 14px; border-radius: 6px; cursor: pointer; font-weight: 700; font-size: 0.8rem; }
+  .teacher-panel { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.6); z-index: 300; align-items: center; justify-content: center; }
+  .teacher-panel.open { display: flex; }
+  .tp-inner { background: var(--card); border-radius: 16px; width: 90%; max-width: 700px; max-height: 80vh; overflow-y: auto; padding: 36px; }
+  .tp-inner h3 { font-family: 'Playfair Display', serif; font-size: 1.4rem; margin-bottom: 20px; border-bottom: 2px solid var(--border); padding-bottom: 12px; }
+  .tp-answer-row { display: grid; grid-template-columns: 60px 1fr; gap: 10px; align-items: center; margin-bottom: 10px; }
+  .tp-answer-row label { font-size: 0.85rem; font-weight: 600; color: var(--muted); }
+  .tp-answer-row input { border: 1px solid var(--border); border-radius: 6px; padding: 7px 10px; font-family: 'Source Serif 4', serif; font-size: 0.9rem; color: var(--ink); width: 100%; }
+  .tp-answer-row input:focus { outline: none; border-color: var(--accent); }
+  .tp-section { margin-bottom: 28px; }
+  .tp-section h4 { font-family: 'Playfair Display', serif; margin-bottom: 14px; color: var(--accent); }
+  .t-login { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.65); z-index: 250; align-items: center; justify-content: center; }
+  .t-login.open { display: flex; }
+  .t-login-box { background: var(--card); border-radius: 16px; padding: 40px; width: 340px; text-align: center; }
+  .t-login-box h3 { font-family: 'Playfair Display', serif; font-size: 1.3rem; margin-bottom: 16px; }
+  .t-login-box input { width: 100%; padding: 12px; border: 2px solid var(--border); border-radius: var(--radius); font-size: 1rem; margin-bottom: 14px; text-align: center; letter-spacing: 0.2em; }
+  .t-login-box input:focus { outline: none; border-color: var(--accent); }
+  .t-error { color: #c0392b; font-size: 0.82rem; margin-top: 8px; }
+  .fade-in { animation: fadeUp 0.5s ease both; }
+  @keyframes fadeUp { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: translateY(0); } }
+
+
+  /* ── Answer Key Panel ── */
+  .ak-overlay {
+    position:fixed;inset:0;background:rgba(0,0,0,0.55);z-index:400;
+    display:flex;align-items:flex-end;justify-content:center;
+    animation:akFadeIn .2s ease;
+  }
+  @keyframes akFadeIn{from{opacity:0}to{opacity:1}}
+  .ak-panel {
+    background:var(--card);border-radius:20px 20px 0 0;
+    width:100%;max-width:860px;max-height:82vh;overflow-y:auto;
+    padding:32px 36px 40px;
+    box-shadow:0 -8px 40px rgba(0,0,0,0.18);
+    animation:akSlideUp .35s cubic-bezier(0.34,1.56,0.64,1);
+  }
+  @keyframes akSlideUp{from{transform:translateY(100%)}to{transform:translateY(0)}}
+  .ak-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:22px;padding-bottom:14px;border-bottom:2px solid var(--border)}
+  .ak-header h3{font-family:'Playfair Display',serif;font-size:1.25rem}
+  .ak-score-badge{background:var(--accent);color:#fff;font-family:'Playfair Display',serif;font-size:1.05rem;padding:5px 16px;border-radius:20px}
+  .ak-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:9px;margin-bottom:22px}
+  .ak-item{background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:9px 12px;display:flex;gap:8px;align-items:flex-start}
+  .ak-item.ak-correct{border-color:var(--correct);background:rgba(45,122,79,0.07)}
+  .ak-item.ak-wrong{border-color:var(--wrong);background:rgba(192,57,43,0.07)}
+  .ak-item.ak-blank{border-color:#bbb;background:#f8f8f8}
+  .ak-num{font-size:.7rem;font-weight:700;color:var(--muted);min-width:22px;padding-top:2px}
+  .ak-content{flex:1}
+  .ak-student{font-size:.86rem;color:var(--ink);margin-bottom:2px}
+  .ak-student.x{text-decoration:line-through;color:var(--wrong)}
+  .ak-corr{font-size:.86rem;color:var(--correct);font-weight:600}
+  .ak-icon{font-size:.85rem;margin-left:auto;flex-shrink:0}
+  .ak-grid-p4{display:flex;flex-direction:column;gap:9px;margin-bottom:22px}
+  .ak-p4{background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:11px 14px}
+  .ak-p4.ak-correct{border-color:var(--correct);background:rgba(45,122,79,0.07)}
+  .ak-p4.ak-wrong{border-color:var(--wrong);background:rgba(192,57,43,0.07)}
+  .ak-p4.ak-blank{border-color:#bbb;background:#f8f8f8}
+  .ak-p4-top{font-size:.7rem;font-weight:700;color:var(--muted);margin-bottom:4px}
+  .ak-p4-s{font-size:.9rem;color:var(--ink)}
+  .ak-p4-s.x{text-decoration:line-through;color:var(--wrong)}
+  .ak-p4-c{font-size:.9rem;color:var(--correct);font-weight:600;margin-top:3px}
+  .ak-foot{display:flex;justify-content:flex-end;padding-top:14px;border-top:1px solid var(--border)}
+</style>
+</head>
+<body>
+<header>
+  <h1>CPE Use of English · Practice Test 13</h1>
+  <span>Paper 3 · 1h 30min</span>
+</header>
+<div class="progress-bar"><div class="progress-fill" id="progress" style="width:0%"></div></div>
+
+
+<div id="screen-name" class="screen active">
+  <div class="name-screen">
+    <div class="name-card fade-in">
+      <div class="badge">EEC · CPE Preparation</div>
+      <h2>Practice Test Thirteen</h2>
+      <p>Paper 3 · Use of English<br>Parts 1, 2 &amp; 4 · Time: 1 hour 30 minutes</p>
+          <div id="login-status" style="margin-bottom:16px;padding:10px 14px;background:rgba(201,168,76,0.08);border:1px solid rgba(201,168,76,0.2);border-radius:5px;font-size:0.85rem;color:#c9a84c;display:none;">
+      Signed in as <strong id="login-status-name"></strong> · <span id="login-status-class" style="color:#888;"></span>
+      <a href="login.html" style="color:#888;font-size:0.78rem;margin-left:10px;text-decoration:underline;">Switch user</a>
+    </div>
+    <input type="text" id="student-name" placeholder="Enter your full name…" autocomplete="off">
+      <br><button class="btn" onclick="startTest()">Begin Test →</button>
+    </div>
+  </div>
+</div>
+
+<div id="screen-part1" class="screen">
+  <div class="part-screen fade-in">
+    <div class="part-header"><div class="part-badge">Part 1</div><h2>Open Cloze</h2></div>
+    <div class="part-instructions">Read the text below and think of the word which best fits each space. Use only one word in each space.</div>
+    <div class="passage-card">
+      <h3>Powerful Efficiency</h3>
+      <p>
+        The energy crisis has been with <span class="gap-num">(0)</span><input class="gap-input" data-q="0" value="us" disabled style="width:50px"> for some time now, promoting calls for developing a better, more efficient use
+        <span class="gap-num">(1)</span><input class="gap-input" data-q="1" placeholder="…"> our ever-dwindling conventional power sources and the need to develop new
+        <span class="gap-num">(2)</span><input class="gap-input" data-q="2" placeholder="…">. As regards the latter, nuclear physicists haven't as
+        <span class="gap-num">(3)</span><input class="gap-input" data-q="3" placeholder="…"> come up with a reliable fast breeder reactor or properly regulated nuclear fission. For solar energy, scientists need to find new
+        <span class="gap-num">(4)</span><input class="gap-input" data-q="4" placeholder="…"> of gathering, concentration and storage. In
+        <span class="gap-num">(5)</span><input class="gap-input" data-q="5" placeholder="…">, new methods have to be found to recover the energy contained
+        <span class="gap-num">(6)</span><input class="gap-input" data-q="6" placeholder="…"> liquid and solid wastes. In the meantime, a top priority is the development of a safe, clean transportation fuel
+        <span class="gap-num">(7)</span><input class="gap-input" data-q="7" placeholder="…"> a replacement for petroleum.
+        <span class="gap-num">(8)</span><input class="gap-input" data-q="8" placeholder="…"> power companies were able to produce it cheaply enough, hydrogen could replace fossil fuels.
+        <span class="gap-num">(9)</span><input class="gap-input" data-q="9" placeholder="…"> fuel cells and solar cells have supplied the power for space programmes, they are
+        <span class="gap-num">(10)</span><input class="gap-input" data-q="10" placeholder="…"> expensive for individual use. Conventional fossil fuels can, however, be
+        <span class="gap-num">(11)</span><input class="gap-input" data-q="11" placeholder="…"> wisely used than they are at present,
+        <span class="gap-num">(12)</span><input class="gap-input" data-q="12" placeholder="…"> petroleum and mining engineers developing more economical and eco-friendly methods of extracting oil, gas and coal from the earth and engineers designing more efficient transportation systems which
+        <span class="gap-num">(13)</span><input class="gap-input" data-q="13" placeholder="…"> reduce levels of energy in transit as
+        <span class="gap-num">(14)</span><input class="gap-input" data-q="14" placeholder="…"> as more energy effective power plants and machinery. The watchword, therefore is to develop new energy sources
+        <span class="gap-num">(15)</span><input class="gap-input" data-q="15" placeholder="…"> conserving and properly managing existing ones.
+      </p>
+    </div>
+    <div class="nav-row"><span class="step-info">Step 1 of 3</span><button class="btn" onclick="revealAndGo(2,'p1')">Next: Part 2 →</button></div>
+  </div>
+</div>
+
+<div id="screen-part2" class="screen">
+  <div class="part-screen fade-in">
+    <div class="part-header"><div class="part-badge">Part 2</div><h2>Word Formation</h2></div>
+    <div class="part-instructions">Read the text below. Use the word given in capitals at the end of some of the lines to form a word that fits in the space in the same line.</div>
+    <div class="passage-card">
+      <h3>Unwanted Visitors</h3>
+      <div class="p2-row"><div class="p2-line">Loss of habitat poses the single greatest threat, <span class="gap-num">(0)</span><input class="gap-input" data-q="p2_0" value="endangering" disabled style="width:130px"> indigenous species. The second largest threat to native flora and fauna would have to be the</div><div class="p2-keyword">DANGER</div></div>
+      <div class="p2-row"><div class="p2-line"><span class="gap-num">(16)</span><input class="gap-input" data-q="p2_16" placeholder="…" style="width:130px"> of alien species into an environment other than their own. Alien species are able to cause such cataclysmic damage because they are usually more</div><div class="p2-keyword">INTRODUCE</div></div>
+      <div class="p2-row"><div class="p2-line"><span class="gap-num">(17)</span><input class="gap-input" data-q="p2_17" placeholder="…" style="width:130px"> in competing for food. They introduce diseases to which the local inhabitants do not possess</div><div class="p2-keyword">SUCCESS</div></div>
+      <div class="p2-row"><div class="p2-line"><span class="gap-num">(18)</span><input class="gap-input" data-q="p2_18" placeholder="…" style="width:130px">. Interbreeding has caused the destruction of entire species because the first hybrid generation will eventually</div><div class="p2-keyword">IMMUNE</div></div>
+      <div class="p2-row"><div class="p2-line"><span class="gap-num">(19)</span><input class="gap-input" data-q="p2_19" placeholder="…" style="width:130px"> the parent stock. Hybrid individuals tend to possess greater vigour and will therefore compete more</div><div class="p2-keyword">PLACE</div></div>
+      <div class="p2-row"><div class="p2-line"><span class="gap-num">(20)</span><input class="gap-input" data-q="p2_20" placeholder="…" style="width:130px"> with the remaining pure stock. Their offspring may also be infertile, resulting in the</div><div class="p2-keyword">EFFECT</div></div>
+      <div class="p2-row"><div class="p2-line"><span class="gap-num">(21)</span><input class="gap-input" data-q="p2_21" placeholder="…" style="width:130px"> of an entire species because of a reduction in the number of breeding animals. The</div><div class="p2-keyword">POPULATE</div></div>
+      <div class="p2-row"><div class="p2-line"><span class="gap-num">(22)</span><input class="gap-input" data-q="p2_22" placeholder="…" style="width:130px"> of guidelines has been called on to exclude non-native wildlife, contain it where it has a foothold, and eliminate it if possible. The principles call for border controls,</div><div class="p2-keyword">FORM</div></div>
+      <div class="p2-row"><div class="p2-line"><span class="gap-num">(23)</span><input class="gap-input" data-q="p2_23" placeholder="…" style="width:130px"> in international trade and technical and financial</div><div class="p2-keyword">CAUTION</div></div>
+      <div class="p2-row"><div class="p2-line"><span class="gap-num">(24)</span><input class="gap-input" data-q="p2_24" placeholder="…" style="width:130px"> to help poor countries detect and combat</div><div class="p2-keyword">ASSIST</div></div>
+      <div class="p2-row"><div class="p2-line"><span class="gap-num">(25)</span><input class="gap-input" data-q="p2_25" placeholder="…" style="width:130px">.</div><div class="p2-keyword">INVADE</div></div>
+    </div>
+    <div class="nav-row">
+      <button class="btn btn-secondary" onclick="goToPart(1)">← Back</button>
+      <span class="step-info">Step 2 of 3</span>
+      <button class="btn" onclick="revealAndGo(4,'p2')">Next: Part 4 →</button>
+    </div>
+  </div>
+</div>
+
+<div id="screen-part4" class="screen">
+  <div class="part-screen fade-in">
+    <div class="part-header"><div class="part-badge">Part 4</div><h2>Key Word Transformations</h2></div>
+    <div class="part-instructions">Complete the second sentence so that it has a similar meaning to the first sentence, using the word given. Do not change the word given. Use between three and eight words, including the word given.</div>
+    <div id="p4-items"></div>
+    <div class="nav-row">
+      <button class="btn btn-secondary" onclick="goToPart(2)">← Back</button>
+      <span class="step-info">Step 3 of 3</span>
+      <button class="btn btn-gold" onclick="revealSubmit()">Submit Test ✓</button>
+    </div>
+  </div>
+</div>
+
+<div id="screen-results" class="screen">
+  <div class="results-screen fade-in">
+    <div class="results-card">
+      <div class="score-ring" id="score-ring"><div class="score-inner"><div class="score-num" id="score-display">0</div><div class="score-total" id="score-total-display">/ 0</div></div></div>
+      <h2>Well done, <span class="student-name" id="result-name"></span>!</h2>
+      <p style="color:var(--muted);margin:10px 0 24px;font-style:italic;">Your results have been submitted.</p>
+      <div class="breakdown">
+        <div class="breakdown-item"><div class="b-score" id="p1-score">–</div><div class="b-label">Part 1</div></div>
+        <div class="breakdown-item"><div class="b-score" id="p2-score">–</div><div class="b-label">Part 2</div></div>
+        <div class="breakdown-item"><div class="b-score" id="p4-score">–</div><div class="b-label">Part 4</div></div>
+      </div>
+      <p class="netlify-notice">Results have been sent to your teacher. You may close this page.</p>
+    </div>
+  </div>
+</div>
+
+<div class="t-login" id="t-login">
+  <div class="t-login-box">
+    <h3>Teacher Access</h3>
+    <p style="font-size:0.85rem;color:var(--muted);margin-bottom:18px;">Enter password to edit answer keys</p>
+    <input type="password" id="t-pass" placeholder="Password">
+    <br><button class="btn" onclick="checkTeacher()">Enter</button>
+    <button class="btn btn-secondary" onclick="closeTeacher()" style="margin-top:10px">Cancel</button>
+    <div class="t-error" id="t-error"></div>
+  </div>
+</div>
+
+<div class="teacher-panel" id="teacher-panel">
+  <div class="tp-inner">
+    <h3>✏️ Edit Answer Keys – Test 13</h3>
+    <div class="tp-section"><h4>Part 1 – Open Cloze (gaps 1–15)</h4><div id="tp-p1"></div></div>
+    <div class="tp-section"><h4>Part 2 – Word Formation (gaps 16–25)</h4><div id="tp-p2"></div></div>
+    <div class="tp-section"><h4>Part 4 – Key Word Transformations</h4><div id="tp-p4"></div></div>
+    <div style="display:flex;gap:12px;margin-top:20px;">
+      <button class="btn" onclick="saveAnswers()">Save Changes</button>
+      <button class="btn btn-secondary" onclick="document.getElementById('teacher-panel').classList.remove('open')">Close</button>
+    </div>
+  </div>
+</div>
+
+<div class="teacher-bar" id="teacher-bar">
+  <span><span class="t-label">TEACHER</span> · Edit mode active</span>
+  <div style="display:flex;gap:10px;">
+    <button class="teacher-btn" onclick="openTeacherPanel()">Edit Answers</button>
+    <button class="teacher-btn" onclick="document.getElementById('teacher-bar').classList.remove('visible')">Exit</button>
+  </div>
+</div>
+
+<script>
+let answers = {
+  p1: {
+    1: ["of"],
+    2: ["ones","alternatives","sources"],
+    3: ["yet"],
+    4: ["ways","means","methods"],
+    5: ["addition"],
+    6: ["in"],
+    7: ["as"],
+    8: ["if","once","when"],
+    9: ["although","while","whilst"],
+    10: ["too","still"],
+    11: ["more"],
+    12: ["with"],
+    13: ["help","will","can","could"],
+    14: ["well","much"],
+    15: ["while","whilst","by"]
+  },
+  p2: {
+    p2_16: ["introduction"],
+    p2_17: ["successful"],
+    p2_18: ["immunity"],
+    p2_19: ["displace","replace"],
+    p2_20: ["effectively"],
+    p2_21: ["depopulation"],
+    p2_22: ["formulation"],
+    p2_23: ["caution","cautiously"],
+    p2_24: ["assistance"],
+    p2_25: ["invaders","invasion"]
+  },
+  p4: {
+    32: ["would be grateful if you would send","would be grateful if you could send","would be grateful to receive your response"],
+    33: ["do not know what caused him to resign","still do not know what caused his resignation"],
+    34: ["is only marginally better than","is marginally better than the last"],
+    35: ["flooded with tears when her pet rabbit","floods of tears when her pet rabbit died"],
+    36: ["placed great emphasis on the need for","put great emphasis on the need for"],
+    37: ["couldn't work out what he was driving at","could not work out what he was driving at"],
+    38: ["saw through his story immediately","could see through his story right away"],
+    39: ["brochure offers a wide array of choices","is a wide array of choices in this brochure"]
+  }
+};
+
+const p4data = [
+  { num: 32, s1: "Would you please send me your response as soon as possible?", keyword: "grateful", s2_start: "I …", s2_end: "… your response as soon as possible." },
+  { num: 33, s1: "The reason for his resignation is still not known.", keyword: "caused", s2_start: "We …", s2_end: "… resign." },
+  { num: 34, s1: "This essay shows a slight improvement on the last.", keyword: "marginally", s2_start: "This essay …", s2_end: "… the last." },
+  { num: 35, s1: "Susie couldn't stop crying when her pet rabbit died.", keyword: "floods", s2_start: "Susie …", s2_end: "… her pet rabbit died." },
+  { num: 36, s1: "He specifically stressed the need for absolute honesty.", keyword: "emphasis", s2_start: "He …", s2_end: "… absolute honesty." },
+  { num: 37, s1: "I couldn't work out what he was trying to say, could you?", keyword: "driving", s2_start: "I …", s2_end: "…, could you?" },
+  { num: 38, s1: "She realised immediately that his story was made up.", keyword: "through", s2_start: "She …", s2_end: "… story." },
+  { num: 39, s1: "There is a considerable number of choices on offer in this brochure.", keyword: "array", s2_start: "This …", s2_end: "… choices." }
+];
+
+let studentName = "";
+const TEACHER_PASS = "1996";
+
+function buildP4() {
+  const c = document.getElementById('p4-items'); c.innerHTML = '';
+  p4data.forEach(item => {
+    const d = document.createElement('div'); d.className = 'p4-item';
+    d.innerHTML = `<div class="p4-num">${item.num}</div><div class="p4-sentence">${item.s1}</div><div><span class="p4-keyword">${item.keyword}</span></div><div class="p4-rewrite">${item.s2_start} <input class="p4-input" data-q="${item.num}" placeholder="…"> ${item.s2_end}</div>`;
+    c.appendChild(d);
+  });
+}
+function setProgress(p) { document.getElementById('progress').style.width = p + '%'; }
+function showScreen(id) { document.querySelectorAll('.screen').forEach(s => s.classList.remove('active')); document.getElementById(id).classList.add('active'); }
+function startTest() {
+  studentName = document.getElementById('student-name').value.trim();
+  if (!studentName) { alert('Please enter your name to begin.'); return; }
+  buildP4(); goToPart(1);
+}
+function goToPart(part) {
+  if (part === 1) { showScreen('screen-part1'); setProgress(10); }
+  else if (part === 2) { showScreen('screen-part2'); setProgress(40); }
+  else if (part === 4) { showScreen('screen-part4'); setProgress(70); }
+  window.scrollTo(0, 0);
+}
+function normalise(str) { return str.trim().toLowerCase().replace(/['']/g,"'"); }
+function checkAnswer(userVal, qKey, section) {
+  const u = normalise(userVal); if (!u) return null;
+  const valid = answers[section][qKey]; if (!valid) return false;
+  return valid.some(a => normalise(a) === u);
+}
+function submitTest() {
+  let p1c = 0, p2c = 0, p4c = 0;
+  document.querySelectorAll('.gap-input[data-q]').forEach(inp => {
+    if (inp.dataset.q === '0' || isNaN(inp.dataset.q)) return;
+    if (inp.classList.contains('correct')) p1c++;
+  });
+  document.querySelectorAll('.gap-input[data-q^="p2_"]').forEach(inp => {
+    if (inp.dataset.q === 'p2_0') return;
+    if (inp.classList.contains('correct')) p2c++;
+  });
+  document.querySelectorAll('.p4-input').forEach(inp => {
+    if (inp.classList.contains('correct')) p4c++;
+  });
+  const total = p1c + p2c + p4c, max = 33;
+  let detail = 'P1: ';
+  document.querySelectorAll('.gap-input[data-q]').forEach(inp => { if (inp.dataset.q !== '0' && !isNaN(inp.dataset.q)) detail += `(${inp.dataset.q})${inp.value||'_'} `; });
+  detail += '| P2: '; document.querySelectorAll('.gap-input[data-q^="p2_"]').forEach(inp => { if (inp.dataset.q !== 'p2_0') detail += `(${inp.dataset.q})${inp.value||'_'} `; });
+  detail += '| P4: '; document.querySelectorAll('.p4-input').forEach(inp => { detail += `(${inp.dataset.q})${inp.value||'_'} `; });
+  // Submit to Web3Forms
+  fetch('https://api.web3forms.com/submit', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      access_key: '0391ecad-04b5-4c9d-ab22-767e2606c7d7',
+      subject: 'CPE Result: ' + studentName,
+      student: studentName,
+      test: 'Practice Test 13',
+      score: `${p1c + p2c + p4c}/${max}`,
+      part1: `${p1c}/15`,
+      part2: `${p2c}/10`,
+      part4: `${p4c}/8`,
+      answers: detail
+    })
+  }).catch(() => {});
+  document.getElementById('result-name').textContent = studentName;
+  document.getElementById('score-display').textContent = total;
+  document.getElementById('score-total-display').textContent = '/ ' + max;
+  document.getElementById('p1-score').textContent = `${p1c}/15`; document.getElementById('p2-score').textContent = `${p2c}/10`; document.getElementById('p4-score').textContent = `${p4c}/8`;
+  document.getElementById('score-ring').style.background = `conic-gradient(var(--accent) ${Math.round(total/max*100)*3.6}deg, var(--bg) 0deg)`;
+  showScreen('screen-results'); setProgress(100);
+}
+function checkTeacher() {
+  if (document.getElementById('t-pass').value === TEACHER_PASS) {
+    document.getElementById('t-login').classList.remove('open'); document.getElementById('t-pass').value = '';
+    document.getElementById('t-error').textContent = ''; document.getElementById('teacher-bar').classList.add('visible');
+  } else document.getElementById('t-error').textContent = 'Incorrect password.';
+}
+function closeTeacher() { document.getElementById('t-login').classList.remove('open'); document.getElementById('t-pass').value = ''; document.getElementById('t-error').textContent = ''; }
+function openTeacherPanel() {
+  const tp1 = document.getElementById('tp-p1'); tp1.innerHTML = '';
+  for (let i = 1; i <= 15; i++) { const r = document.createElement('div'); r.className = 'tp-answer-row'; r.innerHTML = `<label>Gap ${i}</label><input type="text" id="ta-p1-${i}" value="${(answers.p1[i]||[]).join(' / ')}">`;  tp1.appendChild(r); }
+  const tp2 = document.getElementById('tp-p2'); tp2.innerHTML = '';
+  for (let i = 16; i <= 25; i++) { const r = document.createElement('div'); r.className = 'tp-answer-row'; r.innerHTML = `<label>Gap ${i}</label><input type="text" id="ta-p2-${i}" value="${(answers.p2['p2_'+i]||[]).join(' / ')}">`;  tp2.appendChild(r); }
+  const tp4 = document.getElementById('tp-p4'); tp4.innerHTML = '';
+  p4data.forEach(item => { const r = document.createElement('div'); r.className = 'tp-answer-row'; r.innerHTML = `<label>Q ${item.num}</label><input type="text" id="ta-p4-${item.num}" value="${(answers.p4[item.num]||[]).join(' / ')}">`;  tp4.appendChild(r); });
+  document.getElementById('teacher-panel').classList.add('open');
+}
+function saveAnswers() {
+  for (let i = 1; i <= 15; i++) { const v = document.getElementById(`ta-p1-${i}`).value; answers.p1[i] = v.split('/').map(s=>s.trim()).filter(Boolean); }
+  for (let i = 16; i <= 25; i++) { const v = document.getElementById(`ta-p2-${i}`).value; answers.p2[`p2_${i}`] = v.split('/').map(s=>s.trim()).filter(Boolean); }
+  p4data.forEach(item => { const v = document.getElementById(`ta-p4-${item.num}`).value; answers.p4[item.num] = v.split('/').map(s=>s.trim()).filter(Boolean); });
+  document.getElementById('teacher-panel').classList.remove('open'); alert('Answers saved!');
+}
+document.getElementById('t-pass').addEventListener('keydown', e => { if (e.key === 'Enter') checkTeacher(); });
+</script>
+
+<div style="text-align:center;padding:20px 0 60px;font-size:0.75rem;">
+  <button onclick="document.getElementById('t-login').classList.add('open')" 
+    style="background:none;border:none;color:#aaa;cursor:pointer;font-size:0.72rem;letter-spacing:0.05em;text-decoration:underline;font-family:inherit;">
+    Teacher Login
+  </button>
+</div>
+<script>
+
+// ── Answer Key Panel ─────────────────────────────────────────
+var _akNext = null;
+function revealAndGo(nextPart, section) {
+  _akNext = nextPart;
+  var correct = 0, total = 0;
+  if (section === 'p1') {
+    document.querySelectorAll('.gap-input[data-q]').forEach(function(inp){
+      var q = inp.dataset.q; if (q==='0'||isNaN(q)) return;
+      total++; inp.disabled = true;
+      inp.classList.remove('correct','wrong');
+      var ok = checkAnswer(inp.value, parseInt(q), 'p1');
+      if (ok===true){correct++;inp.classList.add('correct');}else{inp.classList.add('wrong');}
+    });
+  } else if (section === 'p2') {
+    document.querySelectorAll('.gap-input[data-q^="p2_"]').forEach(function(inp){
+      var q = inp.dataset.q; if (q==='p2_0') return;
+      total++; inp.disabled = true;
+      inp.classList.remove('correct','wrong');
+      var ok = checkAnswer(inp.value, q, 'p2');
+      if (ok===true){correct++;inp.classList.add('correct');}else{inp.classList.add('wrong');}
+    });
+  }
+  _akBuild(section, correct, total);
+}
+function revealSubmit() {
+  _akNext = 'submit';
+  var correct = 0, total = 0;
+  document.querySelectorAll('.p4-input').forEach(function(inp){
+    total++; inp.disabled = true;
+    inp.classList.remove('correct','wrong');
+    var ok = checkAnswer(inp.value, parseInt(inp.dataset.q), 'p4');
+    if (ok===true){correct++;inp.classList.add('correct');}else{inp.classList.add('wrong');}
+  });
+  _akBuild('p4', correct, total);
+}
+function _akBuild(section, correct, total) {
+  var names = {p1:'Part 1 – Open Cloze', p2:'Part 2 – Word Formation', p4:'Part 4 – Key Word Transformations'};
+  var ov = document.createElement('div'); ov.className='ak-overlay'; ov.id='_akOv';
+  var pn = document.createElement('div'); pn.className='ak-panel';
+  var hdr = document.createElement('div'); hdr.className='ak-header';
+  hdr.innerHTML='<h3>Answer Key · '+names[section]+'</h3><span class="ak-score-badge">'+correct+' / '+total+'</span>';
+  pn.appendChild(hdr);
+  if (section==='p1') {
+    var g=document.createElement('div'); g.className='ak-grid';
+    document.querySelectorAll('.gap-input[data-q]').forEach(function(inp){
+      var q=inp.dataset.q; if(q==='0'||isNaN(q)) return;
+      var ok=inp.classList.contains('correct'), blank=!inp.value.trim();
+      var corr=(answers.p1[parseInt(q)]||[])[0]||'–', stud=inp.value.trim()||'(blank)';
+      var d=document.createElement('div');
+      d.className='ak-item '+(blank?'ak-blank':ok?'ak-correct':'ak-wrong');
+      d.innerHTML='<div class="ak-num">'+q+'</div><div class="ak-content"><div class="ak-student'+(ok?'':' x')+'">'+stud+'</div>'+(ok?'':'<div class="ak-corr">'+corr+'</div>')+'</div><div class="ak-icon">'+(ok?'✅':'❌')+'</div>';
+      g.appendChild(d);
+    });
+    pn.appendChild(g);
+  } else if (section==='p2') {
+    var g=document.createElement('div'); g.className='ak-grid';
+    document.querySelectorAll('.gap-input[data-q^="p2_"]').forEach(function(inp){
+      var q=inp.dataset.q; if(q==='p2_0') return;
+      var num=q.replace('p2_','');
+      var ok=inp.classList.contains('correct'), blank=!inp.value.trim();
+      var corr=(answers.p2[q]||[])[0]||'–', stud=inp.value.trim()||'(blank)';
+      var d=document.createElement('div');
+      d.className='ak-item '+(blank?'ak-blank':ok?'ak-correct':'ak-wrong');
+      d.innerHTML='<div class="ak-num">'+num+'</div><div class="ak-content"><div class="ak-student'+(ok?'':' x')+'">'+stud+'</div>'+(ok?'':'<div class="ak-corr">'+corr+'</div>')+'</div><div class="ak-icon">'+(ok?'✅':'❌')+'</div>';
+      g.appendChild(d);
+    });
+    pn.appendChild(g);
+  } else {
+    var g=document.createElement('div'); g.className='ak-grid-p4';
+    document.querySelectorAll('.p4-input').forEach(function(inp){
+      var q=parseInt(inp.dataset.q);
+      var ok=inp.classList.contains('correct'), blank=!inp.value.trim();
+      var corr=(answers.p4[q]||[])[0]||'–', stud=inp.value.trim()||'(blank)';
+      var d=document.createElement('div');
+      d.className='ak-p4 '+(blank?'ak-blank':ok?'ak-correct':'ak-wrong');
+      d.innerHTML='<div class="ak-p4-top">Q'+q+' '+(ok?'✅':'❌')+'</div><div class="ak-p4-s'+(ok?'':' x')+'">'+stud+'</div>'+(ok?'':'<div class="ak-p4-c">✓ '+corr+'</div>');
+      g.appendChild(d);
+    });
+    pn.appendChild(g);
+  }
+  var foot=document.createElement('div'); foot.className='ak-foot';
+  foot.innerHTML='<button class="btn btn-gold" onclick="dismissPanel()">'+((_akNext==='submit')?'Submit Test ✓':'Continue →')+'</button>';
+  pn.appendChild(foot);
+  ov.appendChild(pn);
+  document.body.appendChild(ov);
+  window.scrollTo(0,0);
+}
+function dismissPanel() {
+  var ov=document.getElementById('_akOv'); if(ov) ov.remove();
+  if (_akNext==='submit'){_akNext=null;submitTest();}
+  else{var p=_akNext;_akNext=null;goToPart(p);}
+}
+
+</script>
+
+<script>
+// Pre-fill student name from login session
+(function(){
+  try {
+    const u = JSON.parse(localStorage.getItem('cam_user') || 'null');
+    if (!u) return;
+    const inp = document.getElementById('student-name');
+    if (inp && !inp.value) inp.value = u.name;
+    // Show login status bar
+    const bar = document.getElementById('login-status');
+    const nm = document.getElementById('login-status-name');
+    const cl = document.getElementById('login-status-class');
+    if (bar) { bar.style.display = 'block'; }
+    if (nm) nm.textContent = u.name;
+    if (cl) cl.textContent = 'Class: ' + u.cls;
+  } catch(e) {}
+})();
+</script>
+</body>
+</html>

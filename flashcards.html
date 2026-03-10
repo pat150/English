@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Flashcards · Cambridge Exam Practice</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Source+Serif+4:wght@300;400;600&display=swap');
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+  body{min-height:100vh;background:linear-gradient(135deg,#0f2027,#203a43,#2c5364);font-family:'Source Serif 4',serif;color:#e8e0d5;}
+  header{background:rgba(0,0,0,0.4);border-bottom:2px solid #c9a84c;padding:16px 32px;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;z-index:100;backdrop-filter:blur(12px);}
+  .logo{font-family:'Playfair Display',serif;color:#c9a84c;letter-spacing:3px;font-size:1rem;text-transform:uppercase;}
+  .home-link{color:#c9a84c;font-size:0.82rem;letter-spacing:1px;text-decoration:none;}
+  .home-link:hover{text-decoration:underline;}
+  .page{display:none;}.page.active{display:block;}
+
+  /* DECK SELECT */
+  .deck-wrap{max-width:780px;margin:40px auto;padding:0 24px;}
+  .deck-wrap h1{font-family:'Playfair Display',serif;color:#c9a84c;font-size:1.7rem;margin-bottom:6px;}
+  .deck-wrap p{color:#888;font-size:0.9rem;margin-bottom:28px;line-height:1.6;}
+  .deck-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:14px;}
+  .deck-card{background:rgba(255,255,255,0.05);border:1px solid rgba(201,168,76,0.25);border-radius:10px;padding:20px 22px;cursor:pointer;transition:all 0.2s;}
+  .deck-card:hover{border-color:#c9a84c;background:rgba(201,168,76,0.08);transform:translateY(-2px);}
+  .deck-card h3{font-family:'Playfair Display',serif;color:#c9a84c;font-size:1rem;margin-bottom:5px;}
+  .deck-card p{color:#888;font-size:0.8rem;margin-bottom:10px;}
+  .deck-meta{display:flex;gap:8px;font-size:0.72rem;}
+  .deck-badge{background:rgba(201,168,76,0.15);border:1px solid rgba(201,168,76,0.3);color:#c9a84c;padding:2px 8px;border-radius:3px;letter-spacing:1px;}
+  .deck-progress{background:rgba(111,207,151,0.12);border:1px solid rgba(111,207,151,0.3);color:#6fcf97;padding:2px 8px;border-radius:3px;letter-spacing:1px;}
+  .no-decks{background:rgba(255,255,255,0.04);border:1px dashed rgba(255,255,255,0.1);border-radius:10px;padding:40px;text-align:center;color:#555;font-style:italic;}
+
+  /* STUDY MODE */
+  .study-wrap{max-width:680px;margin:0 auto;padding:30px 24px 60px;}
+  .study-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:24px;}
+  .study-title{font-family:'Playfair Display',serif;color:#c9a84c;font-size:1.2rem;}
+  .btn-back{background:transparent;border:1px solid rgba(201,168,76,0.4);color:#c9a84c;padding:6px 16px;cursor:pointer;border-radius:3px;font-size:0.78rem;letter-spacing:1px;font-family:inherit;}
+  .btn-back:hover{background:rgba(201,168,76,0.1);}
+
+  /* Progress bar */
+  .study-progress{margin-bottom:20px;}
+  .prog-top{display:flex;justify-content:space-between;color:#888;font-size:0.78rem;margin-bottom:6px;}
+  .prog-bg{background:rgba(255,255,255,0.06);border-radius:4px;height:5px;}
+  .prog-fill{background:#c9a84c;height:5px;border-radius:4px;transition:width 0.4s;}
+
+  /* Flashcard flip */
+  .card-scene{width:100%;height:280px;perspective:1000px;cursor:pointer;margin-bottom:20px;}
+  .card-obj{width:100%;height:100%;position:relative;transform-style:preserve-3d;transition:transform 0.45s cubic-bezier(.4,0,.2,1);}
+  .card-obj.flipped{transform:rotateY(180deg);}
+  .card-face{position:absolute;width:100%;height:100%;backface-visibility:hidden;border-radius:12px;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:30px;text-align:center;}
+  .card-front{background:rgba(255,255,255,0.06);border:1px solid rgba(201,168,76,0.35);}
+  .card-back{background:rgba(201,168,76,0.08);border:1px solid rgba(201,168,76,0.5);transform:rotateY(180deg);}
+  .card-hint{color:#666;font-size:0.72rem;letter-spacing:2px;text-transform:uppercase;margin-bottom:14px;}
+  .card-word{font-family:'Playfair Display',serif;font-size:2rem;color:#c9a84c;margin-bottom:8px;}
+  .card-pos{color:#777;font-size:0.8rem;font-style:italic;margin-bottom:0;}
+  .card-def{font-size:1rem;color:#e8e0d5;line-height:1.7;margin-bottom:12px;}
+  .card-example{color:#888;font-size:0.85rem;font-style:italic;line-height:1.6;}
+
+  /* Buttons */
+  .rating-row{display:flex;gap:10px;justify-content:center;margin-bottom:24px;}
+  .rate-btn{flex:1;max-width:160px;padding:12px;border:none;border-radius:6px;cursor:pointer;font-size:0.85rem;font-weight:bold;font-family:inherit;letter-spacing:1px;transition:all 0.2s;}
+  .rate-know{background:rgba(111,207,151,0.2);border:2px solid #6fcf97;color:#6fcf97;}
+  .rate-know:hover{background:rgba(111,207,151,0.35);}
+  .rate-again{background:rgba(235,87,87,0.15);border:2px solid #eb5757;color:#eb5757;}
+  .rate-again:hover{background:rgba(235,87,87,0.28);}
+  .flip-hint{text-align:center;color:#555;font-size:0.78rem;letter-spacing:1px;margin-bottom:20px;}
+
+  /* Results */
+  .results-wrap{text-align:center;padding:20px 0 30px;}
+  .results-big{font-family:'Playfair Display',serif;font-size:3.5rem;color:#c9a84c;margin-bottom:8px;}
+  .results-sub{color:#aaa;margin-bottom:28px;}
+  .results-row{display:flex;gap:12px;justify-content:center;margin-bottom:28px;flex-wrap:wrap;}
+  .res-box{background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.1);border-radius:8px;padding:14px 20px;text-align:center;min-width:100px;}
+  .res-num{font-family:'Playfair Display',serif;font-size:1.8rem;}
+  .res-lbl{color:#777;font-size:0.72rem;letter-spacing:1px;text-transform:uppercase;margin-top:3px;}
+  .res-num.green{color:#6fcf97;}
+  .res-num.red{color:#eb5757;}
+  .btn-primary{background:#c9a84c;color:#0f2027;border:none;padding:12px 32px;font-size:1rem;font-weight:bold;border-radius:4px;cursor:pointer;letter-spacing:1px;font-family:inherit;margin:0 6px;}
+  .btn-primary:hover{background:#d9bb6a;}
+  .btn-outline{background:transparent;border:2px solid rgba(201,168,76,0.5);color:#c9a84c;padding:12px 32px;font-size:1rem;border-radius:4px;cursor:pointer;letter-spacing:1px;font-family:inherit;margin:0 6px;}
+  .btn-outline:hover{background:rgba(201,168,76,0.1);}
+
+  /* ADMIN DECK EDITOR */
+  .admin-wrap{max-width:860px;margin:0 auto;padding:30px 24px 60px;}
+  .admin-wrap h2{font-family:'Playfair Display',serif;color:#c9a84c;font-size:1.4rem;margin-bottom:18px;}
+  .editor-box{background:rgba(0,0,0,0.2);border:1px solid rgba(255,255,255,0.08);border-radius:8px;padding:20px 22px;margin-bottom:16px;}
+  .editor-box label{display:block;color:#888;font-size:0.75rem;letter-spacing:1px;text-transform:uppercase;margin-bottom:5px;}
+  textarea,input.inp{width:100%;background:rgba(255,255,255,0.07);border:1px solid rgba(201,168,76,0.3);border-radius:4px;color:#e8e0d5;font-size:0.9rem;font-family:inherit;padding:10px 12px;margin-bottom:14px;outline:none;resize:vertical;}
+  textarea:focus,input.inp:focus{border-color:#c9a84c;}
+  .btn-sm{background:transparent;border:1px solid #c9a84c;color:#c9a84c;padding:6px 16px;cursor:pointer;border-radius:3px;font-size:0.8rem;font-family:inherit;}
+  .btn-sm:hover{background:rgba(201,168,76,0.1);}
+  .btn-sm.danger{border-color:#eb5757;color:#eb5757;}
+  .btn-sm.danger:hover{background:rgba(235,87,87,0.1);}
+  .json-hint{color:#666;font-size:0.78rem;line-height:1.6;margin-bottom:10px;}
+  .success-msg{color:#6fcf97;font-size:0.85rem;margin-top:6px;display:none;}
+
+  @media(max-width:600px){.card-scene{height:240px;}.card-word{font-size:1.5rem;}.rating-row{flex-direction:column;align-items:center;}.rate-btn{max-width:100%;width:100%;}}
+</style>
+</head>
+<body>
+<header>
+  <span class="logo">Flashcards</span>
+  <a href="index.html" class="home-link">← Back to Activities</a>
+</header>
+
+<!-- DECK SELECTION -->
+<div id="page-decks" class="page active">
+  <div class="deck-wrap">
+    <h1>Vocabulary Flashcards</h1>
+    <p>Choose a deck to study. Your progress is saved automatically.</p>
+    <div class="deck-grid" id="deck-grid"></div>
+    <div id="no-decks-msg" class="no-decks" style="display:none;">No flashcard decks have been added yet. Ask your teacher to add some!</div>
+    <div style="margin-top:28px;text-align:right;">
+      <button class="btn-sm" onclick="goTo('admin')">⚙ Manage Decks (Teacher)</button>
+    </div>
+  </div>
+</div>
+
+<!-- STUDY MODE -->
+<div id="page-study" class="page">
+  <div class="study-wrap">
+    <div class="study-header">
+      <div class="study-title" id="study-title">Deck Name</div>
+      <button class="btn-back" onclick="goTo('decks')">← Back to Decks</button>
+    </div>
+    <div class="study-progress">
+      <div class="prog-top"><span id="prog-label">Card 1 of 10</span><span id="prog-pct">0%</span></div>
+      <div class="prog-bg"><div class="prog-fill" id="prog-fill" style="width:0%"></div></div>
+    </div>
+
+    <div class="card-scene" onclick="flipCard()" id="card-scene">
+      <div class="card-obj" id="card-obj">
+        <div class="card-face card-front">
+          <div class="card-hint">TAP TO REVEAL</div>
+          <div class="card-word" id="cf-word">word</div>
+          <div class="card-pos" id="cf-pos">noun</div>
+        </div>
+        <div class="card-face card-back">
+          <div class="card-hint">DEFINITION</div>
+          <div class="card-def" id="cb-def">Definition goes here.</div>
+          <div class="card-example" id="cb-ex"></div>
+        </div>
+      </div>
+    </div>
+    <div class="flip-hint" id="flip-hint">Click the card to see the definition</div>
+
+    <div class="rating-row" id="rating-row" style="display:none;">
+      <button class="rate-btn rate-again" onclick="rateCard(false)">✗ Study Again</button>
+      <button class="rate-btn rate-know" onclick="rateCard(true)">✓ Got It</button>
+    </div>
+  </div>
+</div>
+
+<!-- RESULTS -->
+<div id="page-results" class="page">
+  <div class="study-wrap">
+    <div class="results-wrap">
+      <div class="results-big">🎉</div>
+      <div style="font-family:'Playfair Display',serif;font-size:1.8rem;color:#c9a84c;margin-bottom:8px;">Round Complete!</div>
+      <div class="results-sub" id="res-sub"></div>
+      <div class="results-row">
+        <div class="res-box"><div class="res-num green" id="res-know">0</div><div class="res-lbl">Got It</div></div>
+        <div class="res-box"><div class="res-num red" id="res-again">0</div><div class="res-lbl">Study Again</div></div>
+        <div class="res-box"><div class="res-num" id="res-total" style="color:#c9a84c;">0</div><div class="res-lbl">Total Cards</div></div>
+      </div>
+      <div>
+        <button class="btn-primary" onclick="startStudy(currentDeckId, true)">Study Again Cards ↺</button>
+        <button class="btn-outline" onclick="startStudy(currentDeckId, false)">Full Deck ↺</button>
+      </div>
+      <div style="margin-top:16px;">
+        <button class="btn-sm" onclick="goTo('decks')" style="font-size:0.85rem;">← Back to Decks</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- TEACHER ADMIN -->
+<div id="page-admin" class="page">
+  <div class="admin-wrap">
+    <h2>⚙ Manage Flashcard Decks</h2>
+    <div id="existing-decks-admin"></div>
+    <div class="editor-box">
+      <h3 style="color:#c9a84c;margin-bottom:16px;font-family:'Playfair Display',serif;">Add New Deck</h3>
+      <label>Deck Name</label>
+      <input class="inp" id="new-deck-name" placeholder="e.g. CAE Vocabulary Set 1"/>
+      <label>Level Badge (optional)</label>
+      <input class="inp" id="new-deck-level" placeholder="e.g. CAE · C1" style="margin-bottom:0;"/>
+      <div style="margin:14px 0 8px;">
+        <label>Cards (JSON format)</label>
+        <div class="json-hint">Paste your cards as JSON. Each card needs <strong style="color:#aaa;">word</strong>, <strong style="color:#aaa;">definition</strong>, and optionally <strong style="color:#aaa;">pos</strong> (part of speech) and <strong style="color:#aaa;">example</strong>.<br>
+        Example: <code style="color:#c9a84c;">[{{"word":"meticulous","pos":"adj","definition":"Very careful and precise.","example":"She was meticulous in her work."}}]</code></div>
+        <textarea id="new-deck-json" rows="8" placeholder='[&#10;  {"word": "meticulous", "pos": "adj", "definition": "Showing great attention to detail.", "example": "She was meticulous in checking every answer."},&#10;  {"word": "forthcoming", "pos": "adj", "definition": "About to happen or appear soon.", "example": "The forthcoming exam requires careful preparation."}&#10;]'></textarea>
+      </div>
+      <button class="btn-sm" onclick="addDeck()">Add Deck</button>
+      <div class="success-msg" id="add-success">Deck added successfully!</div>
+    </div>
+    <button class="btn-sm" onclick="goTo('decks')" style="margin-top:8px;">← Back to Decks</button>
+  </div>
+</div>
+
+<script>
+const DECKS_KEY='cam_flashcard_decks';
+const PROGRESS_KEY='cam_flashcard_progress';
+let currentDeckId=null, currentCards=[], cardIndex=0, isFlipped=false;
+let results={know:0,again:0};
+let againCards=[];
+
+function goTo(p){
+  document.querySelectorAll('.page').forEach(x=>x.classList.remove('active'));
+  document.getElementById('page-'+p).classList.add('active');
+  if(p==='decks')renderDecks();
+  if(p==='admin')renderAdmin();
+}
+
+// ── Data ───────────────────────────────────────────────────────────────
+function getDecks(){try{return JSON.parse(localStorage.getItem(DECKS_KEY)||'[]');}catch{return[];}}
+function saveDecks(d){localStorage.setItem(DECKS_KEY,JSON.stringify(d));}
+function getProgress(){try{return JSON.parse(localStorage.getItem(PROGRESS_KEY)||'{}');}catch{return{};}}
+function saveProgress(p){localStorage.setItem(PROGRESS_KEY,JSON.stringify(p));}
+
+// ── Deck list ──────────────────────────────────────────────────────────
+function renderDecks(){
+  const decks=getDecks();
+  const progress=getProgress();
+  const grid=document.getElementById('deck-grid');
+  const noMsg=document.getElementById('no-decks-msg');
+  if(!decks.length){grid.innerHTML='';noMsg.style.display='block';return;}
+  noMsg.style.display='none';
+  grid.innerHTML=decks.map(d=>{
+    const p=progress[d.id]||{known:[]};
+    const pct=d.cards.length?Math.round(p.known.length/d.cards.length*100):0;
+    return `<div class="deck-card" onclick="startStudy('${d.id}',false)">
+      <h3>${esc(d.name)}</h3>
+      <p>${d.cards.length} card${d.cards.length!==1?'s':''}</p>
+      <div class="deck-meta">
+        ${d.level?`<span class="deck-badge">${esc(d.level)}</span>`:''}
+        <span class="deck-progress">${pct}% known</span>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+// ── Study ──────────────────────────────────────────────────────────────
+function startStudy(deckId, againOnly){
+  const decks=getDecks();
+  const deck=decks.find(d=>d.id===deckId);
+  if(!deck)return;
+  currentDeckId=deckId;
+  const progress=getProgress();
+  const known=(progress[deckId]||{}).known||[];
+
+  if(againOnly){
+    const againIds=(progress[deckId]||{}).again||[];
+    currentCards=deck.cards.filter(c=>againIds.includes(c.id));
+    if(!currentCards.length){alert('No cards to study again — well done!');return;}
+  } else {
+    currentCards=[...deck.cards].sort(()=>Math.random()-0.5);
+  }
+
+  cardIndex=0; isFlipped=false; results={know:0,again:0}; againCards=[];
+  document.getElementById('study-title').textContent=deck.name;
+  goTo('study');
+  showCard();
+}
+
+function showCard(){
+  if(cardIndex>=currentCards.length){showResults();return;}
+  const c=currentCards[cardIndex];
+  const total=currentCards.length;
+  const pct=Math.round(cardIndex/total*100);
+  document.getElementById('prog-label').textContent=`Card ${cardIndex+1} of ${total}`;
+  document.getElementById('prog-pct').textContent=pct+'%';
+  document.getElementById('prog-fill').style.width=pct+'%';
+  document.getElementById('cf-word').textContent=c.word||'';
+  document.getElementById('cf-pos').textContent=c.pos||'';
+  document.getElementById('cb-def').textContent=c.definition||'';
+  document.getElementById('cb-ex').textContent=c.example?`"${c.example}"`:'';
+  // Reset flip
+  isFlipped=false;
+  document.getElementById('card-obj').classList.remove('flipped');
+  document.getElementById('rating-row').style.display='none';
+  document.getElementById('flip-hint').style.display='block';
+}
+
+function flipCard(){
+  if(isFlipped)return;
+  isFlipped=true;
+  document.getElementById('card-obj').classList.add('flipped');
+  document.getElementById('rating-row').style.display='flex';
+  document.getElementById('flip-hint').style.display='none';
+}
+
+function rateCard(knew){
+  const c=currentCards[cardIndex];
+  if(knew){results.know++;}
+  else{results.again++;againCards.push(c.id);}
+  // Save progress
+  const progress=getProgress();
+  if(!progress[currentDeckId])progress[currentDeckId]={known:[],again:[]};
+  if(knew){
+    if(!progress[currentDeckId].known.includes(c.id))progress[currentDeckId].known.push(c.id);
+    progress[currentDeckId].again=progress[currentDeckId].again.filter(id=>id!==c.id);
+  } else {
+    if(!progress[currentDeckId].again.includes(c.id))progress[currentDeckId].again.push(c.id);
+    progress[currentDeckId].known=progress[currentDeckId].known.filter(id=>id!==c.id);
+  }
+  saveProgress(progress);
+  cardIndex++;
+  showCard();
+}
+
+function showResults(){
+  const total=currentCards.length;
+  document.getElementById('res-know').textContent=results.know;
+  document.getElementById('res-again').textContent=results.again;
+  document.getElementById('res-total').textContent=total;
+  document.getElementById('res-sub').textContent=
+    results.know===total?'Perfect score — excellent work!'
+    :results.know>=total*0.7?'Great effort! A few more to review.'
+    :'Keep practising — you\'ll get there!';
+  goTo('results');
+}
+
+// ── Admin / deck editor ────────────────────────────────────────────────
+function renderAdmin(){
+  const decks=getDecks();
+  const div=document.getElementById('existing-decks-admin');
+  if(!decks.length){div.innerHTML='<p style="color:#666;font-style:italic;margin-bottom:20px;">No decks yet.</p>';return;}
+  div.innerHTML=decks.map(d=>`
+    <div style="display:flex;justify-content:space-between;align-items:center;padding:12px 16px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:6px;margin-bottom:8px;">
+      <div>
+        <span style="color:#c9a84c;font-weight:bold;">${esc(d.name)}</span>
+        <span style="color:#666;font-size:0.8rem;margin-left:10px;">${d.cards.length} cards</span>
+        ${d.level?`<span style="color:#888;font-size:0.78rem;margin-left:6px;">· ${esc(d.level)}</span>`:''}
+      </div>
+      <button class="btn-sm danger" onclick="deleteDeck('${d.id}')">Delete</button>
+    </div>
+  `).join('');
+}
+
+function addDeck(){
+  const name=document.getElementById('new-deck-name').value.trim();
+  const level=document.getElementById('new-deck-level').value.trim();
+  const jsonStr=document.getElementById('new-deck-json').value.trim();
+  if(!name){alert('Please enter a deck name.');return;}
+  let cards;
+  try{cards=JSON.parse(jsonStr);}catch(e){alert('Invalid JSON. Please check the format.\n\n'+e.message);return;}
+  if(!Array.isArray(cards)||!cards.length){alert('Cards must be a non-empty array.');return;}
+  // Validate each card
+  for(let i=0;i<cards.length;i++){
+    if(!cards[i].word||!cards[i].definition){alert(`Card ${i+1} is missing "word" or "definition".`);return;}
+    if(!cards[i].id) cards[i].id='c'+Date.now()+i;
+  }
+  const decks=getDecks();
+  decks.push({id:'d'+Date.now(),name,level,cards});
+  saveDecks(decks);
+  document.getElementById('new-deck-name').value='';
+  document.getElementById('new-deck-level').value='';
+  document.getElementById('new-deck-json').value='';
+  const ok=document.getElementById('add-success');
+  ok.style.display='block';
+  setTimeout(()=>ok.style.display='none',2500);
+  renderAdmin();
+}
+
+function deleteDeck(id){
+  if(!confirm('Delete this deck and all progress data?'))return;
+  let decks=getDecks().filter(d=>d.id!==id);
+  saveDecks(decks);
+  const p=getProgress();delete p[id];saveProgress(p);
+  renderAdmin();
+}
+
+function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+
+// Init
+renderDecks();
+</script>
+</body>
+</html>

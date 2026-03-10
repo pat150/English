@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>CAE Key Word Transformation 5</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Source+Serif+4:wght@300;400;600&display=swap');
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+  body{min-height:100vh;background:linear-gradient(135deg,#0f2027,#203a43,#2c5364);font-family:'Source Serif 4',serif;color:#e8e0d5;}
+  header{background:rgba(0,0,0,0.4);border-bottom:2px solid #c9a84c;padding:16px 32px;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;z-index:100;backdrop-filter:blur(12px);}
+  .logo{font-family:'Playfair Display',serif;color:#c9a84c;letter-spacing:2px;font-size:0.95rem;text-transform:uppercase;}
+  .header-btn{background:transparent;border:1px solid #c9a84c;color:#c9a84c;padding:6px 18px;cursor:pointer;border-radius:3px;font-size:0.8rem;letter-spacing:1px;font-family:inherit;}
+  .header-btn:hover{background:rgba(201,168,76,0.15);}
+  .page{display:none;}.page.active{display:block;}
+  .card{background:rgba(255,255,255,0.05);border:1px solid rgba(201,168,76,0.3);border-radius:10px;padding:36px;max-width:840px;margin:40px auto;backdrop-filter:blur(8px);}
+  h1{font-family:'Playfair Display',serif;color:#c9a84c;font-size:1.7rem;margin-bottom:6px;}
+  .subtitle{color:#aaa;font-size:0.9rem;margin-bottom:28px;line-height:1.6;}
+  .home-link{display:inline-block;margin-bottom:20px;color:#c9a84c;font-size:0.85rem;text-decoration:none;letter-spacing:1px;}
+  .home-link:hover{text-decoration:underline;}
+  input[type="text"],input[type="password"]{width:100%;padding:12px 16px;background:rgba(255,255,255,0.08);border:1px solid rgba(201,168,76,0.5);border-radius:4px;color:#e8e0d5;font-size:1rem;font-family:inherit;margin-bottom:20px;}
+  input::placeholder{color:#888;}
+  .btn-primary{background:#c9a84c;color:#0f2027;border:none;padding:12px 32px;font-size:1rem;font-weight:bold;border-radius:4px;cursor:pointer;letter-spacing:1px;font-family:inherit;}
+  .btn-primary:hover{background:#d9bb6a;}
+  .progress-wrap{margin-bottom:24px;}
+  .progress-top{display:flex;justify-content:space-between;color:#aaa;font-size:0.82rem;margin-bottom:6px;}
+  .progress-bar-bg{background:rgba(255,255,255,0.06);border-radius:4px;height:4px;}
+  .progress-bar{background:#c9a84c;height:4px;border-radius:4px;transition:width 0.3s;width:0%;}
+  .q-block{margin-bottom:18px;padding:18px 20px;background:rgba(255,255,255,0.04);border-radius:8px;border:1px solid rgba(255,255,255,0.07);}
+  .q-top{display:flex;align-items:flex-start;gap:12px;margin-bottom:10px;}
+  .q-num{color:#c9a84c;font-weight:bold;font-size:0.85rem;min-width:26px;flex-shrink:0;margin-top:2px;}
+  .q-original{font-size:0.92rem;color:#bbb;flex:1;line-height:1.6;}
+  .kw-badge{display:inline-block;background:rgba(201,168,76,0.15);border:1px solid rgba(201,168,76,0.4);border-radius:4px;padding:2px 10px;color:#c9a84c;font-weight:bold;letter-spacing:2px;font-size:0.82rem;margin-left:8px;}
+  .q-rewrite{font-size:0.92rem;color:#ccc;line-height:1.8;margin-bottom:10px;}
+  .ans-input{width:100%;background:rgba(255,255,255,0.07);border:1px solid rgba(201,168,76,0.35);border-radius:4px;color:#e8e0d5;font-size:0.92rem;font-family:inherit;padding:8px 12px;margin-bottom:0;}
+  .ans-input:focus{outline:none;border-color:#c9a84c;background:rgba(255,255,255,0.1);}
+  .score-box{text-align:center;padding:20px 0 30px;}
+  .big-score{font-family:'Playfair Display',serif;font-size:4rem;color:#c9a84c;}
+  .result-row{padding:10px 0;border-bottom:1px solid rgba(255,255,255,0.06);font-size:0.88rem;display:flex;gap:12px;}
+  .r-num{color:#c9a84c;font-weight:bold;min-width:26px;flex-shrink:0;}
+  .r-content{flex:1;}
+  .r-student{color:#e8e0d5;margin-bottom:3px;}
+  .r-key{color:#888;font-size:0.8rem;}
+  .gold{color:#c9a84c;font-weight:bold;}
+  .section-title{color:#c9a84c;font-weight:bold;letter-spacing:1px;margin-bottom:14px;font-size:0.85rem;text-transform:uppercase;}
+  .sub-card{margin-bottom:16px;padding:18px 20px;background:rgba(255,255,255,0.04);border-radius:8px;border:1px solid rgba(255,255,255,0.08);}
+  .sub-header{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:14px;flex-wrap:wrap;gap:8px;}
+  .sub-name{font-size:1rem;font-weight:bold;}
+  .sub-meta{color:#777;font-size:0.78rem;margin-top:2px;}
+  .sub-score{color:#c9a84c;font-weight:bold;font-size:1.1rem;}
+  .sub-ans-row{display:flex;gap:10px;padding:7px 0;border-bottom:1px solid rgba(255,255,255,0.05);font-size:0.83rem;flex-wrap:wrap;align-items:flex-start;}
+  .sub-ans-num{color:#c9a84c;font-weight:bold;min-width:26px;flex-shrink:0;}
+  .sub-ans-val{color:#ddd;flex:1;}
+  .sub-key-val{color:#666;font-size:0.78rem;flex:1;font-style:italic;}
+  .edit-input{background:#1a2a35;color:#e8e0d5;border:1px solid #c9a84c;border-radius:3px;padding:5px 8px;font-family:inherit;width:100%;font-size:0.83rem;margin-top:3px;}
+  .key-editor{margin-bottom:28px;padding:20px;background:rgba(201,168,76,0.05);border-radius:6px;border:1px solid rgba(201,168,76,0.25);}
+  .key-row{padding:7px 0;border-bottom:1px solid rgba(255,255,255,0.05);font-size:0.83rem;display:flex;gap:10px;align-items:flex-start;flex-wrap:wrap;}
+  .key-label{color:#c9a84c;font-weight:bold;min-width:50px;flex-shrink:0;margin-top:4px;}
+  .key-input{background:#1a2a35;color:#e8e0d5;border:1px solid rgba(201,168,76,0.4);border-radius:3px;padding:4px 8px;font-family:inherit;flex:1;min-width:200px;font-size:0.83rem;}
+  .btn-sm{background:transparent;border:1px solid #c9a84c;color:#c9a84c;padding:4px 12px;cursor:pointer;border-radius:3px;font-size:0.76rem;font-family:inherit;}
+  .btn-sm.danger{border-color:#eb5757;color:#eb5757;}
+  .btn-sm.danger:hover{background:rgba(235,87,87,0.1);}
+  .btn-sm.success{border-color:#6fcf97;color:#6fcf97;}
+  .no-subs{color:#666;font-style:italic;text-align:center;padding:30px;}
+  .error-msg{color:#eb5757;margin-bottom:12px;font-size:0.9rem;}
+  .login-wrap{display:flex;align-items:center;justify-content:center;min-height:80vh;}
+  .login-card{background:rgba(255,255,255,0.05);border:1px solid rgba(201,168,76,0.3);border-radius:10px;padding:40px;max-width:380px;width:100%;text-align:center;}
+  .login-card h1{font-family:'Playfair Display',serif;color:#c9a84c;font-size:1.5rem;margin-bottom:8px;}
+  .login-card p{color:#888;font-size:0.88rem;margin-bottom:24px;}
+  @media(max-width:600px){.card{padding:20px 16px;margin:20px 12px;}header{padding:12px 16px;flex-wrap:wrap;gap:10px;}}
+
+  /* ── Review mode ── */
+  .review-q{margin-bottom:20px;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.08);border-radius:8px;padding:18px 20px;}
+  .review-q-num{color:#c9a84c;font-size:0.78rem;letter-spacing:1px;text-transform:uppercase;margin-bottom:10px;}
+  .review-opt{display:flex;align-items:center;gap:10px;padding:8px 12px;border-radius:5px;margin-bottom:6px;font-size:0.9rem;}
+  .review-opt.correct{background:rgba(111,207,151,0.15);border:1px solid rgba(111,207,151,0.35);color:#6fcf97;}
+  .review-opt.wrong{background:rgba(235,87,87,0.12);border:1px solid rgba(235,87,87,0.3);color:#eb5757;}
+  .review-opt.neutral{background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.06);color:#888;}
+  .review-icon{font-size:1rem;min-width:18px;}
+  .review-note{font-size:0.82rem;color:#888;font-style:italic;margin-top:8px;padding-top:8px;border-top:1px solid rgba(255,255,255,0.06);}
+  .review-note .hl{color:#c9a84c;font-style:normal;}
+
+  .login-bar{background:rgba(0,0,0,0.3);border-bottom:1px solid rgba(201,168,76,0.2);padding:8px 32px;display:none;justify-content:space-between;align-items:center;font-size:0.8rem;}
+  .login-bar-left{color:#888;}
+  .login-bar-left strong{color:#c9a84c;}
+  .login-bar-right{display:flex;gap:10px;align-items:center;}
+  .bar-link{color:#888;text-decoration:none;font-size:0.75rem;letter-spacing:1px;}
+  .bar-link:hover{color:#c9a84c;}
+  .bar-signout{background:transparent;border:1px solid rgba(235,87,87,0.4);color:#eb5757;padding:3px 10px;cursor:pointer;border-radius:3px;font-size:0.72rem;font-family:inherit;letter-spacing:1px;}
+  .bar-signout:hover{background:rgba(235,87,87,0.1);}
+</style>
+</head>
+<body>
+<header>
+  <span class="logo">CAE Key Word Transformation 5 · Q41–Q50 · Part 4</span>
+  <div id="header-right"><button class="header-btn" onclick="goTo('login')">Teacher Login</button></div>
+</header>
+<div id="login-status" style="display:none;background:rgba(0,0,0,0.3);border-bottom:1px solid rgba(201,168,76,0.2);padding:8px 32px;display:flex;justify-content:space-between;align-items:center;font-size:0.8rem;">
+  <div style="color:#888;">Signed in as <strong id="login-status-name" style="color:#c9a84c;"></strong> &nbsp;·&nbsp; <span id="login-status-class"></span></div>
+  <div style="display:flex;gap:10px;align-items:center;">
+    <a href="login.html" style="color:#888;text-decoration:none;font-size:0.75rem;letter-spacing:1px;">My Results</a>
+    <a href="index.html" style="color:#888;text-decoration:none;font-size:0.75rem;letter-spacing:1px;">Activities</a>
+    <button onclick="signOutUser()" style="background:transparent;border:1px solid rgba(235,87,87,0.4);color:#eb5757;padding:3px 10px;cursor:pointer;border-radius:3px;font-size:0.72rem;font-family:inherit;letter-spacing:1px;">Sign Out</button>
+  </div>
+</div>
+
+<div id="page-home" class="page active">
+  <div class="card">
+    <a class="home-link" href="index.html">&#8592; Back to Home</a>
+    <h1>CAE Key Word Transformation 5</h1>
+    <p class="subtitle">CAE Use of English · Part 4 · Key Word Transformations · <strong style="color:#c9a84c;">Q41–Q50</strong><br>Complete the second sentence so it has a similar meaning to the first, using the key word. Use between 3 and 6 words including the key word. Do not change the key word.</p>
+
+    <div style="margin-top:24px;">
+      <input type="text" id="student-name" placeholder="Enter your full name..." style="width:100%;max-width:400px;padding:12px 16px;background:rgba(255,255,255,0.08);border:1px solid rgba(201,168,76,0.5);border-radius:4px;color:#e8e0d5;font-size:1rem;font-family:inherit;outline:none;display:block;margin-bottom:12px;"/>
+      <button class="btn-primary" onclick="startQuiz()">Start &#8594;</button>
+    </div>
+  </div>
+</div>
+<div id="page-quiz" class="page">
+  <div class="card">
+    <h1>CAE Key Word Transformation 5</h1>
+    <p class="subtitle" style="margin-bottom:16px;">Complete the second sentence using the key word. 3–6 words including the key word.</p>
+    <div class="progress-wrap">
+      <div class="progress-top"><span id="prog-text">0 of 10 answered</span><span id="prog-pct">0%</span></div>
+      <div class="progress-bar-bg"><div class="progress-bar" id="prog-bar"></div></div>
+    </div>
+    <div id="questions-container"></div>
+    <button class="btn-primary" onclick="submitQuiz()" style="margin-top:8px;">Submit Answers &#8594;</button>
+  </div>
+</div>
+
+<div id="page-submitted" class="page">
+  <div class="card">
+    <div class="score-box">
+      <div id="done-name" style="color:#aaa;margin-bottom:8px;"></div>
+      <div class="big-score">&#10003;</div>
+      <div style="color:#aaa;margin-top:10px;margin-bottom:28px;">Submitted! Your teacher will review your answers.</div>
+    </div>
+    <div id="done-breakdown"></div>
+    <button class="btn-primary" style="margin-top:12px;background:transparent;border:1px solid #c9a84c;color:#c9a84c;" onclick="openReview()">Review My Answers →</button>
+    <button class="btn-primary" style="margin-top:12px;" onclick="goHome()">Back to Home</button>
+  </div>
+</div>
+
+
+<div id="page-review" class="page">
+  <div class="card">
+    <h1 style="margin-bottom:4px;">Answer Review</h1>
+    <p style="color:#888;font-size:0.85rem;margin-bottom:24px;">Your answers compared to the answer key</p>
+    <div id="review-container"></div>
+    <div style="display:flex;gap:12px;flex-wrap:wrap;margin-top:8px;">
+      <button class="btn-primary" onclick="goTo('submitted')">← Back to Score</button>
+      <button class="btn-primary" style="background:transparent;border:1px solid #c9a84c;color:#c9a84c;" onclick="goHome()">Back to Home</button>
+    </div>
+  </div>
+</div>
+<div id="page-login" class="page">
+  <div class="login-wrap">
+    <div class="login-card">
+      <h1>Teacher Login</h1><p>Enter your password</p>
+      <input type="password" id="admin-pass" placeholder="Password" style="text-align:center;letter-spacing:4px;" onkeydown="if(event.key==='Enter')adminLogin()"/>
+      <div class="error-msg" id="login-error" style="display:none;">Incorrect password</div>
+      <button class="btn-primary" onclick="adminLogin()">Login &#8594;</button>
+    </div>
+  </div>
+</div>
+
+<div id="page-admin" class="page">
+  <div class="card">
+    <div class="section-title">Answer Key <span style="color:#777;font-size:0.75rem;font-weight:normal;">(pre-filled from PDF — edit if needed, use / for alternatives)</span></div>
+    <div class="key-editor" id="key-editor"></div>
+    <div class="section-title" id="sub-count-label">Student Submissions</div>
+    <div id="submissions-container"><p class="no-subs">No submissions yet.</p></div>
+  </div>
+</div>
+
+<script>
+const STORAGE_KEY='cae_kwt5_subs';
+const QUESTIONS=[
+  {n:41,orig:"Before he put forward the proposal, I&#39;m sure he took the comments of local residents on board.",kw:"WILL",start:"Before he put forward the proposal, I&#39;m sure he",end:"of local residents on board.",key:"WILL HAVE TAKEN THE COMMENTS"},
+  {n:42,orig:"I expect I&#39;ll leave home before I&#39;m twenty.",kw:"TIME",start:"I expect I will",end:"I&#39;m twenty.",key:"LEAVE HOME BY THE TIME"},
+  {n:43,orig:"I know that I&#39;ll find the right job soon.",kw:"MATTER",start:"I know",end:"before I find the right job.",key:"IT IS A MATTER OF TIME"},
+  {n:44,orig:"They confidently expect the broadcast to go ahead at 6 p.m.",kw:"SURE",start:"They",end:"go ahead at 6pm.",key:"ARE SURE THE BROADCAST WILL"},
+  {n:45,orig:"I&#39;m sure he&#39;ll get a promotion very soon.",kw:"LONG",start:"I&#39;m sure it",end:"he gets a promotion.",key:"WON&#39;T BE LONG BEFORE"},
+  {n:46,orig:"I have decided to make a definite plan for my future career.",kw:"AM",start:"What",end:"is make a definite plan for my future career.",key:"I AM GOING TO DO"},
+  {n:47,orig:"Staying another night would have meant paying more.",kw:"IF",start:"I would have had to",end:"another night.",key:"PAY MORE IF I HAD STAYED"},
+  {n:48,orig:"People will always want entertainment, providing that they have the time to enjoy it.",kw:"LONG",start:"There will always be a need for entertainment,",end:"the time to enjoy it.",key:"AS LONG AS PEOPLE HAVE"},
+  {n:49,orig:"Scientists have made an unexpected discovery in the treatment of cancer.",kw:"BREAKTHROUGH",start:"There",end:"in the treatment of cancer.",key:"HAS BEEN AN UNEXPECTED BREAKTHROUGH"},
+  {n:50,orig:"I thought very hard but couldn&#39;t remember the answer.",kw:"RACKED",start:"I",end:"to remember the answer.",key:"RACKED MY BRAINS"}
+];
+let currentStudent='',answers={},submitted=false;
+let submissions=JSON.parse(localStorage.getItem(STORAGE_KEY)||'[]');
+let answerKey={};
+// Pre-fill key from PDF answers
+QUESTIONS.forEach(q=>{answerKey[q.n]=q.key;});
+// Override with any saved edits
+const savedKey=JSON.parse(localStorage.getItem(STORAGE_KEY+'_key')||'null');
+if(savedKey)Object.assign(answerKey,savedKey);
+function saveData(){localStorage.setItem(STORAGE_KEY,JSON.stringify(submissions));}
+function saveKey(){localStorage.setItem(STORAGE_KEY+'_key',JSON.stringify(answerKey));}
+function goTo(page){
+  document.querySelectorAll('.page').forEach(function(p){p.classList.remove('active');});
+  document.getElementById('page-'+page).classList.add('active');
+  var hr=document.getElementById('header-right');
+  var btn=document.createElement('button');
+  btn.className='header-btn';
+  if(page==='admin'){btn.textContent='Logout';btn.onclick=function(){goTo('home');};}
+  else if(page==='login'){btn.textContent='← Back';btn.onclick=function(){goTo('home');};}
+  else{btn.textContent='Teacher Login';btn.onclick=function(){goTo('login');};}
+  hr.innerHTML='';
+  hr.appendChild(btn);
+}
+function goHome(){currentStudent='';answers={};submitted=false;document.getElementById('student-name').value='';goTo('home');}
+function startQuiz(){
+  const name=document.getElementById('student-name').value.trim();
+  if(!name){alert('Please enter your name.');return;}
+  currentStudent=name;answers={};submitted=false;renderQuestions();goTo('quiz');
+}
+function renderQuestions(){
+  const c=document.getElementById('questions-container');c.innerHTML='';
+  QUESTIONS.forEach(q=>{
+    const end_part=q.end?` ${q.end}`:'';
+    c.innerHTML+=`<div class="q-block">
+      <div class="q-top"><span class="q-num">${q.n}</span><span class="q-original">${q.orig} <span class="kw-badge">${q.kw}</span></span></div>
+      <div class="q-rewrite">${q.start} ................................................${end_part}</div>
+      <input class="ans-input" id="ans-${q.n}" type="text" placeholder="Type the missing words..." oninput="track(${q.n},this.value)" autocomplete="off"/>
+    </div>`;
+  });
+}
+function track(n,val){
+  answers[n]=val;
+  const filled=Object.values(answers).filter(v=>v&&v.trim()).length;
+  const pct=Math.round(filled/QUESTIONS.length*100);
+  document.getElementById('prog-text').textContent=filled+' of '+QUESTIONS.length+' answered';
+  document.getElementById('prog-pct').textContent=pct+'%';
+  document.getElementById('prog-bar').style.width=pct+'%';
+}
+function submitQuiz(){
+  const missing=QUESTIONS.filter(q=>!answers[q.n]||!answers[q.n].trim()).length;
+  if(missing&&!confirm(missing+' unanswered. Submit anyway?'))return;
+  submitted=true;
+  const sub={id:Date.now(),name:currentStudent,cls:(function(){try{var u=JSON.parse(localStorage.getItem("cam_user")||"null");return u?u.cls:"";}catch(e){return"";}})(),answers:{...answers},total:QUESTIONS.length,submittedAt:new Date().toLocaleString()};
+  submissions.push(sub);saveData();
+  saveToSupabase({
+    student_name: sub.name||'',
+    class_code: sub.cls||'',
+    activity: 'CAE KWT Q41-50',
+    storage_key: 'cae_kwt5_subs',
+    score: typeof sub.score==='number'?sub.score:null,
+    total: sub.total||null,
+    answers: JSON.stringify(sub.answers||{}),
+    submitted_at: sub.submittedAt||new Date().toLocaleString()
+  });
+  document.getElementById('done-name').textContent='Well done, '+currentStudent+'!';
+  let html='';
+  QUESTIONS.forEach(q=>{
+    const ans=answers[q.n]||'&#8212;';
+    const end_part=q.end?` ${q.end}`:'';
+    html+=`<div class="result-row"><span class="r-num">${q.n}</span><div class="r-content">
+      <div class="r-student">${q.start} <span class="gold">${ans}</span>${end_part}</div>
+      <div class="r-key">Model: ${answerKey[q.n]||q.key}</div>
+    </div></div>`;
+  });
+  document.getElementById('done-breakdown').innerHTML=html;
+  goTo('submitted');
+}
+function adminLogin(){
+  if(document.getElementById('admin-pass').value==='1996'){
+    document.getElementById('login-error').style.display='none';
+    document.getElementById('admin-pass').value='';
+    renderAdmin();goTo('admin');
+  } else document.getElementById('login-error').style.display='block';
+}
+let editingId=null,editTemp={};
+function renderAdmin(){
+  let khtml='';
+  QUESTIONS.forEach(q=>{
+    khtml+=`<div class="key-row"><span class="key-label">Q${q.n}:</span><input class="key-input" id="key-${q.n}" value="${answerKey[q.n]||q.key}" placeholder="Model answer..."/></div>`;
+  });
+  document.getElementById('key-editor').innerHTML=khtml+`<button class="btn-sm" style="margin-top:10px;" onclick="saveKeyFromEditor()">Update Key</button>`;
+  renderSubmissions();
+}
+function saveKeyFromEditor(){
+  QUESTIONS.forEach(q=>{const el=document.getElementById('key-'+q.n);if(el)answerKey[q.n]=el.value;});
+  saveKey();renderSubmissions();alert('Key updated!');
+}
+function renderSubmissions(){
+  const cnt=document.getElementById('submissions-container');
+  document.getElementById('sub-count-label').textContent='STUDENT SUBMISSIONS ('+submissions.length+')';
+  if(!submissions.length){cnt.innerHTML='<p class="no-subs">No submissions yet.</p>';return;}
+  let html='';
+  submissions.sort((a,b)=>b.id-a.id).forEach(sub=>{
+    const isEditing=editingId===sub.id;
+    let rows='';
+    QUESTIONS.forEach(q=>{
+      const ans=isEditing?(editTemp[q.n]!==undefined?editTemp[q.n]:sub.answers[q.n]||''):sub.answers[q.n]||'&#8212;';
+      if(isEditing){
+        rows+=`<div class="sub-ans-row"><span class="sub-ans-num">${q.n}</span><div style="flex:1;"><div style="color:#888;font-size:0.76rem;margin-bottom:2px;">${q.orig}</div><input class="edit-input" value="${ans}" onchange="editAns(${q.n},this.value)"/><div style="color:#666;font-size:0.75rem;margin-top:2px;">Model: ${answerKey[q.n]||q.key}</div></div></div>`;
+      } else {
+        rows+=`<div class="sub-ans-row"><span class="sub-ans-num">${q.n}</span><span class="sub-ans-val">${ans}</span><span class="sub-key-val">Model: ${answerKey[q.n]||q.key}</span></div>`;
+      }
+    });
+    const btns=isEditing
+      ?`<button class="btn-sm success" onclick="saveEdit(${sub.id})">Save</button><button class="btn-sm" onclick="cancelEdit()" style="margin-left:6px;">Cancel</button>`
+      :`<button class="btn-sm" onclick="startEdit(${sub.id})">Edit</button><button class="btn-sm danger" onclick="deleteSub(${sub.id})" style="margin-left:6px;">Delete</button>`;
+    html+=`<div class="sub-card"><div class="sub-header"><div><div class="sub-name">${sub.name}</div><div class="sub-meta">${sub.submittedAt} &middot; ${sub.total} questions</div></div><div>${btns}</div></div>${rows}</div>`;
+  });
+  cnt.innerHTML=html;
+}
+function startEdit(id){editingId=id;const sub=submissions.find(s=>s.id===id);editTemp={...sub.answers};renderSubmissions();}
+function editAns(n,val){editTemp[n]=val;}
+function saveEdit(id){
+  const idx=submissions.findIndex(s=>s.id===id);
+  if(idx>-1){submissions[idx].answers={...editTemp};saveData();}
+  editingId=null;editTemp={};renderSubmissions();
+}
+function cancelEdit(){editingId=null;editTemp={};renderSubmissions();}
+function deleteSub(id){if(!confirm('Delete?'))return;submissions=submissions.filter(s=>s.id!==id);saveData();renderSubmissions();}
+
+function openReview(){
+  const hasKey=Object.keys(answerKey).length>0;
+  let html='';
+  QUESTIONS.forEach(q=>{
+    const qn=q.n;
+    const student=answers[qn]||null;
+    const correct=answerKey[qn]||null;
+    html+=`<div class="review-q"><div class="review-q-num">Question ${qn}</div>`;
+    (q.opts||[]).forEach(o=>{
+      const letter=o.l||o[0]||'';
+      const word=o.w||o[1]||'';
+      const isCorrect=correct&&letter===correct;
+      const isStudent=student&&letter===student;
+      const isWrong=isStudent&&correct&&letter!==correct;
+      let cls='neutral',icon='·';
+      if(isCorrect){cls='correct';icon='✓';}
+      if(isWrong){cls='wrong';icon='✗';}
+      if(isCorrect||isWrong||isStudent){
+        html+=`<div class="review-opt ${cls}"><span class="review-icon">${icon}</span><strong>${letter}</strong> &nbsp; ${word}</div>`;
+      } else {
+        html+=`<div class="review-opt neutral"><span class="review-icon">·</span>${letter} &nbsp; ${word}</div>`;
+      }
+    });
+    if(correct&&student&&student!==correct){
+      const cw=(q.opts||[]).find(o=>o.l===correct);
+      const sw=(q.opts||[]).find(o=>o.l===student);
+      html+=`<div class="review-note">You chose <span class="hl">${student}${sw?' — '+sw.w:''}</span> · Correct answer: <span class="hl">${correct}${cw?' — '+cw.w:''}</span></div>`;
+    } else if(!hasKey){
+      html+=`<div class="review-note">Answer key not set yet — your teacher will review.</div>`;
+    } else if(!student){
+      html+=`<div class="review-note">Not answered.</div>`;
+    }
+    html+='</div>';
+  });
+  document.getElementById('review-container').innerHTML=html;
+  goTo('review');
+}
+
+function signOutUser(){
+  if(confirm('Sign out? Your submitted answers are already saved.')){
+    localStorage.removeItem('cam_user');
+    document.getElementById('login-status').style.display='none';
+    const inp=document.getElementById('student-name');
+    if(inp) inp.value='';
+  }
+}
+
+// ── Supabase ─────────────────────────────────────────────────────────
+const SUPA_URL='https://dhvzvhdefhrfsbjmnnbz.supabase.co';
+const SUPA_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRodnp2aGRlZmhyZnNiam1ubmJ6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzMwODk1OTEsImV4cCI6MjA4ODY2NTU5MX0.SSkscvxvvgsbGaSfJT_1BbJSVbIzfxUMJaE03OQj5Xg';
+async function saveToSupabase(rec){
+  try{
+    const r=await fetch(SUPA_URL+'/rest/v1/submissions',{
+      method:'POST',
+      headers:{'Content-Type':'application/json','apikey':SUPA_KEY,'Authorization':'Bearer '+SUPA_KEY,'Prefer':'return=minimal'},
+      body:JSON.stringify(rec)
+    });
+    return r.ok;
+  }catch(e){return false;}
+}
+// ─────────────────────────────────────────────────────────────────────
+</script>
+
+<script>
+// Pre-fill student name and class from login session
+(function(){
+  try {
+    const u = JSON.parse(localStorage.getItem('cam_user') || 'null');
+    const bar = document.getElementById('login-status');
+    const inp = document.getElementById('student-name');
+    if (!u) { if(bar) bar.style.display='none'; return; }
+    if (inp && !inp.value) inp.value = u.name;
+    if (bar) {
+      bar.style.display = 'flex';
+      const nm = document.getElementById('login-status-name');
+      const cl = document.getElementById('login-status-class');
+      if (nm) nm.textContent = u.name;
+      if (cl) cl.textContent = 'Class: ' + u.cls;
+    }
+  } catch(e) {}
+})();
+</script>
+</body>
+</html>

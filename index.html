@@ -1,0 +1,512 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Cambridge Exam Practice</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700;800&family=Source+Serif+4:wght@300;400;600&display=swap');
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --gold: #c9a84c;
+    --c2: #c0392b; --c2-soft: rgba(192,57,43,0.15);
+    --c1: #d35400; --c1-soft: rgba(211,84,0,0.15);
+    --b2: #1a7a4a; --b2-soft: rgba(26,122,74,0.15);
+    --b1: #1a5fa8; --b1-soft: rgba(26,95,168,0.15);
+    --practice: #6c3483; --practice-soft: rgba(108,52,131,0.15);
+  }
+  body { min-height:100vh; background:linear-gradient(160deg,#0a1628 0%,#112240 50%,#0d1f3c 100%); font-family:'Source Serif 4',serif; color:#e8e0d5; }
+  header { background:rgba(0,0,0,0.5); border-bottom:2px solid var(--gold); padding:16px 32px; display:flex; justify-content:space-between; align-items:center; position:sticky; top:0; z-index:100; backdrop-filter:blur(12px); }
+  .site-title { font-family:'Playfair Display',serif; color:var(--gold); font-size:1.2rem; letter-spacing:3px; text-transform:uppercase; }
+  .site-subtitle { color:#888; font-size:0.75rem; letter-spacing:2px; margin-top:2px; }
+  .teacher-btn { background:transparent; border:1px solid rgba(201,168,76,0.5); color:var(--gold); padding:6px 16px; cursor:pointer; border-radius:3px; font-size:0.78rem; letter-spacing:1px; font-family:inherit; transition:all 0.2s; }
+  .teacher-btn:hover { background:rgba(201,168,76,0.1); }
+  .page { display:none; } .page.active { display:block; }
+  .hero { text-align:center; padding:50px 40px 24px; }
+  .hero h1 { font-family:'Playfair Display',serif; font-size:2.8rem; color:var(--gold); margin-bottom:10px; }
+  .hero p { color:#aaa; font-size:0.95rem; max-width:520px; margin:0 auto; line-height:1.7; }
+  .filter-bar { display:flex; gap:6px; flex-wrap:wrap; justify-content:center; padding:16px 40px; }
+  .nav-btn { background:transparent; border:1px solid rgba(201,168,76,0.3); color:#aaa; padding:6px 14px; cursor:pointer; border-radius:3px; font-size:0.78rem; letter-spacing:1px; font-family:inherit; transition:all 0.2s; }
+  .nav-btn:hover, .nav-btn.active { border-color:var(--gold); color:var(--gold); background:rgba(201,168,76,0.08); }
+  .loading { text-align:center; padding:60px 20px; color:#888; }
+  .spinner { width:36px; height:36px; border:3px solid rgba(201,168,76,0.2); border-top-color:var(--gold); border-radius:50%; animation:spin 0.8s linear infinite; margin:0 auto 16px; }
+  @keyframes spin { to { transform:rotate(360deg); } }
+  .sections-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(320px,1fr)); gap:24px; max-width:1200px; margin:0 auto; padding:10px 40px 60px; }
+  .level-card { background:rgba(255,255,255,0.04); border-radius:12px; border:1px solid rgba(255,255,255,0.08); overflow:hidden; transition:transform 0.2s,box-shadow 0.2s; }
+  .level-card:hover { transform:translateY(-3px); box-shadow:0 12px 40px rgba(0,0,0,0.3); }
+  .level-card.hidden { display:none; }
+  .card-header { padding:20px 24px 16px; border-bottom:1px solid rgba(255,255,255,0.07); display:flex; align-items:center; gap:14px; }
+  .level-badge { font-family:'Playfair Display',serif; font-size:1.3rem; font-weight:800; width:50px; height:50px; border-radius:10px; display:flex; align-items:center; justify-content:center; flex-shrink:0; }
+  .card-header-text h2 { font-family:'Playfair Display',serif; font-size:1.05rem; margin-bottom:3px; }
+  .card-header-text p { font-size:0.75rem; color:#888; letter-spacing:1px; }
+  .card-body { padding:18px 24px 22px; }
+  .exam-group { margin-bottom:18px; }
+  .exam-group:last-child { margin-bottom:0; }
+  .section-label { font-size:0.68rem; letter-spacing:2px; text-transform:uppercase; margin-bottom:8px; color:#666; }
+  .link-list { display:flex; flex-direction:column; gap:5px; }
+  .part-link { display:flex; align-items:center; gap:10px; padding:8px 12px; border-radius:6px; text-decoration:none; color:#ccc; font-size:0.85rem; background:rgba(255,255,255,0.03); border:1px solid rgba(255,255,255,0.06); transition:all 0.18s; }
+  .part-link:hover { color:#fff; background:rgba(255,255,255,0.07); border-color:rgba(255,255,255,0.15); transform:translateX(3px); }
+  .part-num { font-size:0.66rem; font-weight:bold; letter-spacing:1px; min-width:52px; padding:2px 6px; border-radius:3px; text-align:center; flex-shrink:0; }
+  .coming-soon { padding:10px 12px; border-radius:6px; color:#555; font-size:0.83rem; background:rgba(255,255,255,0.01); border:1px dashed rgba(255,255,255,0.06); font-style:italic; }
+  .c2 .card-header{background:var(--c2-soft);} .c2 .level-badge{background:var(--c2-soft);color:var(--c2);border:2px solid var(--c2);} .c2 .card-header-text h2{color:#e8a09a;} .c2 .part-num{background:var(--c2-soft);color:#e8a09a;}
+  .c1 .card-header{background:var(--c1-soft);} .c1 .level-badge{background:var(--c1-soft);color:var(--c1);border:2px solid var(--c1);} .c1 .card-header-text h2{color:#f0a87a;} .c1 .part-num{background:var(--c1-soft);color:#f0a87a;}
+  .b2 .card-header{background:var(--b2-soft);} .b2 .level-badge{background:var(--b2-soft);color:var(--b2);border:2px solid var(--b2);} .b2 .card-header-text h2{color:#7acca0;} .b2 .part-num{background:var(--b2-soft);color:#7acca0;}
+  .b1 .card-header{background:var(--b1-soft);} .b1 .level-badge{background:var(--b1-soft);color:var(--b1);border:2px solid var(--b1);} .b1 .card-header-text h2{color:#7ab0e8;} .b1 .part-num{background:var(--b1-soft);color:#7ab0e8;}
+  .practice .card-header{background:var(--practice-soft);} .practice .level-badge{background:var(--practice-soft);color:var(--practice);border:2px solid var(--practice);font-size:1rem;} .practice .card-header-text h2{color:#c49ad8;} .practice .part-num{background:var(--practice-soft);color:#c49ad8;}
+  /* LOGIN */
+  .login-wrap { display:flex; align-items:center; justify-content:center; min-height:80vh; }
+  .login-card { background:rgba(255,255,255,0.05); border:1px solid rgba(201,168,76,0.3); border-radius:10px; padding:40px; max-width:380px; width:100%; backdrop-filter:blur(8px); text-align:center; }
+  .login-card h1 { font-family:'Playfair Display',serif; color:var(--gold); font-size:1.6rem; margin-bottom:8px; }
+  .login-card p { color:#888; font-size:0.88rem; margin-bottom:24px; }
+  .login-input { width:100%; padding:12px 16px; background:rgba(255,255,255,0.08); border:1px solid rgba(201,168,76,0.5); border-radius:4px; color:#e8e0d5; font-size:1.1rem; font-family:inherit; margin-bottom:14px; text-align:center; letter-spacing:6px; }
+  .login-input::placeholder { letter-spacing:1px; color:#555; font-size:0.9rem; }
+  .btn-primary { background:var(--gold); color:#0f2027; border:none; padding:11px 28px; font-size:0.95rem; font-weight:bold; border-radius:4px; cursor:pointer; font-family:inherit; }
+  .btn-primary:hover { background:#d9bb6a; }
+  .error-msg { color:#eb5757; font-size:0.85rem; margin-bottom:12px; }
+  /* DASHBOARD */
+  .dash-wrap { max-width:980px; margin:0 auto; padding:30px 40px 60px; }
+  .dash-title { font-family:'Playfair Display',serif; color:var(--gold); font-size:1.6rem; margin-bottom:4px; }
+  .dash-sub { color:#888; font-size:0.85rem; margin-bottom:24px; }
+  .exam-filter { display:flex; gap:6px; flex-wrap:wrap; margin-bottom:24px; }
+  .filter-chip { background:transparent; border:1px solid rgba(255,255,255,0.15); color:#aaa; padding:5px 14px; cursor:pointer; border-radius:20px; font-size:0.78rem; font-family:inherit; transition:all 0.2s; }
+  .filter-chip:hover, .filter-chip.active { border-color:var(--gold); color:var(--gold); background:rgba(201,168,76,0.08); }
+  .group-title { color:var(--gold); font-weight:bold; letter-spacing:1px; font-size:0.82rem; text-transform:uppercase; margin:24px 0 10px; border-bottom:1px solid rgba(201,168,76,0.2); padding-bottom:6px; }
+  .sub-card { margin-bottom:12px; padding:16px 20px; background:rgba(255,255,255,0.04); border-radius:8px; border:1px solid rgba(255,255,255,0.08); }
+  .sub-row { display:flex; justify-content:space-between; align-items:flex-start; flex-wrap:wrap; gap:8px; margin-bottom:10px; }
+  .sub-name { font-size:1rem; font-weight:bold; }
+  .sub-meta { color:#777; font-size:0.78rem; margin-top:2px; }
+  .sub-score { color:var(--gold); font-weight:bold; font-size:1.1rem; }
+  .ans-pills { display:flex; gap:7px; flex-wrap:wrap; }
+  .pill { text-align:center; }
+  .pill-label { font-size:0.66rem; color:#777; margin-bottom:3px; }
+  .pill-val { display:inline-flex; align-items:center; justify-content:center; min-width:30px; height:30px; border-radius:15px; font-weight:bold; font-size:0.82rem; padding:0 6px; }
+  .pill-val.ok { background:rgba(111,207,151,0.2); border:2px solid #6fcf97; color:#6fcf97; }
+  .pill-val.bad { background:rgba(235,87,87,0.2); border:2px solid #eb5757; color:#eb5757; }
+  .pill-val.neutral { background:rgba(201,168,76,0.15); border:2px solid var(--gold); color:var(--gold); }
+  .open-ans-grid { display:flex; flex-wrap:wrap; gap:8px; }
+  .open-ans-item { background:rgba(255,255,255,0.04); border:1px solid rgba(255,255,255,0.08); border-radius:4px; padding:5px 10px; font-size:0.82rem; }
+  .open-ans-item .q-lbl { color:#c9a84c; font-size:0.7rem; font-weight:bold; }
+  .open-ans-item .q-val { color:#ddd; }
+  .btn-sm { background:transparent; border:1px solid rgba(235,87,87,0.5); color:#eb5757; padding:4px 10px; cursor:pointer; border-radius:3px; font-size:0.75rem; font-family:inherit; }
+  .btn-sm:hover { background:rgba(235,87,87,0.1); }
+  .no-subs { color:#666; font-style:italic; text-align:center; padding:40px; }
+  @media(max-width:600px){.hero h1{font-size:2rem;}.sections-grid,.dash-wrap{padding:10px 14px 40px;}.filter-bar{padding:12px 14px;}header{padding:12px 16px;flex-wrap:wrap;gap:10px;}}
+</style>
+</head>
+<body>
+
+<header>
+  <div>
+    <div class="site-title">Cambridge Exam Practice</div>
+    <div class="site-subtitle">Interactive Reading &amp; Use of English</div>
+  </div>
+  <div id="header-actions" style="display:flex;gap:8px;align-items:center;">
+    <a href="flashcards.html" style="color:#888;font-size:0.78rem;letter-spacing:1px;text-decoration:none;padding:6px 10px;border:1px solid rgba(255,255,255,0.1);border-radius:3px;">Flashcards</a>
+    <a href="dashboard.html" style="color:#888;font-size:0.78rem;letter-spacing:1px;text-decoration:none;padding:6px 10px;border:1px solid rgba(255,255,255,0.1);border-radius:3px;">Dashboard</a>
+    <div id="student-status"></div>
+  </div>
+</header>
+
+<!-- HOME -->
+<div id="page-home" class="page active">
+  <div class="hero">
+    <h1>Exam Practice Hub</h1>
+    <p>Select your level and choose an exam part or practice activity. All results are saved for your teacher to review.</p>
+  </div>
+  <div class="filter-bar">
+    <button class="nav-btn active" onclick="filterLevel('all',this)">All</button>
+    <button class="nav-btn" onclick="filterLevel('c2',this)">C2 · CPE</button>
+    <button class="nav-btn" onclick="filterLevel('c1',this)">C1 · CAE</button>
+    <button class="nav-btn" onclick="filterLevel('b2',this)">B2 · FCE</button>
+    <button class="nav-btn" onclick="filterLevel('b1',this)">B1 · PET</button>
+    <button class="nav-btn" onclick="filterLevel('practice',this)">Practice</button>
+  </div>
+  <div id="loading" class="loading"><div class="spinner"></div><div>Loading exams...</div></div>
+  <div class="sections-grid" id="grid" style="display:none;"></div>
+</div>
+
+<!-- LOGIN -->
+<div id="page-login" class="page">
+  <div class="login-wrap">
+    <div class="login-card">
+      <h1>Teacher Login</h1>
+      <p>Enter your password to access the dashboard</p>
+      <input class="login-input" type="password" id="admin-pass" placeholder="Password" onkeydown="if(event.key==='Enter')adminLogin()"/>
+      <div class="error-msg" id="login-error" style="display:none;">Incorrect password</div>
+      <button class="btn-primary" onclick="adminLogin()">Login →</button>
+    </div>
+  </div>
+</div>
+
+<!-- DASHBOARD -->
+<div id="page-admin" class="page">
+  <div class="dash-wrap">
+    <div class="dash-title">Teacher Dashboard</div>
+    <div class="dash-sub">All student submissions across every exam and activity</div>
+    <div class="exam-filter" id="dash-filter"></div>
+    <div id="dash-content"></div>
+  </div>
+</div>
+
+<script>
+const GITHUB_USER = 'pat150';
+const GITHUB_REPO = 'English';
+const TEACHER_PASS = '1996';
+
+const PART_LABELS = {
+  cpe: {1:'Multiple Choice Cloze',2:'Open Cloze',3:'Word Formation',4:'Key Word Transformations',5:'Multiple Choice',6:'Gapped Text',7:'Multiple Matching'},
+  cae: {1:'Multiple Choice Cloze',2:'Open Cloze',3:'Word Formation',4:'Key Word Transformations',5:'Multiple Choice',6:'Gapped Text',7:'Cross-text Multiple Matching',8:'Multiple Matching'},
+  fce: {1:'Multiple Choice Cloze',2:'Open Cloze',3:'Word Formation',4:'Key Word Transformations',5:'Multiple Choice',6:'Gapped Text',7:'Multiple Matching'},
+  pet: {1:'Multiple Choice',2:'Multiple Choice',3:'Multiple Choice',4:'Multiple Choice',5:'Multiple Choice',6:'Open Cloze'},
+};
+
+const LEVEL_CONFIG = {
+  cpe: {badge:'C2', name:'CPE · Cambridge Proficiency', cls:'c2'},
+  cae: {badge:'C1', name:'CAE · Cambridge Advanced',   cls:'c1'},
+  fce: {badge:'B2', name:'FCE · Cambridge First',      cls:'b2'},
+  pet: {badge:'B1', name:'PET · Cambridge Preliminary',cls:'b1'},
+};
+
+const STORAGE_KEYS = [
+  {key:'cpe_submissions',   label:'CPE · Part 5'},
+  {key:'cpe_p6_submissions',label:'CPE · Part 6'},
+  {key:'cpe_p7_submissions',label:'CPE · Part 7'},
+  {key:'cae_p1_subs',       label:'CAE · Part 1'},
+  {key:'cae_p2_subs',       label:'CAE · Part 2'},
+  {key:'cae_p3_subs',       label:'CAE · Part 3'},
+  {key:'cae_p4_subs',       label:'CAE · Part 4'},
+];
+
+let currentFilter = 'all';
+
+// ── LOAD FILES FROM GITHUB ──
+async function loadFiles() {
+  try {
+    const res = await fetch(`https://api.github.com/repos/${GITHUB_USER}/${GITHUB_REPO}/contents`);
+    const data = await res.json();
+    const files = data.filter(f=>f.name.endsWith('.html') && f.name!=='index.html').map(f=>f.name);
+    renderGrid(files);
+  } catch(e) {
+    document.getElementById('loading').innerHTML='<p style="color:#888;">Could not load file list. Please check your internet connection.</p>';
+  }
+}
+
+function parseFilename(name) {
+  // Standard exam files: cpe_full_1_part1.html
+  const m = name.match(/^(cpe|cae|fce|pet)_full_(\d+)_part(\d+)\.html$/);
+  if (m) return {type:'exam', level:m[1], exam:parseInt(m[2]), part:parseInt(m[3]), file:name};
+
+  // Legacy CPE quiz filenames: cpe_part5_quiz.html etc → treated as cpe_full_1_partN
+  const legacyCpe = name.match(/^cpe_part(\d+)_quiz\.html$/);
+  if (legacyCpe) return {type:'exam', level:'cpe', exam:1, part:parseInt(legacyCpe[1]), file:name};
+
+  // Legacy CAE full 1 filenames: cae_full_1_part1.html already matches above,
+  // but cae_full_1_partN.html variants (e.g. cae_full_1_part1.html) also match above — no action needed.
+
+  // FCE/B2 level practice: fce_practice_test_N.html
+  const fpt = name.match(/^fce_practice_test_(\d+)\.html$/);
+  if (fpt) return {type:'levelpractice', level:'fce', subtype:'test', label:'Practice Test '+fpt[1], sort:parseInt(fpt[1]), file:name};
+
+  // Level-specific practice: cae_practice_kwt_1.html, cpe_practice_test_2.html etc.
+  const lp = name.match(/^(cpe|cae|fce|pet)_practice_kwt_(\d+)\.html$/);
+  if (lp) return {type:'levelpractice', level:lp[1], subtype:'kwt', label:'Key Word Transformations '+lp[2], sort:100+parseInt(lp[2]), file:name};
+  const lpt = name.match(/^(cpe|cae|fce|pet)_practice_test_(\d+)\.html$/);
+  if (lpt) return {type:'levelpractice', level:lpt[1], subtype:'test', label:'Practice Test '+lpt[2], sort:parseInt(lpt[2]), file:name};
+  const lpk = name.match(/^(cpe|cae|fce|pet)_practice_keyword_(\d+)\.html$/);
+  if (lpk) return {type:'levelpractice', level:lpk[1], subtype:'keyword', label:'Keyword Practice '+lpk[2], sort:200+parseInt(lpk[2]), file:name};
+  const lpo = name.match(/^(cpe|cae|fce|pet)_practice_(.+)\.html$/);
+  if (lpo) return {type:'levelpractice', level:lpo[1], subtype:'other', label:lpo[2].replace(/_/g,' ').replace(/\b\w/g,c=>c.toUpperCase()), sort:999, file:name};
+
+  // Legacy unlevelled practice files — assign to levels by known filename
+  // KWT series → CAE
+  const k = name.match(/^practice_kwt_(\d+)\.html$/);
+  if (k) return {type:'levelpractice', level:'cae', subtype:'kwt', label:'Key Word Transformations '+k[1], sort:100+parseInt(k[1]), file:name};
+  // practice_keyword → CAE
+  const kw = name.match(/^practice_keyword_(\d+)\.html$/);
+  if (kw) return {type:'levelpractice', level:'cae', subtype:'keyword', label:'Keyword Practice '+kw[1], sort:200+parseInt(kw[1]), file:name};
+  // practice_test — assign by number: 14,15,16 → CAE; others → general
+  const p = name.match(/^practice_test_(\d+)\.html$/);
+  if (p) {
+    const n = parseInt(p[1]);
+    const caeTests = [14,15,16]; // add more numbers here as you create CAE practice tests
+    const cpeTests = [];         // add CPE test numbers here
+    const fceTests = [];         // add FCE test numbers here
+    if (caeTests.includes(n)) return {type:'levelpractice', level:'cae', subtype:'test', label:'Practice Test '+n, sort:n, file:name};
+    if (cpeTests.includes(n)) return {type:'levelpractice', level:'cpe', subtype:'test', label:'Practice Test '+n, sort:n, file:name};
+    if (fceTests.includes(n)) return {type:'levelpractice', level:'fce', subtype:'test', label:'Practice Test '+n, sort:n, file:name};
+    return {type:'practice', label:'Practice Test '+n, sort:n, file:name}; // unassigned → general card
+  }
+  // any other practice_*.html → general
+  const other = name.match(/^practice_(.+)\.html$/);
+  if (other) return {type:'practice', label:other[1].replace(/_/g,' ').replace(/\b\w/g,c=>c.toUpperCase()), sort:999, file:name};
+  return null;
+}
+
+function renderGrid(files) {
+  document.getElementById('loading').style.display='none';
+  const grid = document.getElementById('grid');
+  grid.style.display='grid';
+  grid.innerHTML='';
+
+  const parsed = files.map(parseFilename).filter(Boolean);
+
+  // Build exam map: level → examNum → parts[]
+  const examMap = {};
+  parsed.filter(f=>f.type==='exam').forEach(f=>{
+    if(!examMap[f.level]) examMap[f.level]={};
+    if(!examMap[f.level][f.exam]) examMap[f.level][f.exam]=[];
+    examMap[f.level][f.exam].push(f);
+  });
+
+  const practiceFiles = parsed.filter(f=>f.type==='practice').sort((a,b)=>a.sort-b.sort);
+  // Level-specific practice: keyed by level
+  const levelPracticeMap = {};
+  parsed.filter(f=>f.type==='levelpractice').forEach(f=>{
+    if(!levelPracticeMap[f.level]) levelPracticeMap[f.level]=[];
+    levelPracticeMap[f.level].push(f);
+  });
+
+  // Render level cards
+  ['cpe','cae','fce','pet'].forEach(level=>{
+    const cfg = LEVEL_CONFIG[level];
+    const exams = examMap[level]||{};
+    const examNums = Object.keys(exams).map(Number).sort((a,b)=>a-b);
+    const maxPart = level==='cae'?8:7;
+
+    let bodyHtml='';
+    if(examNums.length){
+      examNums.forEach(examNum=>{
+        const parts = exams[examNum].sort((a,b)=>a.part-b.part);
+        const ue = parts.filter(p=>p.part<=4);
+        const rd = parts.filter(p=>p.part>=5);
+        bodyHtml+=`<div class="exam-group">`;
+        if(examNums.length>1) bodyHtml+=`<div class="section-label" style="color:var(--gold);font-size:0.75rem;margin-bottom:10px;letter-spacing:1px;">EXAM ${examNum}</div>`;
+        if(ue.length){
+          bodyHtml+=`<div class="section-label">Parts 1–4 · Use of English</div><div class="link-list">`;
+          ue.forEach(p=>{ const lbl=(PART_LABELS[level]||{})[p.part]||''; bodyHtml+=`<a class="part-link" href="${p.file}"><span class="part-num">PART ${p.part}</span>${lbl}</a>`; });
+          bodyHtml+=`</div>`;
+        }
+        if(rd.length){
+          bodyHtml+=`<div class="section-label" style="margin-top:12px;">Parts 5–${maxPart} · Reading</div><div class="link-list">`;
+          rd.forEach(p=>{ const lbl=(PART_LABELS[level]||{})[p.part]||''; bodyHtml+=`<a class="part-link" href="${p.file}"><span class="part-num">PART ${p.part}</span>${lbl}</a>`; });
+          bodyHtml+=`</div>`;
+        }
+        bodyHtml+=`</div>`;
+      });
+    } else {
+      bodyHtml=`<div class="coming-soon">Files will appear automatically when uploaded as <strong style="color:#555;">${level}_full_1_part1.html</strong> etc.</div>`;
+    }
+
+    // Add level-specific practice section at bottom of card
+    const lp=(levelPracticeMap[level]||[]).sort((a,b)=>a.sort-b.sort);
+    if(lp.length){
+      const kwt=lp.filter(f=>f.subtype==='kwt');
+      const tests=lp.filter(f=>f.subtype==='test');
+      const keyword=lp.filter(f=>f.subtype==='keyword');
+      const other=lp.filter(f=>f.subtype==='other');
+      bodyHtml+=`<div class="exam-group" style="margin-top:18px;padding-top:16px;border-top:1px solid rgba(255,255,255,0.07);">`;
+      bodyHtml+=`<div class="section-label" style="color:var(--practice);">Practice Activities</div>`;
+      if(tests.length){ bodyHtml+=`<div class="link-list">`; tests.forEach(f=>{ bodyHtml+=`<a class="part-link" href="${f.file}" style="border-color:rgba(108,52,131,0.2);"><span class="part-num" style="background:var(--practice-soft);color:var(--practice);">TEST</span>${f.label}</a>`; }); bodyHtml+=`</div>`; }
+      if(kwt.length){ bodyHtml+=`<div class="link-list" style="margin-top:5px;">`; kwt.forEach(f=>{ bodyHtml+=`<a class="part-link" href="${f.file}" style="border-color:rgba(108,52,131,0.2);"><span class="part-num" style="background:var(--practice-soft);color:var(--practice);">KWT</span>${f.label}</a>`; }); bodyHtml+=`</div>`; }
+      if(keyword.length){ bodyHtml+=`<div class="link-list" style="margin-top:5px;">`; keyword.forEach(f=>{ bodyHtml+=`<a class="part-link" href="${f.file}" style="border-color:rgba(108,52,131,0.2);"><span class="part-num" style="background:var(--practice-soft);color:var(--practice);">KW</span>${f.label}</a>`; }); bodyHtml+=`</div>`; }
+      if(other.length){ bodyHtml+=`<div class="link-list" style="margin-top:5px;">`; other.forEach(f=>{ bodyHtml+=`<a class="part-link" href="${f.file}" style="border-color:rgba(108,52,131,0.2);"><span class="part-num" style="background:var(--practice-soft);color:var(--practice);">ACT</span>${f.label}</a>`; }); bodyHtml+=`</div>`; }
+      bodyHtml+=`</div>`;
+    }
+
+    const card = document.createElement('div');
+    card.className=`level-card ${cfg.cls}`;
+    card.dataset.level=cfg.cls;
+    card.innerHTML=`
+      <div class="card-header">
+        <div class="level-badge">${cfg.badge}</div>
+        <div class="card-header-text"><h2>${cfg.name}</h2><p>READING &amp; USE OF ENGLISH</p></div>
+      </div>
+      <div class="card-body">${bodyHtml}</div>`;
+    grid.appendChild(card);
+  });
+
+  // Practice card
+  if(practiceFiles.length){
+    const pc=document.createElement('div');
+    pc.className='level-card practice';
+    pc.dataset.level='practice';
+
+    // Group by type: practice tests, KWT, keyword, other
+    const tests    = practiceFiles.filter(f=>f.file.match(/^practice_test_/));
+    const kwt      = practiceFiles.filter(f=>f.file.match(/^practice_kwt_/));
+    const keyword  = practiceFiles.filter(f=>f.file.match(/^practice_keyword_/));
+    const other    = practiceFiles.filter(f=>!f.file.match(/^practice_(test|kwt|keyword)_/));
+
+    let bodyHtml='';
+    if(tests.length){
+      bodyHtml+=`<div class="section-label">Mixed Practice Tests</div><div class="link-list">`;
+      tests.forEach(f=>{ bodyHtml+=`<a class="part-link" href="${f.file}"><span class="part-num" style="min-width:60px;">TEST</span>${f.label}</a>`; });
+      bodyHtml+=`</div>`;
+    }
+    if(kwt.length){
+      bodyHtml+=`<div class="section-label" style="margin-top:14px;">Key Word Transformations</div><div class="link-list">`;
+      kwt.forEach(f=>{ bodyHtml+=`<a class="part-link" href="${f.file}"><span class="part-num" style="min-width:60px;">KWT</span>${f.label}</a>`; });
+      bodyHtml+=`</div>`;
+    }
+    if(keyword.length){
+      bodyHtml+=`<div class="section-label" style="margin-top:14px;">Keyword Practice</div><div class="link-list">`;
+      keyword.forEach(f=>{ bodyHtml+=`<a class="part-link" href="${f.file}"><span class="part-num" style="min-width:60px;">KW</span>${f.label}</a>`; });
+      bodyHtml+=`</div>`;
+    }
+    if(other.length){
+      bodyHtml+=`<div class="section-label" style="margin-top:14px;">Other Activities</div><div class="link-list">`;
+      other.forEach(f=>{ bodyHtml+=`<a class="part-link" href="${f.file}"><span class="part-num" style="min-width:60px;">ACT</span>${f.label}</a>`; });
+      bodyHtml+=`</div>`;
+    }
+
+    pc.innerHTML=`
+      <div class="card-header">
+        <div class="level-badge" style="font-size:1rem;">✦</div>
+        <div class="card-header-text"><h2>Practice Activities</h2><p>USE OF ENGLISH · MIXED PRACTICE</p></div>
+      </div>
+      <div class="card-body">${bodyHtml}</div>`;
+    grid.appendChild(pc);
+  }
+
+  applyFilter(currentFilter);
+}
+
+function filterLevel(level,btn){
+  document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('active'));
+  if(btn) btn.classList.add('active');
+  currentFilter=level;
+  applyFilter(level);
+}
+function applyFilter(level){
+  document.querySelectorAll('.level-card').forEach(c=>{
+    if(level==='all'||c.dataset.level===level) c.classList.remove('hidden');
+    else c.classList.add('hidden');
+  });
+}
+
+// ── NAVIGATION ──
+function goTo(page){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.getElementById('page-'+page).classList.add('active');
+  const ha=document.getElementById('header-actions');
+  if(page==='admin') ha.innerHTML='<button class="teacher-btn" onclick="goTo(\'home\')">← Back to Site</button>';
+  else if(page==='login') ha.innerHTML='<button class="teacher-btn" onclick="goTo(\'home\')">← Back</button>';
+  else ha.innerHTML='<button class="teacher-btn" onclick="goTo(\'login\')">Teacher Login</button>';
+}
+
+// ── LOGIN ──
+function adminLogin(){
+  if(document.getElementById('admin-pass').value===TEACHER_PASS){
+    document.getElementById('login-error').style.display='none';
+    document.getElementById('admin-pass').value='';
+    renderDashboard();
+    goTo('admin');
+  } else {
+    document.getElementById('login-error').style.display='block';
+  }
+}
+
+// ── DASHBOARD ──
+function getAllSubmissions(){
+  let all=[];
+  STORAGE_KEYS.forEach(sk=>{
+    try{
+      const data=JSON.parse(localStorage.getItem(sk.key)||'[]');
+      data.forEach(sub=>all.push({...sub,examLabel:sk.label,storageKey:sk.key}));
+    }catch(e){}
+  });
+  return all.sort((a,b)=>b.id-a.id);
+}
+
+function renderDashboard(){
+  const all=getAllSubmissions();
+  const labels=['All',...new Set(all.map(s=>s.examLabel))];
+  document.getElementById('dash-filter').innerHTML=labels.map((l,i)=>
+    `<button class="filter-chip ${i===0?'active':''}" onclick="dashFilter('${l}',this)">${l} ${l==='All'?'('+all.length+')':''}</button>`
+  ).join('');
+  renderDashContent(all,'All');
+}
+
+function dashFilter(label,btn){
+  document.querySelectorAll('.filter-chip').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  renderDashContent(getAllSubmissions(),label);
+}
+
+function renderDashContent(all,label){
+  const content=document.getElementById('dash-content');
+  const filtered=label==='All'?all:all.filter(s=>s.examLabel===label);
+  if(!filtered.length){content.innerHTML='<div class="no-subs">No submissions yet.</div>';return;}
+
+  const grouped={};
+  filtered.forEach(sub=>{
+    if(!grouped[sub.examLabel]) grouped[sub.examLabel]=[];
+    grouped[sub.examLabel].push(sub);
+  });
+
+  let html='';
+  Object.entries(grouped).forEach(([examLabel,subs])=>{
+    html+=`<div class="group-title">${examLabel} <span style="color:#555;font-weight:normal;font-size:0.75rem;">${subs.length} submission${subs.length!==1?'s':''}</span></div>`;
+    subs.forEach(sub=>{
+      const scoreDisplay=(sub.score!==undefined&&sub.score!=='—')?`${sub.score}/${sub.total}`:sub.total+' Q';
+      let ansHtml='';
+      if(sub.answers){
+        const vals=Object.values(sub.answers);
+        const isLong=vals.some(v=>v&&v.toString().length>3);
+        if(isLong){
+          ansHtml='<div class="open-ans-grid">';
+          Object.entries(sub.answers).forEach(([q,a])=>{
+            ansHtml+=`<div class="open-ans-item"><div class="q-lbl">Q${q}</div><div class="q-val">${a||'—'}</div></div>`;
+          });
+          ansHtml+='</div>';
+        } else {
+          ansHtml='<div class="ans-pills">';
+          Object.entries(sub.answers).forEach(([q,a])=>{
+            ansHtml+=`<div class="pill"><div class="pill-label">Q${q}</div><div class="pill-val neutral">${a}</div></div>`;
+          });
+          ansHtml+='</div>';
+        }
+      }
+      html+=`<div class="sub-card">
+        <div class="sub-row">
+          <div><div class="sub-name">${sub.name}</div><div class="sub-meta">${sub.submittedAt}</div></div>
+          <div style="display:flex;align-items:center;gap:10px;">
+            <span class="sub-score">${scoreDisplay}</span>
+            <button class="btn-sm" onclick="deleteSub('${sub.storageKey}',${sub.id})">Delete</button>
+          </div>
+        </div>
+        ${ansHtml}
+      </div>`;
+    });
+  });
+  content.innerHTML=html;
+}
+
+function deleteSub(storageKey,id){
+  if(!confirm('Delete this submission?')) return;
+  try{
+    let data=JSON.parse(localStorage.getItem(storageKey)||'[]');
+    data=data.filter(s=>s.id!==id);
+    localStorage.setItem(storageKey,JSON.stringify(data));
+    renderDashboard();
+  }catch(e){}
+}
+
+// ── INIT ──
+// Show student login status in header
+(function(){
+  try{
+    const u=JSON.parse(localStorage.getItem('cam_user')||'null');
+    const el=document.getElementById('student-status');
+    if(!el) return;
+    if(u&&u.name){
+      el.innerHTML=`<span style="color:#c9a84c;font-size:0.78rem;letter-spacing:1px;padding:6px 10px;border:1px solid rgba(201,168,76,0.3);border-radius:3px;">${u.name} · ${u.cls}</span>`;
+    } else {
+      el.innerHTML=`<a href="login.html" style="color:#888;font-size:0.78rem;letter-spacing:1px;text-decoration:none;padding:6px 10px;border:1px solid rgba(255,255,255,0.1);border-radius:3px;">Sign In</a>`;
+    }
+  }catch(e){}
+})();
+loadFiles();
+</script>
+</body>
+</html>

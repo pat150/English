@@ -1,0 +1,560 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Key Word Practice 1 – Idioms & Expressions</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Source+Serif+4:wght@300;400;600&display=swap');
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body { min-height: 100vh; background: linear-gradient(135deg, #0f2027, #203a43, #2c5364); font-family: 'Source Serif 4', serif; color: #e8e0d5; }
+
+  header { background: rgba(0,0,0,0.4); border-bottom: 2px solid #c9a84c; padding: 16px 32px; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 100; backdrop-filter: blur(12px); }
+  .logo { font-family: 'Playfair Display', serif; color: #c9a84c; letter-spacing: 3px; font-size: 1rem; text-transform: uppercase; }
+  .header-btn { background: transparent; border: 1px solid #c9a84c; color: #c9a84c; padding: 6px 18px; cursor: pointer; border-radius: 3px; font-size: 0.8rem; letter-spacing: 1px; font-family: inherit; transition: all 0.2s; }
+  .header-btn:hover { background: rgba(201,168,76,0.15); }
+
+  .page { display: none; } .page.active { display: block; }
+
+  .card { background: rgba(255,255,255,0.05); border: 1px solid rgba(201,168,76,0.3); border-radius: 10px; padding: 36px; max-width: 820px; margin: 40px auto; backdrop-filter: blur(8px); }
+  h1 { font-family: 'Playfair Display', serif; color: #c9a84c; font-size: 1.7rem; margin-bottom: 6px; }
+  .subtitle { color: #aaa; font-size: 0.9rem; margin-bottom: 28px; line-height: 1.6; }
+  .home-link { display: inline-block; margin-bottom: 20px; color: #c9a84c; font-size: 0.85rem; text-decoration: none; letter-spacing: 1px; }
+  .home-link:hover { text-decoration: underline; }
+  input[type="text"], input[type="password"], textarea { width: 100%; padding: 12px 16px; background: rgba(255,255,255,0.08); border: 1px solid rgba(201,168,76,0.5); border-radius: 4px; color: #e8e0d5; font-size: 1rem; font-family: inherit; margin-bottom: 20px; }
+  input::placeholder, textarea::placeholder { color: #888; }
+  textarea { resize: vertical; min-height: 80px; line-height: 1.6; }
+  .btn-primary { background: #c9a84c; color: #0f2027; border: none; padding: 12px 32px; font-size: 1rem; font-weight: bold; border-radius: 4px; cursor: pointer; letter-spacing: 1px; font-family: inherit; }
+  .btn-primary:hover { background: #d9bb6a; }
+  .btn-secondary { background: transparent; border: 2px solid #c9a84c; color: #c9a84c; padding: 11px 28px; font-size: 1rem; font-weight: bold; border-radius: 4px; cursor: pointer; font-family: inherit; }
+  .btn-secondary:hover { background: rgba(201,168,76,0.1); }
+
+  /* STAGE INDICATOR */
+  .stages { display: flex; gap: 0; margin-bottom: 32px; border-radius: 6px; overflow: hidden; border: 1px solid rgba(201,168,76,0.3); }
+  .stage-pill { flex: 1; text-align: center; padding: 10px 6px; font-size: 0.78rem; letter-spacing: 1px; color: #666; background: rgba(255,255,255,0.02); border-right: 1px solid rgba(201,168,76,0.2); cursor: default; transition: all 0.2s; }
+  .stage-pill:last-child { border-right: none; }
+  .stage-pill.active { background: rgba(201,168,76,0.15); color: #c9a84c; font-weight: bold; }
+  .stage-pill.done { background: rgba(111,207,151,0.1); color: #6fcf97; }
+
+  /* PROGRESS */
+  .progress-wrap { margin-bottom: 24px; }
+  .progress-label { color: #aaa; font-size: 0.82rem; margin-bottom: 6px; display: flex; justify-content: space-between; }
+  .progress-bar-bg { background: rgba(255,255,255,0.06); border-radius: 4px; height: 4px; }
+  .progress-bar { background: #c9a84c; height: 4px; border-radius: 4px; transition: width 0.3s; width: 0%; }
+
+  /* VERSION 1 */
+  .v1-item { margin-bottom: 16px; background: rgba(255,255,255,0.04); border-radius: 8px; padding: 18px 20px; border: 1px solid rgba(255,255,255,0.07); display: flex; gap: 14px; align-items: flex-start; }
+  .v1-num { color: #c9a84c; font-weight: bold; font-size: 0.85rem; min-width: 28px; flex-shrink: 0; margin-top: 2px; }
+  .v1-text { font-size: 0.92rem; color: #ddd; line-height: 1.7; flex: 1; }
+  .v1-text .phrase { color: #c9a84c; font-weight: bold; text-decoration: underline; text-decoration-color: rgba(201,168,76,0.5); }
+  .v1-meaning { margin-top: 10px; font-size: 0.82rem; color: #888; font-style: italic; border-top: 1px solid rgba(255,255,255,0.06); padding-top: 8px; }
+  .v1-meaning span { color: #6fcf97; }
+
+  /* VERSION 2 */
+  .v2-item { margin-bottom: 18px; background: rgba(255,255,255,0.04); border-radius: 8px; padding: 18px 20px; border: 1px solid rgba(255,255,255,0.07); }
+  .v2-top { display: flex; gap: 12px; align-items: flex-start; margin-bottom: 10px; }
+  .v2-num { color: #c9a84c; font-weight: bold; font-size: 0.85rem; min-width: 28px; flex-shrink: 0; margin-top: 2px; }
+  .v2-original { font-size: 0.92rem; color: #bbb; line-height: 1.7; flex: 1; }
+  .v2-original .underlined { text-decoration: underline; color: #ddd; }
+  .keyword-badge { display: inline-block; background: rgba(201,168,76,0.15); border: 1px solid rgba(201,168,76,0.4); border-radius: 4px; padding: 1px 8px; color: #c9a84c; font-weight: bold; letter-spacing: 2px; font-size: 0.75rem; margin-left: 6px; white-space: nowrap; }
+  .v2-hint { font-size: 0.8rem; color: #888; margin-bottom: 8px; font-style: italic; }
+  .v2-input { width: 100%; background: rgba(255,255,255,0.07); border: 1px solid rgba(201,168,76,0.35); border-radius: 4px; color: #e8e0d5; font-size: 0.92rem; font-family: inherit; padding: 8px 12px; margin-bottom: 0; }
+  .v2-input:focus { outline: none; border-color: #c9a84c; background: rgba(255,255,255,0.1); }
+
+  /* CONVERSATION */
+  .conv-intro { background: rgba(201,168,76,0.07); border: 1px solid rgba(201,168,76,0.2); border-radius: 6px; padding: 14px 18px; margin-bottom: 24px; font-size: 0.88rem; color: #aaa; line-height: 1.7; }
+  .conv-intro strong { color: #c9a84c; }
+  .conv-item { margin-bottom: 20px; background: rgba(255,255,255,0.04); border-radius: 8px; padding: 18px 20px; border: 1px solid rgba(255,255,255,0.07); }
+  .conv-top { display: flex; gap: 12px; margin-bottom: 12px; }
+  .conv-num { color: #c9a84c; font-weight: bold; font-size: 0.85rem; min-width: 28px; flex-shrink: 0; margin-top: 2px; }
+  .conv-q { font-size: 0.92rem; color: #ddd; line-height: 1.7; flex: 1; }
+  .conv-q .gap { color: #c9a84c; font-weight: bold; border-bottom: 1px dashed #c9a84c; padding: 0 2px; }
+  .conv-textarea { width: 100%; background: rgba(255,255,255,0.07); border: 1px solid rgba(201,168,76,0.3); border-radius: 4px; color: #e8e0d5; font-size: 0.9rem; font-family: inherit; padding: 10px 12px; resize: vertical; min-height: 70px; line-height: 1.6; margin-bottom: 0; }
+  .conv-textarea:focus { outline: none; border-color: #c9a84c; }
+
+  /* SUBMITTED */
+  .score-box { text-align: center; padding: 20px 0 30px; }
+  .big-check { font-size: 4rem; color: #c9a84c; }
+  .result-section { margin-bottom: 28px; }
+  .result-section-title { font-family: 'Playfair Display', serif; color: #c9a84c; font-size: 1.05rem; margin-bottom: 12px; padding-bottom: 6px; border-bottom: 1px solid rgba(201,168,76,0.2); }
+  .result-row { padding: 10px 0; border-bottom: 1px solid rgba(255,255,255,0.06); font-size: 0.88rem; display: flex; gap: 12px; }
+  .result-num { color: #c9a84c; font-weight: bold; min-width: 28px; flex-shrink: 0; }
+  .result-content { flex: 1; }
+  .result-answer { color: #e8e0d5; margin-bottom: 3px; }
+  .result-key { color: #888; font-size: 0.8rem; }
+
+  /* ADMIN */
+  .section-title { color: #c9a84c; font-weight: bold; letter-spacing: 1px; margin-bottom: 14px; font-size: 0.85rem; text-transform: uppercase; }
+  .sub-card { margin-bottom: 16px; padding: 18px 20px; background: rgba(255,255,255,0.04); border-radius: 8px; border: 1px solid rgba(255,255,255,0.08); }
+  .sub-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 14px; flex-wrap: wrap; gap: 8px; }
+  .sub-name { font-size: 1rem; font-weight: bold; }
+  .sub-meta { color: #777; font-size: 0.78rem; margin-top: 2px; }
+  .sub-group { margin-bottom: 16px; }
+  .sub-group-title { font-size: 0.75rem; color: #c9a84c; letter-spacing: 1px; font-weight: bold; margin-bottom: 8px; text-transform: uppercase; }
+  .sub-ans-row { display: flex; gap: 10px; padding: 7px 0; border-bottom: 1px solid rgba(255,255,255,0.05); font-size: 0.83rem; flex-wrap: wrap; align-items: flex-start; }
+  .sub-ans-num { color: #c9a84c; font-weight: bold; min-width: 28px; flex-shrink: 0; }
+  .sub-ans-val { color: #ddd; flex: 1; line-height: 1.5; }
+  .sub-key-val { color: #666; font-size: 0.78rem; flex: 1; font-style: italic; }
+  .edit-input { background: #1a2a35; color: #e8e0d5; border: 1px solid #c9a84c; border-radius: 3px; padding: 5px 8px; font-family: inherit; width: 100%; font-size: 0.83rem; margin-top: 3px; }
+  .edit-textarea { background: #1a2a35; color: #e8e0d5; border: 1px solid #c9a84c; border-radius: 3px; padding: 5px 8px; font-family: inherit; width: 100%; font-size: 0.83rem; margin-top: 3px; resize: vertical; min-height: 60px; line-height: 1.5; }
+  .btn-sm { background: transparent; border: 1px solid #c9a84c; color: #c9a84c; padding: 4px 12px; cursor: pointer; border-radius: 3px; font-size: 0.76rem; font-family: inherit; }
+  .btn-sm:hover { background: rgba(201,168,76,0.12); }
+  .btn-sm.danger { border-color: #eb5757; color: #eb5757; }
+  .btn-sm.danger:hover { background: rgba(235,87,87,0.1); }
+  .btn-sm.success { border-color: #6fcf97; color: #6fcf97; }
+  .hint { color: #888; font-size: 0.8rem; margin-top: 14px; }
+  .error-msg { color: #eb5757; margin-bottom: 12px; font-size: 0.9rem; }
+  .login-wrap { display: flex; align-items: center; justify-content: center; min-height: 80vh; }
+  .login-card { background: rgba(255,255,255,0.05); border: 1px solid rgba(201,168,76,0.3); border-radius: 10px; padding: 40px; max-width: 380px; width: 100%; text-align: center; }
+  .login-card h1 { font-family: 'Playfair Display', serif; color: #c9a84c; font-size: 1.5rem; margin-bottom: 8px; }
+  .login-card p { color: #888; font-size: 0.88rem; margin-bottom: 24px; }
+  .no-subs { color: #666; font-style: italic; text-align: center; padding: 30px; }
+  .key-editor { margin-bottom: 28px; padding: 20px; background: rgba(201,168,76,0.05); border-radius: 6px; border: 1px solid rgba(201,168,76,0.25); }
+  .key-row { padding: 7px 0; border-bottom: 1px solid rgba(255,255,255,0.05); font-size: 0.83rem; display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
+  .key-label { color: #c9a84c; font-weight: bold; min-width: 50px; flex-shrink: 0; }
+  .key-val-input { background: #1a2a35; color: #e8e0d5; border: 1px solid rgba(201,168,76,0.4); border-radius: 3px; padding: 4px 8px; font-family: inherit; flex: 1; min-width: 200px; font-size: 0.83rem; }
+
+  @media(max-width:600px){ .card{padding:20px 16px;margin:20px 12px;} header{padding:12px 16px;flex-wrap:wrap;gap:10px;} }
+
+  /* ── Review mode ── */
+  .review-q{margin-bottom:20px;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.08);border-radius:8px;padding:18px 20px;}
+  .review-q-num{color:#c9a84c;font-size:0.78rem;letter-spacing:1px;text-transform:uppercase;margin-bottom:10px;}
+  .review-opt{display:flex;align-items:center;gap:10px;padding:8px 12px;border-radius:5px;margin-bottom:6px;font-size:0.9rem;}
+  .review-opt.correct{background:rgba(111,207,151,0.15);border:1px solid rgba(111,207,151,0.35);color:#6fcf97;}
+  .review-opt.wrong{background:rgba(235,87,87,0.12);border:1px solid rgba(235,87,87,0.3);color:#eb5757;}
+  .review-opt.neutral{background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.06);color:#888;}
+  .review-icon{font-size:1rem;min-width:18px;}
+  .review-note{font-size:0.82rem;color:#888;font-style:italic;margin-top:8px;padding-top:8px;border-top:1px solid rgba(255,255,255,0.06);}
+  .review-note .hl{color:#c9a84c;font-style:normal;}
+
+  .login-bar{background:rgba(0,0,0,0.3);border-bottom:1px solid rgba(201,168,76,0.2);padding:8px 32px;display:none;justify-content:space-between;align-items:center;font-size:0.8rem;}
+  .login-bar-left{color:#888;}
+  .login-bar-left strong{color:#c9a84c;}
+  .login-bar-right{display:flex;gap:10px;align-items:center;}
+  .bar-link{color:#888;text-decoration:none;font-size:0.75rem;letter-spacing:1px;}
+  .bar-link:hover{color:#c9a84c;}
+  .bar-signout{background:transparent;border:1px solid rgba(235,87,87,0.4);color:#eb5757;padding:3px 10px;cursor:pointer;border-radius:3px;font-size:0.72rem;font-family:inherit;letter-spacing:1px;}
+  .bar-signout:hover{background:rgba(235,87,87,0.1);}
+</style>
+</head>
+<body>
+
+<header>
+  <span class="logo">Key Word Practice 1 · Idioms &amp; Expressions</span>
+  <div id="header-right">
+    <button class="header-btn" onclick="goTo('login')">Teacher Login</button>
+  </div>
+</header>
+<div id="login-status" style="display:none;background:rgba(0,0,0,0.3);border-bottom:1px solid rgba(201,168,76,0.2);padding:8px 32px;display:flex;justify-content:space-between;align-items:center;font-size:0.8rem;">
+  <div style="color:#888;">Signed in as <strong id="login-status-name" style="color:#c9a84c;"></strong> &nbsp;·&nbsp; <span id="login-status-class"></span></div>
+  <div style="display:flex;gap:10px;align-items:center;">
+    <a href="login.html" style="color:#888;text-decoration:none;font-size:0.75rem;letter-spacing:1px;">My Results</a>
+    <a href="index.html" style="color:#888;text-decoration:none;font-size:0.75rem;letter-spacing:1px;">Activities</a>
+    <button onclick="signOutUser()" style="background:transparent;border:1px solid rgba(235,87,87,0.4);color:#eb5757;padding:3px 10px;cursor:pointer;border-radius:3px;font-size:0.72rem;font-family:inherit;letter-spacing:1px;">Sign Out</button>
+  </div>
+</div>
+
+<!-- HOME -->
+<div id="page-home" class="page active">
+  <div class="card">
+    <a class="home-link" href="index.html">← Back to Home</a>
+    <h1>Key Word Practice 1</h1>
+    <p class="subtitle">
+      This activity has <strong style="color:#c9a84c;">three stages</strong>:<br><br>
+      <strong style="color:#c9a84c;">Stage 1 · Version 1</strong> — Read sentences using idioms and expressions in context. Try to work out the meaning of each highlighted phrase.<br><br>
+      <strong style="color:#c9a84c;">Stage 2 · Version 2</strong> — Rewrite sentences using the key word given to produce the same expression.<br><br>
+      <strong style="color:#c9a84c;">Stage 3 · Conversation</strong> — Answer discussion questions using the expressions you have learned.
+    </p>
+
+    <div style="margin-top:24px;">
+      <input type="text" id="student-name" placeholder="Enter your full name..." style="width:100%;max-width:400px;padding:12px 16px;background:rgba(255,255,255,0.08);border:1px solid rgba(201,168,76,0.5);border-radius:4px;color:#e8e0d5;font-size:1rem;font-family:inherit;outline:none;display:block;margin-bottom:12px;"/>
+      <button class="btn-primary" onclick="startQuiz()">Start &#8594;</button>
+    </div>
+  </div>
+</div>
+<div id="page-login" class="page">
+  <div class="login-wrap">
+    <div class="login-card">
+      <h1>Teacher Login</h1>
+      <p>Enter your password to view submissions</p>
+      <input type="password" id="admin-pass" placeholder="Password" style="text-align:center;letter-spacing:4px;" onkeydown="if(event.key==='Enter')adminLogin()"/>
+      <div class="error-msg" id="login-error" style="display:none;">Incorrect password</div>
+      <button class="btn-primary" onclick="adminLogin()">Login →</button>
+    </div>
+  </div>
+</div>
+
+<!-- ADMIN -->
+<div id="page-admin" class="page">
+  <div class="card">
+    <div class="section-title">Answer Key — Version 2</div>
+    <div class="key-editor" id="key-editor"></div>
+    <div class="section-title" id="sub-count-label">Student Submissions</div>
+    <div id="submissions-container"><p class="no-subs">No submissions yet.</p></div>
+  </div>
+</div>
+
+<script>
+// ── DATA ──
+const V1_ITEMS = [
+  { num:1,  text:'We all had to <span class="phrase">burn the midnight oil</span> to finish the costumes for the show.', meaning:'to stay up very late working' },
+  { num:2,  text:'She <span class="phrase">fell behind on</span> her rent payments and had to ask for a loan from the bank.', meaning:'to fail to keep up with payments or obligations' },
+  { num:3,  text:'After 2.5 hours the film really started <span class="phrase">to drag on</span> and I have to admit that I <span class="phrase">nodded off</span>.', meaning:'drag on = to go on too long and become boring; nodded off = fell asleep' },
+  { num:4,  text:'I really <span class="phrase">put my foot in it</span> when I <span class="phrase">brought up</span> my brother\'s ex-girlfriend in front of his new one.', meaning:'put my foot in it = made an embarrassing mistake; brought up = mentioned' },
+  { num:5,  text:'After so many years of partying, she\'s decided to <span class="phrase">turn over a new leaf</span> and <span class="phrase">go teetotal</span>.', meaning:'turn over a new leaf = reform/change for the better; go teetotal = stop drinking alcohol' },
+  { num:6,  text:'My parents are always telling me to <span class="phrase">take a leaf out of my sister\'s book</span>, she\'s always been the golden girl.', meaning:'to copy someone\'s good example' },
+  { num:7,  text:'<span class="phrase">If need be</span>, I can stay on for a couple of extra hours to clean up after the conference.', meaning:'if it is necessary' },
+  { num:8,  text:'<span class="phrase">Only on rare occasions do we</span> all get together as a family.', meaning:'we rarely/seldom all get together (inverted structure for emphasis)' },
+  { num:9,  text:'As he started trying to climb the lamppost, a group of students gathered to <span class="phrase">egg him on</span>.', meaning:'to encourage someone to do something (often risky or unwise)' },
+  { num:10, text:'<span class="phrase">Being at a loose end</span>, she called her grandma to see if she needed any help in the garden.', meaning:'having nothing to do; being bored with no plans' },
+  { num:11, text:'Please don\'t give me any more bad news; I\'m already <span class="phrase">at a low ebb</span>.', meaning:'feeling very low in spirits; at a low point' },
+  { num:12, text:'When all the controversy around the policy <span class="phrase">died down</span>, they quietly <span class="phrase">did away with</span> it.', meaning:'died down = became less intense; did away with = abolished/got rid of' },
+  { num:13, text:'Let\'s <span class="phrase">give him the benefit of the doubt</span> before we start accusing him.', meaning:'to trust someone and assume they are innocent until proven otherwise' },
+  { num:14, text:'The news that she had finally beaten the cancer <span class="phrase">gave her a new lease of life</span>.', meaning:'gave her renewed energy, hope and enthusiasm for living' },
+  { num:15, text:'The boss can be very strict so it\'s important to <span class="phrase">toe the line</span> and <span class="phrase">stay in his good graces</span>.', meaning:'toe the line = follow the rules; stay in his good graces = keep him happy/approving of you' },
+  { num:16, text:'The party <span class="phrase">got out of hand</span> and someone called the police.', meaning:'became uncontrollable' },
+  { num:17, text:'After the beautiful speech her students gave her at her retirement party, she <span class="phrase">was at a loss for words</span>.', meaning:'didn\'t know what to say; was speechless' },
+  { num:18, text:'I know you\'re a little worried about me being around all of these beautiful women, but <span class="phrase">I only have eyes for</span> you, my darling.', meaning:'to only be interested in / attracted to one person' },
+  { num:19, text:'The two dogs <span class="phrase">took an instant liking to</span> each other and spent the afternoon playing in the garden.', meaning:'immediately liked each other' },
+  { num:20, text:'How many times have I told you not to <span class="phrase">stick your nose into</span> other people\'s business Susan?', meaning:'to interfere in matters that don\'t concern you' },
+  { num:21, text:'The new discovery has <span class="phrase">called into question</span> everything we thought we knew about the planet\'s atmosphere.', meaning:'caused doubt about; challenged' },
+  { num:22, text:'He\'s just <span class="phrase">not in the right frame of mind</span> to make important decisions at the moment.', meaning:'not in the right mental state' },
+];
+
+const V2_ITEMS = [
+  { num:1,  original:'We all had to <span class="underlined">stay up late</span> to finish the costumes for the show.',  keyword:'OIL',       start:'We all had to burn', end:'to finish the costumes for the show.', key:'the midnight oil' },
+  { num:2,  original:'She <span class="underlined">missed a few of</span> her rent payments and had to ask for a loan from the bank.', keyword:'BEHIND', start:'She fell', end:'her rent payments and had to ask for a loan from the bank.', key:'behind on' },
+  { num:3,  original:'After 2.5 hours the film really started to <span class="underlined">get boring</span> and I have to admit that I <span class="underlined">fell asleep</span>.', keyword:'DRAG, OFF', start:'After 2.5 hours the film really started to drag', end:'and I have to admit that I nodded', key:'on / off' },
+  { num:4,  original:'I really <span class="underlined">made a faux pas</span> when I <span class="underlined">mentioned</span> my brother\'s ex-girlfriend in front of his new one.', keyword:'FOOT, UP', start:'I really put my foot', end:'when I brought', key:'in it / up' },
+  { num:5,  original:'After so many years of partying, she\'s decided to <span class="underlined">change her behaviour for the better</span> and <span class="underlined">quit drinking</span>.', keyword:'LEAF, GO', start:'After so many years of partying, she\'s decided to turn over a new', end:'and go', key:'leaf / teetotal' },
+  { num:6,  original:'My parents are always telling me to <span class="underlined">copy my sister</span>, she\'s always been the golden girl.', keyword:'LEAF', start:'My parents are always telling me to take a', end:'my sister\'s book, she\'s always been the golden girl.', key:'leaf out of' },
+  { num:7,  original:'<span class="underlined">If necessary</span>, I can stay on for a couple of extra hours.', keyword:'BE', start:'If need', end:'I can stay on for a couple of extra hours.', key:'be,' },
+  { num:8,  original:'<span class="underlined">We all rarely</span> get together as a family.', keyword:'OCCASIONS', start:'Only on rare', end:'we all get together as a family.', key:'occasions do' },
+  { num:9,  original:'A group of students gathered to <span class="underlined">encourage him</span>.', keyword:'EGG', start:'A group of students gathered to egg him', end:'', key:'on' },
+  { num:10, original:'<span class="underlined">As she didn\'t have anything else to do</span>, she called her grandma.', keyword:'END', start:'Being at a loose', end:'she called her grandma.', key:'end,' },
+  { num:11, original:'I\'m already <span class="underlined">feeling pretty down</span>.', keyword:'LOW', start:'I\'m already at a low', end:'', key:'ebb' },
+  { num:12, original:'When all the controversy <span class="underlined">faded</span>, they quietly <span class="underlined">got rid of</span> it.', keyword:'DOWN, AWAY', start:'When all the controversy died', end:'they quietly did', key:'down / away with it' },
+  { num:13, original:'Let\'s <span class="underlined">not jump to conclusions</span> before we start accusing him.', keyword:'DOUBT', start:'Let\'s give him the benefit of the', end:'before we start accusing him.', key:'doubt' },
+  { num:14, original:'The news <span class="underlined">gave her new hope and energy</span>.', keyword:'LEASE', start:'The news gave her a new', end:'life.', key:'lease of' },
+  { num:15, original:'It\'s important to <span class="underlined">stay within the rules</span> and <span class="underlined">keep him happy</span>.', keyword:'LINE, GRACES', start:'It\'s important to toe the', end:'and stay in his good', key:'line / graces' },
+  { num:16, original:'The party <span class="underlined">became out of control</span> and someone called the police.', keyword:'HAND', start:'The party got out of', end:'and someone called the police.', key:'hand' },
+  { num:17, original:'She <span class="underlined">didn\'t know what to say</span>.', keyword:'WORDS', start:'She was at a loss for', end:'', key:'words' },
+  { num:18, original:'I <span class="underlined">only love</span> you, my darling.', keyword:'EYES', start:'I only have', end:'you, my darling.', key:'eyes for' },
+  { num:19, original:'The two dogs <span class="underlined">got on well instantly with</span> each other.', keyword:'TOOK', start:'The two dogs took an instant', end:'each other.', key:'liking to' },
+  { num:20, original:'How many times have I told you not to <span class="underlined">get involved in</span> other people\'s business?', keyword:'NOSE', start:'How many times have I told you not to stick your nose', end:'other people\'s business?', key:'into' },
+  { num:21, original:'The new discovery has <span class="underlined">made us doubt</span> everything we thought we knew.', keyword:'QUESTION', start:'The new discovery has called into', end:'everything we thought we knew.', key:'question' },
+  { num:22, original:'He\'s just <span class="underlined">not in a good mental state</span> to make important decisions.', keyword:'MIND', start:'He\'s just not in the right frame of', end:'to make important decisions.', key:'mind' },
+];
+
+const CONV_ITEMS = [
+  { num:1,  q:'When was the last time you burned the midnight <span class="gap">...oil...</span> to finish a work/study project? Is it something you tend to do often? What time of day do you think you\'re most productive?', gap_key:'oil' },
+  { num:2,  q:'How can you catch up with work if you fall <span class="gap">...behind...?</span> Has this ever happened to you?', gap_key:'behind' },
+  { num:3,  q:'Have you ever nodded <span class="gap">...off...</span> at the cinema? Was the film dragging <span class="gap">...on...?</span> What about when watching TV/films at home?', gap_key:'off / on' },
+  { num:4,  q:'Can people ever really change? How difficult is it to turn <span class="gap">...over...</span> a new leaf and stick to it? Do you know anyone who has tried recently?', gap_key:'over' },
+  { num:5,  q:'Has anyone ever told you to take a leaf <span class="gap">...out...</span> of someone else\'s book? Who? How did it make you feel?', gap_key:'out' },
+  { num:6,  q:'Would you consider going <span class="gap">...teetotal...?</span> Do you know anyone who is teetotal? Why do you think younger generations are drinking less?', gap_key:'teetotal' },
+  { num:7,  q:'If you were in government, which laws or policies would you do away <span class="gap">...with...?</span>', gap_key:'with' },
+  { num:8,  q:'Have you ever put your <span class="gap">...foot...</span> in it in a social situation? What did you say? How did people react?', gap_key:'foot' },
+  { num:9,  q:'Have you ever been at a party that has gotten out of <span class="gap">...hand...?</span> Why do you think celebrations at football matches tend to get out of hand?', gap_key:'hand' },
+  { num:10, q:'If you\'re at a loose <span class="gap">...end...</span> at home, what sort of things do you tend to do?', gap_key:'end' },
+  { num:11, q:'Have you ever been in a situation where a group of people were egging someone <span class="gap">...on...</span> to do something bad? How susceptible are you to peer pressure?', gap_key:'on' },
+  { num:12, q:'How can you lift someone\'s spirits when they\'re at a low <span class="gap">...ebb...?</span> What would your friends do to cheer you up?', gap_key:'ebb' },
+  { num:13, q:'If your best friend was accused of stealing something, would you give them the benefit of the <span class="gap">...doubt...?</span>', gap_key:'doubt' },
+  { num:14, q:'When was the last time you took an instant <span class="gap">...liking...</span> to someone you had just met? How important are first impressions?', gap_key:'liking' },
+];
+
+let currentStudent = '';
+let v2Answers = {};
+let convAnswers = {};
+let submissions = JSON.parse(localStorage.getItem('pkw1_subs') || '[]');
+let editingId = null, editTemp = {};
+
+function saveData(){ localStorage.setItem('pkw1_subs', JSON.stringify(submissions)); }
+
+function goTo(page){
+  document.querySelectorAll('.page').forEach(function(p){p.classList.remove('active');});
+  document.getElementById('page-'+page).classList.add('active');
+  var hr=document.getElementById('header-right');
+  var btn=document.createElement('button');
+  btn.className='header-btn';
+  if(page==='admin'){btn.textContent='Logout';btn.onclick=function(){goTo('home');};}
+  else if(page==='login'){btn.textContent='← Back';btn.onclick=function(){goTo('home');};}
+  else{btn.textContent='Teacher Login';btn.onclick=function(){goTo('login');};}
+  hr.innerHTML='';
+  hr.appendChild(btn);
+}
+
+function goHome(){ currentStudent=''; v2Answers={}; convAnswers={}; document.getElementById('student-name').value=''; goTo('home'); }
+
+function startActivity(){
+  const name=document.getElementById('student-name').value.trim();
+  if(!name){alert('Please enter your name.');return;}
+  currentStudent=name; v2Answers={}; convAnswers={};
+  renderV1(); renderV2(); renderConv();
+  goTo('stage1');
+}
+
+// ── RENDER VERSION 1 ──
+function renderV1(){
+  const c=document.getElementById('v1-container'); c.innerHTML='';
+  V1_ITEMS.forEach(item=>{
+    c.innerHTML+=`<div class="v1-item">
+      <span class="v1-num">${item.num}</span>
+      <div class="v1-text">${item.text}
+        <div class="v1-meaning">Meaning: <span>${item.meaning}</span></div>
+      </div>
+    </div>`;
+  });
+}
+
+function goToStage2(){ goTo('stage2'); }
+
+// ── RENDER VERSION 2 ──
+function renderV2(){
+  const c=document.getElementById('v2-container'); c.innerHTML='';
+  V2_ITEMS.forEach(q=>{
+    c.innerHTML+=`<div class="v2-item">
+      <div class="v2-top">
+        <span class="v2-num">${q.num}</span>
+        <span class="v2-original">${q.original} <span class="keyword-badge">${q.keyword}</span></span>
+      </div>
+      <div class="v2-hint">${q.start} ................................................ ${q.end}</div>
+      <input class="v2-input" id="v2-${q.num}" type="text" placeholder="Type the missing expression..." oninput="trackV2(${q.num},this.value)" autocomplete="off"/>
+    </div>`;
+  });
+}
+
+function trackV2(num,val){
+  v2Answers[num]=val;
+  const filled=Object.values(v2Answers).filter(v=>v&&v.trim()).length;
+  const pct=Math.round(filled/V2_ITEMS.length*100);
+  document.getElementById('v2-prog-text').textContent=filled+' of '+V2_ITEMS.length+' answered';
+  document.getElementById('v2-prog-pct').textContent=pct+'%';
+  document.getElementById('v2-prog-bar').style.width=pct+'%';
+}
+
+function goToStage3(){
+  const missing=V2_ITEMS.filter(q=>!v2Answers[q.num]||!v2Answers[q.num].trim()).length;
+  if(missing>0&&!confirm(missing+' expression(s) unanswered in Stage 2. Continue anyway?'))return;
+  goTo('stage3');
+}
+
+// ── RENDER CONVERSATION ──
+function renderConv(){
+  const c=document.getElementById('conv-container'); c.innerHTML='';
+  CONV_ITEMS.forEach(q=>{
+    c.innerHTML+=`<div class="conv-item">
+      <div class="conv-top">
+        <span class="conv-num">${q.num}</span>
+        <span class="conv-q">${q.q}</span>
+      </div>
+      <textarea class="conv-textarea" id="conv-${q.num}" placeholder="Write your answer here..." oninput="trackConv(${q.num},this.value)"></textarea>
+    </div>`;
+  });
+}
+
+function trackConv(num,val){
+  convAnswers[num]=val;
+  const filled=Object.values(convAnswers).filter(v=>v&&v.trim()).length;
+  const pct=Math.round(filled/CONV_ITEMS.length*100);
+  document.getElementById('conv-prog-text').textContent=filled+' of '+CONV_ITEMS.length+' answered';
+  document.getElementById('conv-prog-pct').textContent=pct+'%';
+  document.getElementById('conv-prog-bar').style.width=pct+'%';
+}
+
+// ── SUBMIT ──
+function submitAll(){
+  const missing=CONV_ITEMS.filter(q=>!convAnswers[q.num]||!convAnswers[q.num].trim()).length;
+  if(missing>0&&!confirm(missing+' conversation question(s) unanswered. Submit anyway?'))return;
+  const sub={id:Date.now(),name:currentStudent,v2Answers:{...v2Answers},convAnswers:{...convAnswers},submittedAt:new Date().toLocaleString()};
+  submissions.push(sub); saveData();
+  saveToSupabase({
+    student_name: sub.name||'',
+    class_code: sub.cls||'',
+    activity: 'Keyword Practice 1',
+    storage_key: 'pkw1_subs',
+    score: typeof sub.score==='number'?sub.score:null,
+    total: sub.total||null,
+    answers: JSON.stringify(sub.answers||{}),
+    submitted_at: sub.submittedAt||new Date().toLocaleString()
+  }); showResult(sub); goTo('submitted');
+}
+
+function showResult(sub){
+  document.getElementById('done-name').textContent='Well done, '+sub.name+'!';
+  let html='<div class="result-section"><div class="result-section-title">Stage 2 — Version 2 Expressions</div>';
+  V2_ITEMS.forEach(q=>{
+    const ans=sub.v2Answers[q.num]||'—';
+    html+=`<div class="result-row"><span class="result-num">${q.num}</span><div class="result-content"><div class="result-answer">${q.start} <strong style="color:#c9a84c;">${ans}</strong> ${q.end}</div><div class="result-key">Key: ${q.key}</div></div></div>`;
+  });
+  html+='</div><div class="result-section"><div class="result-section-title">Stage 3 — Conversation Answers</div>';
+  CONV_ITEMS.forEach(q=>{
+    const ans=sub.convAnswers[q.num]||'—';
+    html+=`<div class="result-row"><span class="result-num">${q.num}</span><div class="result-content"><div class="result-answer" style="white-space:pre-wrap;">${ans}</div></div></div>`;
+  });
+  html+='</div>';
+  document.getElementById('done-breakdown').innerHTML=html;
+}
+
+// ── LOGIN ──
+function adminLogin(){
+  if(document.getElementById('admin-pass').value==='1996'){
+    document.getElementById('login-error').style.display='none';
+    document.getElementById('admin-pass').value='';
+    renderAdmin(); goTo('admin');
+  } else {
+    document.getElementById('login-error').style.display='block';
+  }
+}
+
+// ── ADMIN ──
+function renderAdmin(){
+  // Key editor
+  let khtml='';
+  V2_ITEMS.forEach(q=>{
+    khtml+=`<div class="key-row"><span class="key-label">Q${q.num}:</span><input class="key-val-input" id="key-v2-${q.num}" value="${q.key}"/></div>`;
+  });
+  document.getElementById('key-editor').innerHTML=khtml+`<button class="btn-sm" style="margin-top:10px;" onclick="saveKey()">Update Key</button>`;
+  renderSubmissions();
+}
+
+function saveKey(){
+  V2_ITEMS.forEach(q=>{ const el=document.getElementById('key-v2-'+q.num); if(el) q.key=el.value; });
+  renderSubmissions(); alert('Key updated!');
+}
+
+function renderSubmissions(){
+  const cnt=document.getElementById('submissions-container');
+  document.getElementById('sub-count-label').textContent=`STUDENT SUBMISSIONS (${submissions.length})`;
+  if(!submissions.length){cnt.innerHTML='<p class="no-subs">No submissions yet.</p>';return;}
+  let html='';
+  submissions.sort((a,b)=>b.id-a.id).forEach(sub=>{
+    const isEditing=editingId===sub.id;
+    // V2 answers
+    let v2html='<div class="sub-group"><div class="sub-group-title">Stage 2 — Version 2 Expressions</div>';
+    V2_ITEMS.forEach(q=>{
+      const ans=isEditing?(editTemp['v2_'+q.num]!==undefined?editTemp['v2_'+q.num]:sub.v2Answers[q.num]||''):sub.v2Answers[q.num]||'—';
+      if(isEditing){
+        v2html+=`<div class="sub-ans-row"><span class="sub-ans-num">${q.num}</span><div style="flex:1;"><input class="edit-input" value="${ans}" onchange="editAnswer('v2_${q.num}',this.value)"/><div style="color:#666;font-size:0.76rem;margin-top:3px;">Key: ${q.key}</div></div></div>`;
+      } else {
+        v2html+=`<div class="sub-ans-row"><span class="sub-ans-num">${q.num}</span><span class="sub-ans-val">${ans}</span><span class="sub-key-val">Key: ${q.key}</span></div>`;
+      }
+    });
+    v2html+='</div>';
+    // Conv answers
+    let convhtml='<div class="sub-group"><div class="sub-group-title">Stage 3 — Conversation Answers</div>';
+    CONV_ITEMS.forEach(q=>{
+      const ans=isEditing?(editTemp['conv_'+q.num]!==undefined?editTemp['conv_'+q.num]:sub.convAnswers[q.num]||''):sub.convAnswers[q.num]||'—';
+      if(isEditing){
+        convhtml+=`<div class="sub-ans-row"><span class="sub-ans-num">${q.num}</span><div style="flex:1;"><textarea class="edit-textarea" onchange="editAnswer('conv_${q.num}',this.value)">${ans}</textarea></div></div>`;
+      } else {
+        convhtml+=`<div class="sub-ans-row"><span class="sub-ans-num">${q.num}</span><span class="sub-ans-val" style="white-space:pre-wrap;">${ans}</span></div>`;
+      }
+    });
+    convhtml+='</div>';
+    const btns=isEditing
+      ?`<button class="btn-sm success" onclick="saveEdit(${sub.id})">Save</button><button class="btn-sm" onclick="cancelEdit()" style="margin-left:6px;">Cancel</button>`
+      :`<button class="btn-sm" onclick="startEdit(${sub.id})">Edit</button><button class="btn-sm danger" onclick="deleteSub(${sub.id})" style="margin-left:6px;">Delete</button>`;
+    html+=`<div class="sub-card"><div class="sub-header"><div><div class="sub-name">${sub.name}</div><div class="sub-meta">${sub.submittedAt}</div></div><div>${btns}</div></div>${v2html}${convhtml}</div>`;
+  });
+  cnt.innerHTML=html;
+}
+
+function startEdit(id){ editingId=id; const sub=submissions.find(s=>s.id===id); editTemp={}; Object.entries(sub.v2Answers||{}).forEach(([k,v])=>editTemp['v2_'+k]=v); Object.entries(sub.convAnswers||{}).forEach(([k,v])=>editTemp['conv_'+k]=v); renderSubmissions(); }
+function editAnswer(key,val){ editTemp[key]=val; }
+function saveEdit(id){
+  const idx=submissions.findIndex(s=>s.id===id);
+  if(idx>-1){
+    const v2={},conv={};
+    Object.entries(editTemp).forEach(([k,v])=>{ if(k.startsWith('v2_')) v2[k.replace('v2_','')]=v; else if(k.startsWith('conv_')) conv[k.replace('conv_','')]=v; });
+    submissions[idx].v2Answers=v2; submissions[idx].convAnswers=conv; saveData();
+  }
+  editingId=null; editTemp={}; renderSubmissions();
+}
+function cancelEdit(){ editingId=null; editTemp={}; renderSubmissions(); }
+function deleteSub(id){ if(!confirm('Delete this submission?'))return; submissions=submissions.filter(s=>s.id!==id); saveData(); renderSubmissions(); }
+
+function openReview(){
+  const hasKey=Object.keys(answerKey).length>0;
+  let html='';
+  QUESTIONS.forEach(q=>{
+    const qn=q.n;
+    const student=answers[qn]||null;
+    const correct=answerKey[qn]||null;
+    html+=`<div class="review-q"><div class="review-q-num">Question ${qn}</div>`;
+    (q.opts||[]).forEach(o=>{
+      const letter=o.l||o[0]||'';
+      const word=o.w||o[1]||'';
+      const isCorrect=correct&&letter===correct;
+      const isStudent=student&&letter===student;
+      const isWrong=isStudent&&correct&&letter!==correct;
+      let cls='neutral',icon='·';
+      if(isCorrect){cls='correct';icon='✓';}
+      if(isWrong){cls='wrong';icon='✗';}
+      if(isCorrect||isWrong||isStudent){
+        html+=`<div class="review-opt ${cls}"><span class="review-icon">${icon}</span><strong>${letter}</strong> &nbsp; ${word}</div>`;
+      } else {
+        html+=`<div class="review-opt neutral"><span class="review-icon">·</span>${letter} &nbsp; ${word}</div>`;
+      }
+    });
+    if(correct&&student&&student!==correct){
+      const cw=(q.opts||[]).find(o=>o.l===correct);
+      const sw=(q.opts||[]).find(o=>o.l===student);
+      html+=`<div class="review-note">You chose <span class="hl">${student}${sw?' — '+sw.w:''}</span> · Correct answer: <span class="hl">${correct}${cw?' — '+cw.w:''}</span></div>`;
+    } else if(!hasKey){
+      html+=`<div class="review-note">Answer key not set yet — your teacher will review.</div>`;
+    } else if(!student){
+      html+=`<div class="review-note">Not answered.</div>`;
+    }
+    html+='</div>';
+  });
+  document.getElementById('review-container').innerHTML=html;
+  goTo('review');
+}
+
+function signOutUser(){
+  if(confirm('Sign out? Your submitted answers are already saved.')){
+    localStorage.removeItem('cam_user');
+    document.getElementById('login-status').style.display='none';
+    const inp=document.getElementById('student-name');
+    if(inp) inp.value='';
+  }
+}
+
+// ── Supabase ─────────────────────────────────────────────────────────
+const SUPA_URL='https://dhvzvhdefhrfsbjmnnbz.supabase.co';
+const SUPA_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRodnp2aGRlZmhyZnNiam1ubmJ6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzMwODk1OTEsImV4cCI6MjA4ODY2NTU5MX0.SSkscvxvvgsbGaSfJT_1BbJSVbIzfxUMJaE03OQj5Xg';
+async function saveToSupabase(rec){
+  try{
+    const r=await fetch(SUPA_URL+'/rest/v1/submissions',{
+      method:'POST',
+      headers:{'Content-Type':'application/json','apikey':SUPA_KEY,'Authorization':'Bearer '+SUPA_KEY,'Prefer':'return=minimal'},
+      body:JSON.stringify(rec)
+    });
+    return r.ok;
+  }catch(e){return false;}
+}
+// ─────────────────────────────────────────────────────────────────────
+</script>
+
+<script>
+// Pre-fill student name and class from login session
+(function(){
+  try {
+    const u = JSON.parse(localStorage.getItem('cam_user') || 'null');
+    const bar = document.getElementById('login-status');
+    const inp = document.getElementById('student-name');
+    if (!u) { if(bar) bar.style.display='none'; return; }
+    if (inp && !inp.value) inp.value = u.name;
+    if (bar) {
+      bar.style.display = 'flex';
+      const nm = document.getElementById('login-status-name');
+      const cl = document.getElementById('login-status-class');
+      if (nm) nm.textContent = u.name;
+      if (cl) cl.textContent = 'Class: ' + u.cls;
+    }
+  } catch(e) {}
+})();
+</script>
+</body>
+</html>

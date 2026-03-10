@@ -1,0 +1,486 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Practice Test 14 – Key Word Transformations</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Source+Serif+4:wght@300;400;600&display=swap');
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body { min-height: 100vh; background: linear-gradient(135deg, #0f2027, #203a43, #2c5364); font-family: 'Source Serif 4', serif; color: #e8e0d5; }
+
+  header { background: rgba(0,0,0,0.4); border-bottom: 2px solid #c9a84c; padding: 16px 32px; display: flex; justify-content: space-between; align-items: center; }
+  .logo { font-family: 'Playfair Display', serif; color: #c9a84c; letter-spacing: 3px; font-size: 1rem; text-transform: uppercase; }
+  .header-btn { background: transparent; border: 1px solid #c9a84c; color: #c9a84c; padding: 6px 18px; cursor: pointer; border-radius: 3px; font-size: 0.8rem; letter-spacing: 1px; font-family: inherit; }
+  .header-btn:hover { background: rgba(201,168,76,0.15); }
+
+  .card { background: rgba(255,255,255,0.05); border: 1px solid rgba(201,168,76,0.3); border-radius: 10px; padding: 36px; max-width: 820px; margin: 40px auto; backdrop-filter: blur(8px); }
+  h1 { font-family: 'Playfair Display', serif; color: #c9a84c; font-size: 1.7rem; margin-bottom: 6px; }
+  .subtitle { color: #aaa; font-size: 0.9rem; margin-bottom: 28px; }
+  .home-link { display: inline-block; margin-bottom: 20px; color: #c9a84c; font-size: 0.85rem; text-decoration: none; letter-spacing: 1px; }
+  .home-link:hover { text-decoration: underline; }
+
+  input[type="text"], input[type="password"] { width: 100%; padding: 12px 16px; background: rgba(255,255,255,0.08); border: 1px solid rgba(201,168,76,0.5); border-radius: 4px; color: #e8e0d5; font-size: 1rem; font-family: inherit; margin-bottom: 20px; }
+  input::placeholder { color: #888; }
+  .btn-primary { background: #c9a84c; color: #0f2027; border: none; padding: 12px 32px; font-size: 1rem; font-weight: bold; border-radius: 4px; cursor: pointer; letter-spacing: 1px; font-family: inherit; }
+  .btn-primary:hover { background: #d9bb6a; }
+
+  .exercise-block { margin-bottom: 32px; background: rgba(255,255,255,0.03); border-radius: 8px; padding: 24px; border: 1px solid rgba(255,255,255,0.07); }
+  .exercise-title { font-family: 'Playfair Display', serif; color: #c9a84c; font-size: 1.1rem; margin-bottom: 6px; }
+  .exercise-desc { color: #aaa; font-size: 0.85rem; margin-bottom: 20px; line-height: 1.6; font-style: italic; }
+
+  .q-block { margin-bottom: 20px; padding: 16px 18px; background: rgba(255,255,255,0.04); border-radius: 6px; border: 1px solid rgba(255,255,255,0.07); }
+  .q-top { display: flex; align-items: flex-start; gap: 12px; margin-bottom: 10px; }
+  .q-num { color: #c9a84c; font-weight: bold; font-size: 0.85rem; min-width: 24px; flex-shrink: 0; margin-top: 2px; }
+  .q-original { font-size: 0.92rem; color: #ddd; line-height: 1.6; flex: 1; }
+  .keyword-badge { display: inline-block; background: rgba(201,168,76,0.15); border: 1px solid rgba(201,168,76,0.4); border-radius: 4px; padding: 2px 10px; color: #c9a84c; font-weight: bold; letter-spacing: 2px; font-size: 0.82rem; margin-left: 8px; white-space: nowrap; flex-shrink: 0; }
+  .q-transform { font-size: 0.92rem; color: #bbb; line-height: 1.8; margin-bottom: 8px; }
+  .q-transform em { color: #c9a84c; font-style: italic; }
+  .ans-input { width: 100%; background: rgba(255,255,255,0.07); border: 1px solid rgba(201,168,76,0.35); border-radius: 4px; color: #e8e0d5; font-size: 0.92rem; font-family: inherit; padding: 8px 12px; }
+  .ans-input:focus { outline: none; border-color: #c9a84c; background: rgba(255,255,255,0.1); }
+
+  .progress-bar-wrap { background: rgba(255,255,255,0.06); border-radius: 4px; height: 4px; margin-bottom: 24px; }
+  .progress-bar { background: #c9a84c; height: 4px; border-radius: 4px; transition: width 0.3s; width: 0%; }
+  .progress-label { color: #aaa; font-size: 0.82rem; margin-bottom: 8px; }
+
+  /* SUBMITTED */
+  .score-box { text-align: center; padding: 20px 0 30px; }
+  .big-score { font-family: 'Playfair Display', serif; font-size: 4rem; color: #c9a84c; }
+  .result-group { margin-bottom: 28px; }
+  .result-group-title { font-family: 'Playfair Display', serif; color: #c9a84c; font-size: 1rem; margin-bottom: 12px; padding-bottom: 6px; border-bottom: 1px solid rgba(201,168,76,0.2); }
+  .result-row { padding: 10px 0; border-bottom: 1px solid rgba(255,255,255,0.06); font-size: 0.88rem; }
+  .result-row .r-original { color: #888; font-size: 0.82rem; margin-bottom: 4px; }
+  .result-row .r-answers { display: flex; gap: 16px; flex-wrap: wrap; align-items: center; }
+  .r-student { }
+  .r-key { color: #888; }
+  .correct { color: #6fcf97; font-weight: bold; }
+  .wrong { color: #eb5757; font-weight: bold; }
+  .gold { color: #c9a84c; font-weight: bold; }
+
+  /* ADMIN */
+  .dash-section { margin-bottom: 28px; }
+  .section-title { color: #c9a84c; font-weight: bold; letter-spacing: 1px; margin-bottom: 14px; font-size: 0.85rem; text-transform: uppercase; }
+  .sub-card { margin-bottom: 16px; padding: 18px 20px; background: rgba(255,255,255,0.04); border-radius: 8px; border: 1px solid rgba(255,255,255,0.08); }
+  .sub-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 14px; flex-wrap: wrap; gap: 8px; }
+  .sub-name { font-size: 1rem; font-weight: bold; }
+  .sub-meta { color: #777; font-size: 0.78rem; margin-top: 2px; }
+  .sub-score { color: #c9a84c; font-weight: bold; font-size: 1.1rem; }
+  .sub-ex-group { margin-bottom: 14px; }
+  .sub-ex-title { font-size: 0.75rem; color: #c9a84c; letter-spacing: 1px; font-weight: bold; margin-bottom: 8px; }
+  .sub-ans-row { display: flex; gap: 10px; align-items: flex-start; padding: 7px 0; border-bottom: 1px solid rgba(255,255,255,0.05); font-size: 0.83rem; flex-wrap: wrap; }
+  .sub-ans-num { color: #c9a84c; font-weight: bold; min-width: 28px; flex-shrink: 0; }
+  .sub-ans-val { color: #ddd; flex: 1; }
+  .sub-key-val { color: #777; font-size: 0.78rem; flex: 1; }
+  .edit-input { background: #1a2a35; color: #e8e0d5; border: 1px solid #c9a84c; border-radius: 3px; padding: 4px 8px; font-family: inherit; width: 100%; font-size: 0.83rem; margin-top: 3px; }
+  .btn-sm { background: transparent; border: 1px solid #c9a84c; color: #c9a84c; padding: 4px 12px; cursor: pointer; border-radius: 3px; font-size: 0.76rem; font-family: inherit; }
+  .btn-sm:hover { background: rgba(201,168,76,0.12); }
+  .btn-sm.danger { border-color: #eb5757; color: #eb5757; }
+  .btn-sm.success { border-color: #6fcf97; color: #6fcf97; }
+  .hint { color: #888; font-size: 0.8rem; margin-top: 14px; }
+  .error-msg { color: #eb5757; margin-bottom: 12px; font-size: 0.9rem; }
+  .page { display: none; } .page.active { display: block; }
+  .login-wrap { display: flex; align-items: center; justify-content: center; min-height: 80vh; }
+  .login-card { background: rgba(255,255,255,0.05); border: 1px solid rgba(201,168,76,0.3); border-radius: 10px; padding: 40px; max-width: 380px; width: 100%; text-align: center; }
+  .login-card h1 { font-family: 'Playfair Display', serif; color: #c9a84c; font-size: 1.5rem; margin-bottom: 8px; }
+  .login-card p { color: #888; font-size: 0.88rem; margin-bottom: 24px; }
+  .no-subs { color: #666; font-style: italic; text-align: center; padding: 30px; }
+  .key-editor { margin-bottom: 28px; padding: 20px; background: rgba(201,168,76,0.05); border-radius: 6px; border: 1px solid rgba(201,168,76,0.25); }
+  .key-row { padding: 8px 0; border-bottom: 1px solid rgba(255,255,255,0.05); font-size: 0.83rem; display: flex; gap: 10px; align-items: flex-start; flex-wrap: wrap; }
+  .key-label { color: #c9a84c; font-weight: bold; min-width: 60px; flex-shrink: 0; }
+  .key-val-input { background: #1a2a35; color: #e8e0d5; border: 1px solid rgba(201,168,76,0.4); border-radius: 3px; padding: 4px 8px; font-family: inherit; flex: 1; min-width: 200px; font-size: 0.83rem; }
+
+  /* ── Review mode ── */
+  .review-q{margin-bottom:20px;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.08);border-radius:8px;padding:18px 20px;}
+  .review-q-num{color:#c9a84c;font-size:0.78rem;letter-spacing:1px;text-transform:uppercase;margin-bottom:10px;}
+  .review-opt{display:flex;align-items:center;gap:10px;padding:8px 12px;border-radius:5px;margin-bottom:6px;font-size:0.9rem;}
+  .review-opt.correct{background:rgba(111,207,151,0.15);border:1px solid rgba(111,207,151,0.35);color:#6fcf97;}
+  .review-opt.wrong{background:rgba(235,87,87,0.12);border:1px solid rgba(235,87,87,0.3);color:#eb5757;}
+  .review-opt.neutral{background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.06);color:#888;}
+  .review-icon{font-size:1rem;min-width:18px;}
+  .review-note{font-size:0.82rem;color:#888;font-style:italic;margin-top:8px;padding-top:8px;border-top:1px solid rgba(255,255,255,0.06);}
+  .review-note .hl{color:#c9a84c;font-style:normal;}
+
+  .login-bar{background:rgba(0,0,0,0.3);border-bottom:1px solid rgba(201,168,76,0.2);padding:8px 32px;display:none;justify-content:space-between;align-items:center;font-size:0.8rem;}
+  .login-bar-left{color:#888;}
+  .login-bar-left strong{color:#c9a84c;}
+  .login-bar-right{display:flex;gap:10px;align-items:center;}
+  .bar-link{color:#888;text-decoration:none;font-size:0.75rem;letter-spacing:1px;}
+  .bar-link:hover{color:#c9a84c;}
+  .bar-signout{background:transparent;border:1px solid rgba(235,87,87,0.4);color:#eb5757;padding:3px 10px;cursor:pointer;border-radius:3px;font-size:0.72rem;font-family:inherit;letter-spacing:1px;}
+  .bar-signout:hover{background:rgba(235,87,87,0.1);}
+</style>
+</head>
+<body>
+
+<header>
+  <span class="logo">Practice Test 14 · Key Word Transformations</span>
+  <div id="header-right">
+    <button class="header-btn" onclick="goTo('login')">Teacher Login</button>
+  </div>
+</header>
+<div id="login-status" style="display:none;background:rgba(0,0,0,0.3);border-bottom:1px solid rgba(201,168,76,0.2);padding:8px 32px;display:flex;justify-content:space-between;align-items:center;font-size:0.8rem;">
+  <div style="color:#888;">Signed in as <strong id="login-status-name" style="color:#c9a84c;"></strong> &nbsp;·&nbsp; <span id="login-status-class"></span></div>
+  <div style="display:flex;gap:10px;align-items:center;">
+    <a href="login.html" style="color:#888;text-decoration:none;font-size:0.75rem;letter-spacing:1px;">My Results</a>
+    <a href="index.html" style="color:#888;text-decoration:none;font-size:0.75rem;letter-spacing:1px;">Activities</a>
+    <button onclick="signOutUser()" style="background:transparent;border:1px solid rgba(235,87,87,0.4);color:#eb5757;padding:3px 10px;cursor:pointer;border-radius:3px;font-size:0.72rem;font-family:inherit;letter-spacing:1px;">Sign Out</button>
+  </div>
+</div>
+
+<!-- HOME -->
+<div id="page-home" class="page active">
+  <div class="card">
+    <a class="home-link" href="index.html">← Back to Home</a>
+    <h1>Practice Test 14</h1>
+    <p class="subtitle">Key Word Transformations · 4 Exercises · Complete the second sentence using the key word given</p>
+
+    <div style="margin-top:24px;">
+      <input type="text" id="student-name" placeholder="Enter your full name..." style="width:100%;max-width:400px;padding:12px 16px;background:rgba(255,255,255,0.08);border:1px solid rgba(201,168,76,0.5);border-radius:4px;color:#e8e0d5;font-size:1rem;font-family:inherit;outline:none;display:block;margin-bottom:12px;"/>
+      <button class="btn-primary" onclick="startQuiz()">Start &#8594;</button>
+    </div>
+  </div>
+</div>
+<div id="page-login" class="page">
+  <div class="login-wrap">
+    <div class="login-card">
+      <h1>Teacher Login</h1>
+      <p>Enter your password to view submissions</p>
+      <input type="password" id="admin-pass" placeholder="Password" style="text-align:center;letter-spacing:4px;" onkeydown="if(event.key==='Enter')adminLogin()"/>
+      <div class="error-msg" id="login-error" style="display:none;">Incorrect password</div>
+      <button class="btn-primary" onclick="adminLogin()">Login →</button>
+    </div>
+  </div>
+</div>
+
+<!-- ADMIN -->
+<div id="page-admin" class="page">
+  <div class="card">
+    <div class="section-title">Answer Key <span style="color:#777;font-size:0.75rem;font-weight:normal;">(click any answer to edit)</span></div>
+    <div class="key-editor" id="key-editor"></div>
+    <div class="section-title" id="sub-count-label">Student Submissions</div>
+    <div id="submissions-container"><p class="no-subs">No submissions yet.</p></div>
+  </div>
+</div>
+
+<script>
+const EXERCISES = [
+  {
+    id: 'ex2s1',
+    title: 'Exercise 2 · Section 1 — Grammatical Patterns',
+    desc: 'Complete the second sentence with THREE TO EIGHT words so it has a similar meaning, using the key word. Do not change the key word.',
+    questions: [
+      { num:1, original:"Petrol is very expensive these days.", keyword:"COST", start:"The cost", end:"these days.", key:"of petrol is very high" },
+      { num:2, original:"Over the past year the number of house buyers has risen considerably.", keyword:"INCREASE", start:"Over the past year there", end:"the number of house buyers.", key:"has been a considerable increase in" },
+      { num:3, original:"When the theft was discovered, Mike was immediately dismissed.", keyword:"LED", start:"The discovery of the theft led", end:"dismissal.", key:"to Mike's immediate" },
+      { num:4, original:"We only realised what had happened after the accident.", keyword:"UNAWARE", start:"We were unaware", end:"after the accident.", key:"of what had happened until" },
+      { num:5, original:"They think that Alex caused the problem.", keyword:"SUSPECTED", start:"Alex is suspected", end:"the problem.", key:"of having caused" },
+    ]
+  },
+  {
+    id: 'ex2s2',
+    title: 'Exercise 2 · Section 2 — Phrasal Verbs & Dependent Prepositions',
+    desc: 'Complete the second sentence with THREE TO EIGHT words so it has a similar meaning, using the key word.',
+    questions: [
+      { num:1, original:"I don't think you should get involved in this argument.", keyword:"KEEP", start:"I think you should", end:"this argument.", key:"keep out of" },
+      { num:2, original:"Would my bringing a friend with me to dinner inconvenience you?", keyword:"PUT", start:"Would it", end:"a friend with me to dinner?", key:"put you out if I brought" },
+      { num:3, original:"I can't understand why he is unwilling to tell us the truth.", keyword:"BAFFLED", start:"I am", end:"to tell us the truth.", key:"baffled by his unwillingness" },
+      { num:4, original:"She is a very valuable helper at the shop.", keyword:"RELIED", start:"She can", end:"at the shop.", key:"be relied on to help" },
+      { num:5, original:"One of the reasons the enterprise failed was that the manager was so inefficient.", keyword:"CONTRIBUTED", start:"The manager's", end:"of the enterprise.", key:"inefficiency contributed to the failure" },
+    ]
+  },
+  {
+    id: 'ex3',
+    title: 'Exercise 3 — Idioms & Expressions',
+    desc: 'Complete the second sentence with THREE TO EIGHT words so it has a similar meaning, using the key word given.',
+    questions: [
+      { num:1, original:"Mark's brother suddenly decided to go home by bus.", keyword:"SPUR", start:"Mark's brother decided", end:"the bus home.", key:"on the spur of the moment to take" },
+      { num:2, original:"I won't settle for anything less than an exotic foreign holiday.", keyword:"SET", start:"I have", end:"an exotic foreign holiday.", key:"set my heart on" },
+      { num:3, original:"Sandra didn't get any sleep at all last night.", keyword:"WINK", start:"Sandra", end:"last night.", key:"didn't get a wink of sleep / didn't sleep a wink" },
+      { num:4, original:"The mistake was not discovered until we counted the money.", keyword:"LIGHT", start:"The mistake only", end:"counted the money.", key:"came to light when we" },
+      { num:5, original:"I don't mind lending you money, but I refuse to pay for a new car.", keyword:"DRAW", start:"I don't mind lending you money but I", end:"a new car.", key:"draw the line at paying for" },
+    ]
+  },
+  {
+    id: 'ex4',
+    title: 'Exercise 4 — Mixed Language Features',
+    desc: 'Complete the second sentence with THREE TO EIGHT words so it has a similar meaning, using the key word given.',
+    questions: [
+      { num:1, original:"I spend much less money on groceries than she does.", keyword:"NEARLY", start:"I don't", end:"she does.", key:"spend nearly as much on groceries as" },
+      { num:2, original:"These two brands of ketchup are almost the same.", keyword:"HARDLY", start:"There is", end:"these two brands of ketchup.", key:"hardly any difference between" },
+      { num:3, original:"I really can't understand why she so desperately needs to be popular.", keyword:"CRAVING", start:"Her", end:"I really can't understand.", key:"desperate craving for popularity is something" },
+      { num:4, original:"Ten years ago, this shop's turnover was half of what it is today.", keyword:"DOUBLED", start:"Over the past ten years this shop has", end:"turnover.", key:"doubled its" },
+      { num:5, original:"A fight broke out almost immediately at the start of the match.", keyword:"THAN", start:"No sooner had the match started", end:"a fight broke out.", key:"than" },
+      { num:6, original:"She asked you to leave only because she wanted you to be safe.", keyword:"HEART", start:"She only had your", end:"she asked you to leave.", key:"safety at heart when" },
+      { num:7, original:"It was only with great difficulty that he could understand what they were saying.", keyword:"VIRTUALLY", start:"It was", end:"what they were saying.", key:"virtually impossible (for him) to understand" },
+      { num:8, original:"When we returned to the shop the manager was nowhere to be seen.", keyword:"SIGN", start:"When we returned to the shop there was no", end:"manager.", key:"sign of the" },
+      { num:9, original:"It was only at the age of eighteen that Heather started to do ballroom dancing.", keyword:"TAKE", start:"Heather didn't", end:"she was eighteen.", key:"take up ballroom dancing until" },
+      { num:10, original:"George lost his job six months ago.", keyword:"OUT", start:"George has been", end:"six months.", key:"out of work / out of a job for" },
+      { num:11, original:"Provided our fuel supply continues, we'll be fine.", keyword:"RUN", start:"Unless we", end:"we'll be fine.", key:"run out of fuel" },
+      { num:12, original:"Watch my children for me while I'm away, won't you?", keyword:"EYE", start:"Can you", end:"I'm away?", key:"keep an/your eye on my children while" },
+    ]
+  }
+];
+
+const TOTAL_Q = EXERCISES.reduce((s,e)=>s+e.questions.length,0);
+let studentAnswers = {}, currentStudent = "";
+let submissions = JSON.parse(localStorage.getItem("pt14_subs") || "[]");
+let editingId = null, editTemp = {};
+let answerKey = buildDefaultKey();
+
+function buildDefaultKey() {
+  const k={};
+  EXERCISES.forEach(ex=>ex.questions.forEach(q=>{ k[ex.id+'_'+q.num]=q.key; }));
+  return k;
+}
+function saveData(){ localStorage.setItem("pt14_subs", JSON.stringify(submissions)); }
+
+function goTo(page){
+  document.querySelectorAll('.page').forEach(function(p){p.classList.remove('active');});
+  document.getElementById('page-'+page).classList.add('active');
+  var hr=document.getElementById('header-right');
+  var btn=document.createElement('button');
+  btn.className='header-btn';
+  if(page==='admin'){btn.textContent='Logout';btn.onclick=function(){goTo('home');};}
+  else if(page==='login'){btn.textContent='← Back';btn.onclick=function(){goTo('home');};}
+  else{btn.textContent='Teacher Login';btn.onclick=function(){goTo('login');};}
+  hr.innerHTML='';
+  hr.appendChild(btn);
+}
+function goHome(){ currentStudent=""; studentAnswers={}; document.getElementById('student-name').value=""; goTo('home'); }
+
+function startQuiz(){
+  const name=document.getElementById('student-name').value.trim();
+  if(!name){alert('Please enter your name.');return;}
+  currentStudent=name; studentAnswers={}; renderQuestions(); goTo('quiz');
+}
+
+function renderQuestions(){
+  const c=document.getElementById('questions-container'); c.innerHTML='';
+  EXERCISES.forEach(ex=>{
+    const exDiv=document.createElement('div'); exDiv.className='exercise-block';
+    let qhtml='';
+    ex.questions.forEach(q=>{
+      const key=ex.id+'_'+q.num;
+      qhtml+=`<div class="q-block">
+        <div class="q-top">
+          <span class="q-num">${q.num}</span>
+          <span class="q-original">${q.original} <span class="keyword-badge">${q.keyword}</span></span>
+        </div>
+        <div class="q-transform">${q.start} ................................................ ${q.end}</div>
+        <input class="ans-input" id="ans-${key}" type="text" placeholder="Type the missing words..." oninput="trackAnswer('${key}',this.value)" autocomplete="off"/>
+      </div>`;
+    });
+    exDiv.innerHTML=`<div class="exercise-title">${ex.title}</div><div class="exercise-desc">${ex.desc}</div>${qhtml}`;
+    c.appendChild(exDiv);
+  });
+}
+
+function trackAnswer(key,val){
+  studentAnswers[key]=val;
+  const filled=Object.values(studentAnswers).filter(v=>v&&v.trim()).length;
+  const pct=Math.round(filled/TOTAL_Q*100);
+  document.getElementById('progress-label').textContent=filled+'/'+TOTAL_Q+' answered';
+  document.getElementById('prog-text').textContent='Progress: '+filled+' of '+TOTAL_Q;
+  document.getElementById('prog-bar').style.width=pct+'%';
+}
+
+function submitQuiz(){
+  const missing=[];
+  EXERCISES.forEach(ex=>ex.questions.forEach(q=>{ const k=ex.id+'_'+q.num; if(!studentAnswers[k]||!studentAnswers[k].trim()) missing.push(ex.id.replace('ex','Ex ')+' Q'+q.num); }));
+  if(missing.length&&!confirm('You have '+missing.length+' unanswered question(s). Submit anyway?')) return;
+  const sub={id:Date.now(),name:currentStudent,cls:(function(){try{var u=JSON.parse(localStorage.getItem("cam_user")||"null");return u?u.cls:"";}catch(e){return"";}})(),answers:{...studentAnswers},total:TOTAL_Q,submittedAt:new Date().toLocaleString()};
+  submissions.push(sub); saveData();
+  saveToSupabase({
+    student_name: sub.name||'',
+    class_code: sub.cls||'',
+    activity: 'Practice Test 14',
+    storage_key: 'pt14_subs',
+    score: typeof sub.score==='number'?sub.score:null,
+    total: sub.total||null,
+    answers: JSON.stringify(sub.answers||{}),
+    submitted_at: sub.submittedAt||new Date().toLocaleString()
+  }); showResult(sub); goTo('submitted');
+}
+
+function showResult(sub){
+  document.getElementById('done-name').textContent='Well done, '+sub.name+'!';
+  let html='';
+  EXERCISES.forEach(ex=>{
+    html+=`<div class="result-group"><div class="result-group-title">${ex.title}</div>`;
+    ex.questions.forEach(q=>{
+      const k=ex.id+'_'+q.num;
+      const ans=sub.answers[k]||'—';
+      html+=`<div class="result-row">
+        <div class="r-original">${q.original}</div>
+        <div class="r-answers">
+          <span>${q.start} <span class="gold">${ans}</span> ${q.end}</span>
+          <span class="r-key">Model: ${answerKey[k]||q.key}</span>
+        </div>
+      </div>`;
+    });
+    html+='</div>';
+  });
+  document.getElementById('done-breakdown').innerHTML=html;
+}
+
+function adminLogin(){
+  if(document.getElementById('admin-pass').value==='1996'){
+    document.getElementById('login-error').style.display='none';
+    document.getElementById('admin-pass').value='';
+    renderAdmin(); goTo('admin');
+  } else {
+    document.getElementById('login-error').style.display='block';
+  }
+}
+
+function renderAdmin(){
+  // Key editor
+  let khtml='';
+  EXERCISES.forEach(ex=>{
+    khtml+=`<div style="margin-bottom:16px;"><div style="color:#c9a84c;font-size:0.8rem;font-weight:bold;letter-spacing:1px;margin-bottom:8px;">${ex.title}</div>`;
+    ex.questions.forEach(q=>{
+      const k=ex.id+'_'+q.num;
+      khtml+=`<div class="key-row"><span class="key-label">Q${q.num}:</span><input class="key-val-input" id="key-${k}" value="${answerKey[k]||q.key}"/></div>`;
+    });
+    khtml+='</div>';
+  });
+  document.getElementById('key-editor').innerHTML=khtml+`<button class="btn-sm" style="margin-top:8px;" onclick="saveKey()">Update Key</button>`;
+  renderSubmissions();
+}
+
+function saveKey(){
+  EXERCISES.forEach(ex=>ex.questions.forEach(q=>{
+    const k=ex.id+'_'+q.num;
+    const el=document.getElementById('key-'+k);
+    if(el) answerKey[k]=el.value;
+  }));
+  renderSubmissions(); alert('Answer key updated!');
+}
+
+function renderSubmissions(){
+  const cnt=document.getElementById('submissions-container');
+  document.getElementById('sub-count-label').textContent=`Student Submissions (${submissions.length})`.toUpperCase();
+  if(!submissions.length){cnt.innerHTML='<p class="no-subs">No submissions yet.</p>';return;}
+  let html='';
+  submissions.sort((a,b)=>b.id-a.id).forEach(sub=>{
+    const isEditing=editingId===sub.id;
+    let exHtml='';
+    EXERCISES.forEach(ex=>{
+      exHtml+=`<div class="sub-ex-group"><div class="sub-ex-title">${ex.title}</div>`;
+      ex.questions.forEach(q=>{
+        const k=ex.id+'_'+q.num;
+        const ans=isEditing?(editTemp[k]!==undefined?editTemp[k]:sub.answers[k]||''):sub.answers[k]||'—';
+        const keyAns=answerKey[k]||q.key;
+        if(isEditing){
+          exHtml+=`<div class="sub-ans-row"><span class="sub-ans-num">Q${q.num}</span><div style="flex:1;"><div style="color:#888;font-size:0.78rem;margin-bottom:3px;">${q.original}</div><input class="edit-input" value="${ans}" onchange="editAnswer('${k}',this.value)"/><div style="color:#666;font-size:0.76rem;margin-top:3px;">Key: ${keyAns}</div></div></div>`;
+        } else {
+          exHtml+=`<div class="sub-ans-row"><span class="sub-ans-num">Q${q.num}</span><span class="sub-ans-val">${ans}</span><span class="sub-key-val">Key: ${keyAns}</span></div>`;
+        }
+      });
+      exHtml+='</div>';
+    });
+    const btns=isEditing
+      ?`<button class="btn-sm success" onclick="saveEdit(${sub.id})">Save</button><button class="btn-sm" onclick="cancelEdit()" style="margin-left:6px;">Cancel</button>`
+      :`<button class="btn-sm" onclick="startEdit(${sub.id})">Edit</button><button class="btn-sm danger" onclick="deleteSub(${sub.id})" style="margin-left:6px;">Delete</button>`;
+    html+=`<div class="sub-card"><div class="sub-header"><div><div class="sub-name">${sub.name}</div><div class="sub-meta">${sub.submittedAt} · ${sub.total} questions</div></div><div>${btns}</div></div>${exHtml}</div>`;
+  });
+  cnt.innerHTML=html;
+}
+
+function startEdit(id){ editingId=id; const sub=submissions.find(s=>s.id===id); editTemp={...sub.answers}; renderSubmissions(); }
+function editAnswer(key,val){ editTemp[key]=val; }
+function saveEdit(id){
+  const idx=submissions.findIndex(s=>s.id===id);
+  if(idx>-1){submissions[idx].answers={...editTemp};saveData();}
+  editingId=null;editTemp={};renderSubmissions();
+}
+function cancelEdit(){ editingId=null;editTemp={};renderSubmissions(); }
+function deleteSub(id){
+  if(!confirm('Delete this submission?'))return;
+  submissions=submissions.filter(s=>s.id!==id);saveData();renderSubmissions();
+}
+
+function openReview(){
+  const hasKey=Object.keys(answerKey).length>0;
+  let html='';
+  QUESTIONS.forEach(q=>{
+    const qn=q.n;
+    const student=answers[qn]||null;
+    const correct=answerKey[qn]||null;
+    html+=`<div class="review-q"><div class="review-q-num">Question ${qn}</div>`;
+    (q.opts||[]).forEach(o=>{
+      const letter=o.l||o[0]||'';
+      const word=o.w||o[1]||'';
+      const isCorrect=correct&&letter===correct;
+      const isStudent=student&&letter===student;
+      const isWrong=isStudent&&correct&&letter!==correct;
+      let cls='neutral',icon='·';
+      if(isCorrect){cls='correct';icon='✓';}
+      if(isWrong){cls='wrong';icon='✗';}
+      if(isCorrect||isWrong||isStudent){
+        html+=`<div class="review-opt ${cls}"><span class="review-icon">${icon}</span><strong>${letter}</strong> &nbsp; ${word}</div>`;
+      } else {
+        html+=`<div class="review-opt neutral"><span class="review-icon">·</span>${letter} &nbsp; ${word}</div>`;
+      }
+    });
+    if(correct&&student&&student!==correct){
+      const cw=(q.opts||[]).find(o=>o.l===correct);
+      const sw=(q.opts||[]).find(o=>o.l===student);
+      html+=`<div class="review-note">You chose <span class="hl">${student}${sw?' — '+sw.w:''}</span> · Correct answer: <span class="hl">${correct}${cw?' — '+cw.w:''}</span></div>`;
+    } else if(!hasKey){
+      html+=`<div class="review-note">Answer key not set yet — your teacher will review.</div>`;
+    } else if(!student){
+      html+=`<div class="review-note">Not answered.</div>`;
+    }
+    html+='</div>';
+  });
+  document.getElementById('review-container').innerHTML=html;
+  goTo('review');
+}
+
+function signOutUser(){
+  if(confirm('Sign out? Your submitted answers are already saved.')){
+    localStorage.removeItem('cam_user');
+    document.getElementById('login-status').style.display='none';
+    const inp=document.getElementById('student-name');
+    if(inp) inp.value='';
+  }
+}
+
+// ── Supabase ─────────────────────────────────────────────────────────
+const SUPA_URL='https://dhvzvhdefhrfsbjmnnbz.supabase.co';
+const SUPA_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRodnp2aGRlZmhyZnNiam1ubmJ6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzMwODk1OTEsImV4cCI6MjA4ODY2NTU5MX0.SSkscvxvvgsbGaSfJT_1BbJSVbIzfxUMJaE03OQj5Xg';
+async function saveToSupabase(rec){
+  try{
+    const r=await fetch(SUPA_URL+'/rest/v1/submissions',{
+      method:'POST',
+      headers:{'Content-Type':'application/json','apikey':SUPA_KEY,'Authorization':'Bearer '+SUPA_KEY,'Prefer':'return=minimal'},
+      body:JSON.stringify(rec)
+    });
+    return r.ok;
+  }catch(e){return false;}
+}
+// ─────────────────────────────────────────────────────────────────────
+</script>
+
+<script>
+// Pre-fill student name and class from login session
+(function(){
+  try {
+    const u = JSON.parse(localStorage.getItem('cam_user') || 'null');
+    const bar = document.getElementById('login-status');
+    const inp = document.getElementById('student-name');
+    if (!u) { if(bar) bar.style.display='none'; return; }
+    if (inp && !inp.value) inp.value = u.name;
+    if (bar) {
+      bar.style.display = 'flex';
+      const nm = document.getElementById('login-status-name');
+      const cl = document.getElementById('login-status-class');
+      if (nm) nm.textContent = u.name;
+      if (cl) cl.textContent = 'Class: ' + u.cls;
+    }
+  } catch(e) {}
+})();
+</script>
+</body>
+</html>

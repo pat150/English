@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Practice Test 15 · The Truth about Love</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Source+Serif+4:wght@300;400;600&display=swap');
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+  body{min-height:100vh;background:linear-gradient(135deg,#0f2027,#203a43,#2c5364);font-family:'Source Serif 4',serif;color:#e8e0d5;}
+  header{background:rgba(0,0,0,0.4);border-bottom:2px solid #c9a84c;padding:16px 32px;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;z-index:100;backdrop-filter:blur(12px);}
+  .logo{font-family:'Playfair Display',serif;color:#c9a84c;letter-spacing:3px;font-size:1rem;text-transform:uppercase;}
+  .header-btn{background:transparent;border:1px solid #c9a84c;color:#c9a84c;padding:6px 18px;cursor:pointer;border-radius:3px;font-size:0.8rem;letter-spacing:1px;font-family:inherit;}
+  .header-btn:hover{background:rgba(201,168,76,0.15);}
+  .page{display:none;}.page.active{display:block;}
+  .card{background:rgba(255,255,255,0.05);border:1px solid rgba(201,168,76,0.3);border-radius:10px;padding:36px;max-width:860px;margin:40px auto;backdrop-filter:blur(8px);}
+  h1{font-family:'Playfair Display',serif;color:#c9a84c;font-size:1.7rem;margin-bottom:6px;}
+  .subtitle{color:#aaa;font-size:0.9rem;margin-bottom:28px;line-height:1.6;}
+  .home-link{display:inline-block;margin-bottom:20px;color:#c9a84c;font-size:0.85rem;text-decoration:none;letter-spacing:1px;}
+  .home-link:hover{text-decoration:underline;}
+  input[type="text"],input[type="password"]{width:100%;padding:12px 16px;background:rgba(255,255,255,0.08);border:1px solid rgba(201,168,76,0.5);border-radius:4px;color:#e8e0d5;font-size:1rem;font-family:inherit;margin-bottom:20px;}
+  input::placeholder{color:#888;}
+  .btn-primary{background:#c9a84c;color:#0f2027;border:none;padding:12px 32px;font-size:1rem;font-weight:bold;border-radius:4px;cursor:pointer;letter-spacing:1px;font-family:inherit;}
+  .btn-primary:hover{background:#d9bb6a;}
+  .passage-box{background:rgba(0,0,0,0.25);border:1px solid rgba(255,255,255,0.08);border-radius:8px;padding:24px 28px;margin-bottom:28px;line-height:2.1;font-size:0.95rem;color:#ddd;}
+  .passage-box h2{font-family:'Playfair Display',serif;color:#c9a84c;text-align:center;margin-bottom:18px;font-size:1.3rem;letter-spacing:1px;}
+  .gap-label{color:#c9a84c;font-weight:bold;font-size:0.82rem;}
+  .example{color:#888;font-size:0.82rem;font-style:italic;margin-bottom:10px;}
+  .progress-wrap{margin-bottom:24px;}
+  .progress-top{display:flex;justify-content:space-between;color:#aaa;font-size:0.82rem;margin-bottom:6px;}
+  .progress-bar-bg{background:rgba(255,255,255,0.06);border-radius:4px;height:4px;}
+  .progress-bar{background:#c9a84c;height:4px;border-radius:4px;transition:width 0.3s;width:0%;}
+  .q-block{margin-bottom:14px;padding:14px 18px;background:rgba(255,255,255,0.04);border-radius:6px;border:1px solid rgba(255,255,255,0.07);}
+  .q-num{color:#c9a84c;font-weight:bold;font-size:0.85rem;margin-bottom:10px;}
+  .options{display:grid;grid-template-columns:1fr 1fr;gap:8px;}
+  .opt-btn{background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.12);color:#ccc;padding:9px 14px;border-radius:5px;cursor:pointer;font-family:inherit;font-size:0.88rem;text-align:left;transition:all 0.18s;}
+  .opt-btn:hover{border-color:#c9a84c;color:#e8e0d5;background:rgba(201,168,76,0.08);}
+  .opt-btn.selected{border-color:#c9a84c;background:rgba(201,168,76,0.18);color:#c9a84c;font-weight:bold;}
+  .score-box{text-align:center;padding:20px 0 30px;}
+  .big-score{font-family:'Playfair Display',serif;font-size:4rem;color:#c9a84c;}
+  .result-grid{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px;}
+  .pill{text-align:center;}
+  .pill-label{font-size:0.66rem;color:#777;margin-bottom:3px;}
+  .pill-val{display:inline-flex;align-items:center;justify-content:center;min-width:32px;height:32px;border-radius:16px;font-weight:bold;font-size:0.82rem;padding:0 6px;}
+  .pill-val.ok{background:rgba(111,207,151,0.2);border:2px solid #6fcf97;color:#6fcf97;}
+  .pill-val.bad{background:rgba(235,87,87,0.2);border:2px solid #eb5757;color:#eb5757;}
+  .pill-val.neutral{background:rgba(201,168,76,0.15);border:2px solid #c9a84c;color:#c9a84c;}
+  .section-title{color:#c9a84c;font-weight:bold;letter-spacing:1px;margin-bottom:14px;font-size:0.85rem;text-transform:uppercase;}
+  .sub-card{margin-bottom:16px;padding:18px 20px;background:rgba(255,255,255,0.04);border-radius:8px;border:1px solid rgba(255,255,255,0.08);}
+  .sub-header{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:12px;flex-wrap:wrap;gap:8px;}
+  .sub-name{font-size:1rem;font-weight:bold;}
+  .sub-meta{color:#777;font-size:0.78rem;margin-top:2px;}
+  .sub-score{color:#c9a84c;font-weight:bold;font-size:1.1rem;}
+  .btn-sm{background:transparent;border:1px solid #c9a84c;color:#c9a84c;padding:4px 12px;cursor:pointer;border-radius:3px;font-size:0.76rem;font-family:inherit;}
+  .btn-sm.danger{border-color:#eb5757;color:#eb5757;}
+  .btn-sm.danger:hover{background:rgba(235,87,87,0.1);}
+  .no-subs{color:#666;font-style:italic;text-align:center;padding:30px;}
+  .error-msg{color:#eb5757;margin-bottom:12px;font-size:0.9rem;}
+  .login-wrap{display:flex;align-items:center;justify-content:center;min-height:80vh;}
+  .login-card{background:rgba(255,255,255,0.05);border:1px solid rgba(201,168,76,0.3);border-radius:10px;padding:40px;max-width:380px;width:100%;text-align:center;}
+  .login-card h1{font-family:'Playfair Display',serif;color:#c9a84c;font-size:1.5rem;margin-bottom:8px;}
+  .login-card p{color:#888;font-size:0.88rem;margin-bottom:24px;}
+  .key-editor{margin-bottom:28px;padding:20px;background:rgba(201,168,76,0.05);border-radius:6px;border:1px solid rgba(201,168,76,0.25);}
+  .key-row{padding:6px 0;border-bottom:1px solid rgba(255,255,255,0.05);font-size:0.83rem;display:flex;gap:10px;align-items:center;}
+  .key-label{color:#c9a84c;font-weight:bold;min-width:50px;flex-shrink:0;}
+  .key-select{background:#1a2a35;color:#e8e0d5;border:1px solid rgba(201,168,76,0.4);border-radius:3px;padding:4px 8px;font-family:inherit;font-size:0.83rem;}
+  @media(max-width:600px){.card{padding:20px 16px;margin:20px 12px;}.options{grid-template-columns:1fr;}}
+
+  /* ── Review mode ── */
+  .review-q{margin-bottom:20px;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.08);border-radius:8px;padding:18px 20px;}
+  .review-q-num{color:#c9a84c;font-size:0.78rem;letter-spacing:1px;text-transform:uppercase;margin-bottom:10px;}
+  .review-opt{display:flex;align-items:center;gap:10px;padding:8px 12px;border-radius:5px;margin-bottom:6px;font-size:0.9rem;}
+  .review-opt.correct{background:rgba(111,207,151,0.15);border:1px solid rgba(111,207,151,0.35);color:#6fcf97;}
+  .review-opt.wrong{background:rgba(235,87,87,0.12);border:1px solid rgba(235,87,87,0.3);color:#eb5757;}
+  .review-opt.neutral{background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.06);color:#888;}
+  .review-icon{font-size:1rem;min-width:18px;}
+  .review-note{font-size:0.82rem;color:#888;font-style:italic;margin-top:8px;padding-top:8px;border-top:1px solid rgba(255,255,255,0.06);}
+  .review-note .hl{color:#c9a84c;font-style:normal;}
+
+  .login-bar{background:rgba(0,0,0,0.3);border-bottom:1px solid rgba(201,168,76,0.2);padding:8px 32px;display:none;justify-content:space-between;align-items:center;font-size:0.8rem;}
+  .login-bar-left{color:#888;}
+  .login-bar-left strong{color:#c9a84c;}
+  .login-bar-right{display:flex;gap:10px;align-items:center;}
+  .bar-link{color:#888;text-decoration:none;font-size:0.75rem;letter-spacing:1px;}
+  .bar-link:hover{color:#c9a84c;}
+  .bar-signout{background:transparent;border:1px solid rgba(235,87,87,0.4);color:#eb5757;padding:3px 10px;cursor:pointer;border-radius:3px;font-size:0.72rem;font-family:inherit;letter-spacing:1px;}
+  .bar-signout:hover{background:rgba(235,87,87,0.1);}
+</style>
+</head>
+<body>
+<header>
+  <span class="logo">Practice Test 15 · Multiple Choice Cloze</span>
+  <div id="header-right"><button class="header-btn" onclick="goTo('login')">Teacher Login</button></div>
+</header>
+<div id="login-status" style="display:none;background:rgba(0,0,0,0.3);border-bottom:1px solid rgba(201,168,76,0.2);padding:8px 32px;display:flex;justify-content:space-between;align-items:center;font-size:0.8rem;">
+  <div style="color:#888;">Signed in as <strong id="login-status-name" style="color:#c9a84c;"></strong> &nbsp;·&nbsp; <span id="login-status-class"></span></div>
+  <div style="display:flex;gap:10px;align-items:center;">
+    <a href="login.html" style="color:#888;text-decoration:none;font-size:0.75rem;letter-spacing:1px;">My Results</a>
+    <a href="index.html" style="color:#888;text-decoration:none;font-size:0.75rem;letter-spacing:1px;">Activities</a>
+    <button onclick="signOutUser()" style="background:transparent;border:1px solid rgba(235,87,87,0.4);color:#eb5757;padding:3px 10px;cursor:pointer;border-radius:3px;font-size:0.72rem;font-family:inherit;letter-spacing:1px;">Sign Out</button>
+  </div>
+</div>
+
+<div id="page-home" class="page active">
+  <div class="card">
+    <a class="home-link" href="index.html">← Back to Home</a>
+    <h1>Practice Test 15</h1>
+    <p class="subtitle">CAE-style Part 1 · Multiple Choice Cloze · <strong style="color:#c9a84c;">The Truth about Love</strong><br>Read the text and choose the best word (A, B, C or D) for each gap. 12 questions.</p>
+
+    <div style="margin-top:24px;">
+      <input type="text" id="student-name" placeholder="Enter your full name..." style="width:100%;max-width:400px;padding:12px 16px;background:rgba(255,255,255,0.08);border:1px solid rgba(201,168,76,0.5);border-radius:4px;color:#e8e0d5;font-size:1rem;font-family:inherit;outline:none;display:block;margin-bottom:12px;"/>
+      <button class="btn-primary" onclick="startQuiz()">Start &#8594;</button>
+    </div>
+  </div>
+</div>
+<div id="page-quiz" class="page">
+  <div class="card">
+    <h1>Practice Test 15 — The Truth about Love</h1>
+    <p class="subtitle" style="margin-bottom:16px;">Choose the best word (A, B, C or D) for each gap. The first one (0) has been done for you.</p>
+    <div class="progress-wrap">
+      <div class="progress-top"><span id="prog-text">0 of 12 answered</span><span id="prog-pct">0%</span></div>
+      <div class="progress-bar-bg"><div class="progress-bar" id="prog-bar"></div></div>
+    </div>
+    <div class="passage-box">
+      <h2>The Truth about Love</h2>
+      <p class="example">Example (0): C — incurable</p>
+      <p>This week we celebrated Valentine's Day … or rather <span class="gap-label">(0) C. incurable</span> romantics and those of us who are a bit soft in the head did! The fourteenth of February always gives everyone who's anyone a chance to cast a few pearls of <span class="gap-label">(1)</span> before their fellow sufferers about the nature of 'the universal migraine' – love. Francis Farnsworth is a case in point. I'm sure the poor old fellow has a heart of <span class="gap-label">(2)</span> but he really does talk a <span class="gap-label">(3)</span> of rubbish sometimes! His appearance last night on BBC 1's 'Let's Talk It Over' was no exception. He started off by having what I will politely call a <span class="gap-label">(4)</span> of opinion with Tania Di Monte, author of 'Tell me the Truth about Love'. Ms Di Monte always expresses the most extraordinary views without any apparent <span class="gap-label">(5)</span> of contradiction. Last night she was boldly setting out her rules for a perfect relationship when poor old Farnsworth accidentally called her Tina. Tina is of course the name of her ex-husband Darren's second wife and we all know that any mention of him – or her – is like <span class="gap-label">(6)</span> to Tania. Farnsworth kept apologising and saying that it had been a <span class="gap-label">(7)</span> of the tongue brought about by a momentary <span class="gap-label">(8)</span> of concentration, but it took all presenter Greg Lazarre's skills to calm our Tania down again. Francis then started calling her 'darling', which only succeeded in making her even more furious. '<span class="gap-label">(9)</span> of endearment,' he stammered as she glared at him. She had been vehemently denying that there was even a <span class="gap-label">(10)</span> of truth in rumours about her forthcoming engagement to football star Nick Pérez. Nevertheless, I'm sure it is only a(n) <span class="gap-label">(11)</span> of time before we see Tania and Nick on the cover of 'Hi There!' celebrating 'the wedding of the century'. If marrying someone like Tania is what happens to you if you're incredibly successful, as Pérez undoubtedly is, I shudder to think what the <span class="gap-label">(12)</span> of failure might be!</p>
+    </div>
+    <div id="questions-container"></div>
+    <button class="btn-primary" onclick="submitQuiz()" style="margin-top:8px;">Submit Answers →</button>
+  </div>
+</div>
+
+<div id="page-submitted" class="page">
+  <div class="card">
+    <div class="score-box">
+      <div id="done-name" style="color:#aaa;margin-bottom:8px;"></div>
+      <div class="big-score" id="done-score">✓</div>
+      <div style="color:#aaa;margin-top:8px;" id="done-msg">Submitted! Your teacher will review your answers.</div>
+    </div>
+    <div id="done-breakdown"></div>
+    <button class="btn-primary" style="margin-top:12px;background:transparent;border:1px solid #c9a84c;color:#c9a84c;" onclick="openReview()">Review My Answers →</button>
+    <button class="btn-primary" style="margin-top:12px;" onclick="goHome()">Back to Home</button>
+  </div>
+</div>
+
+
+<div id="page-review" class="page">
+  <div class="card">
+    <h1 style="margin-bottom:4px;">Answer Review</h1>
+    <p style="color:#888;font-size:0.85rem;margin-bottom:24px;">Your answers compared to the answer key</p>
+    <div id="review-container"></div>
+    <div style="display:flex;gap:12px;flex-wrap:wrap;margin-top:8px;">
+      <button class="btn-primary" onclick="goTo('submitted')">← Back to Score</button>
+      <button class="btn-primary" style="background:transparent;border:1px solid #c9a84c;color:#c9a84c;" onclick="goHome()">Back to Home</button>
+    </div>
+  </div>
+</div>
+<div id="page-login" class="page">
+  <div class="login-wrap">
+    <div class="login-card">
+      <h1>Teacher Login</h1><p>Enter your password</p>
+      <input type="password" id="admin-pass" placeholder="Password" style="text-align:center;letter-spacing:4px;" onkeydown="if(event.key==='Enter')adminLogin()"/>
+      <div class="error-msg" id="login-error" style="display:none;">Incorrect password</div>
+      <button class="btn-primary" onclick="adminLogin()">Login →</button>
+    </div>
+  </div>
+</div>
+
+<div id="page-admin" class="page">
+  <div class="card">
+    <div class="section-title">Answer Key</div>
+    <div class="key-editor" id="key-editor"></div>
+    <div class="section-title" id="sub-count-label">Student Submissions</div>
+    <div id="submissions-container"><p class="no-subs">No submissions yet.</p></div>
+  </div>
+</div>
+
+<script>
+const STORAGE_KEY='pt15_subs';
+const QUESTIONS=[
+  {n:1, opts:['A knowledge','B wisdom','C intelligence','D sense']},
+  {n:2, opts:['A gold','B silver','C brass','D steel']},
+  {n:3, opts:['A mound','B load','C pile','D stack']},
+  {n:4, opts:['A disagreement','B conflict','C contrast','D difference']},
+  {n:5, opts:['A worry','B anxiety','C concern','D fear']},
+  {n:6, opts:['A a bull in a china shop','B the bull by the horns','C a red rag to a bull','D a bull market']},
+  {n:7, opts:['A mistake','B slip','C error','D lapse']},
+  {n:8, opts:['A lapse','B error','C mistake','D slip']},
+  {n:9, opts:['A Expression','B Idiom','C Term','D Phrase']},
+  {n:10,opts:['A grain','B fragment','C particle','D pellet']},
+  {n:11,opts:['A issue','B question','C problem','D topic']},
+  {n:12,opts:['A payment','B expense','C price','D sum']},
+];
+let currentStudent='',answers={},submitted=false;
+let submissions=JSON.parse(localStorage.getItem(STORAGE_KEY)||'[]');
+let answerKey=JSON.parse(localStorage.getItem(STORAGE_KEY+'_key')||'{}');
+function saveData(){localStorage.setItem(STORAGE_KEY,JSON.stringify(submissions));}
+function saveKey(){localStorage.setItem(STORAGE_KEY+'_key',JSON.stringify(answerKey));}
+function goTo(page){
+  document.querySelectorAll('.page').forEach(function(p){p.classList.remove('active');});
+  document.getElementById('page-'+page).classList.add('active');
+  var hr=document.getElementById('header-right');
+  var btn=document.createElement('button');
+  btn.className='header-btn';
+  if(page==='admin'){btn.textContent='Logout';btn.onclick=function(){goTo('home');};}
+  else if(page==='login'){btn.textContent='← Back';btn.onclick=function(){goTo('home');};}
+  else{btn.textContent='Teacher Login';btn.onclick=function(){goTo('login');};}
+  hr.innerHTML='';
+  hr.appendChild(btn);
+}
+function goHome(){currentStudent='';answers={};submitted=false;document.getElementById('student-name').value='';goTo('home');}
+function startQuiz(){
+  const name=document.getElementById('student-name').value.trim();
+  if(!name){alert('Please enter your name.');return;}
+  currentStudent=name;answers={};submitted=false;renderQuestions();goTo('quiz');
+}
+function renderQuestions(){
+  const c=document.getElementById('questions-container');c.innerHTML='';
+  QUESTIONS.forEach(q=>{
+    const div=document.createElement('div');div.className='q-block';
+    const opts=q.opts.map(o=>`<button class="opt-btn" id="opt-${q.n}-${o[0]}" onclick="selectAnswer(${q.n},'${o[0]}')">${o}</button>`).join('');
+    div.innerHTML=`<div class="q-num">Question ${q.n}</div><div class="options">${opts}</div>`;
+    c.appendChild(div);
+  });
+}
+function selectAnswer(qn,letter){
+  if(submitted)return;
+  answers[qn]=letter;
+  QUESTIONS.find(q=>q.n===qn).opts.forEach(o=>{
+    const btn=document.getElementById('opt-'+qn+'-'+o[0]);
+    if(btn)btn.classList.toggle('selected',o[0]===letter);
+  });
+  const filled=Object.keys(answers).length;
+  const pct=Math.round(filled/QUESTIONS.length*100);
+  document.getElementById('prog-text').textContent=filled+' of '+QUESTIONS.length+' answered';
+  document.getElementById('prog-pct').textContent=pct+'%';
+  document.getElementById('prog-bar').style.width=pct+'%';
+}
+function submitQuiz(){
+  const unanswered=QUESTIONS.filter(q=>!answers[q.n]).length;
+  if(unanswered&&!confirm(unanswered+' unanswered. Submit anyway?'))return;
+  submitted=true;
+  const hasKey=Object.keys(answerKey).length>0;
+  let score=0;
+  if(hasKey) QUESTIONS.forEach(q=>{if(answerKey[q.n]&&answers[q.n]===answerKey[q.n])score++;});
+  const sub={id:Date.now(),name:currentStudent,cls:(function(){try{var u=JSON.parse(localStorage.getItem("cam_user")||"null");return u?u.cls:"";}catch(e){return"";}})(),answers:{...answers},score:hasKey?score:undefined,total:QUESTIONS.length,submittedAt:new Date().toLocaleString()};
+  submissions.push(sub);saveData();
+  saveToSupabase({
+    student_name: sub.name||'',
+    class_code: sub.cls||'',
+    activity: 'Practice Test 15',
+    storage_key: 'pt15_subs',
+    score: typeof sub.score==='number'?sub.score:null,
+    total: sub.total||null,
+    answers: JSON.stringify(sub.answers||{}),
+    submitted_at: sub.submittedAt||new Date().toLocaleString()
+  });
+  document.getElementById('done-name').textContent=currentStudent;
+  if(hasKey){
+    document.getElementById('done-score').textContent=score+'/'+QUESTIONS.length;
+    document.getElementById('done-msg').textContent='';
+    let html='<div class="result-grid">';
+    QUESTIONS.forEach(q=>{const s=answers[q.n]||'?';const k=answerKey[q.n];const cls=k?(s===k?'ok':'bad'):'neutral';html+=`<div class="pill"><div class="pill-label">Q${q.n}</div><div class="pill-val ${cls}">${s}</div></div>`;});
+    html+='</div>';
+    document.getElementById('done-breakdown').innerHTML=html;
+  } else {
+    document.getElementById('done-score').textContent='✓';
+    document.getElementById('done-msg').textContent='Submitted! Your teacher will review your answers.';
+    document.getElementById('done-breakdown').innerHTML='';
+  }
+  goTo('submitted');
+}
+function adminLogin(){
+  if(document.getElementById('admin-pass').value==='1996'){
+    document.getElementById('login-error').style.display='none';
+    document.getElementById('admin-pass').value='';
+    renderAdmin();goTo('admin');
+  } else document.getElementById('login-error').style.display='block';
+}
+function renderAdmin(){
+  let khtml='';
+  QUESTIONS.forEach(q=>{
+    const cur=answerKey[q.n]||'';
+    const opts=q.opts.map(o=>`<option value="${o[0]}" ${cur===o[0]?'selected':''}>${o}</option>`).join('');
+    khtml+=`<div class="key-row"><span class="key-label">Q${q.n}:</span><select class="key-select" id="key-${q.n}"><option value="">— not set —</option>${opts}</select></div>`;
+  });
+  document.getElementById('key-editor').innerHTML=khtml+`<button class="btn-sm" style="margin-top:10px;" onclick="saveKeyFromEditor()">Save Key</button>`;
+  renderSubmissions();
+}
+function saveKeyFromEditor(){
+  QUESTIONS.forEach(q=>{const el=document.getElementById('key-'+q.n);if(el&&el.value)answerKey[q.n]=el.value;else delete answerKey[q.n];});
+  saveKey();renderSubmissions();alert('Answer key saved!');
+}
+function renderSubmissions(){
+  const cnt=document.getElementById('submissions-container');
+  document.getElementById('sub-count-label').textContent='STUDENT SUBMISSIONS ('+submissions.length+')';
+  if(!submissions.length){cnt.innerHTML='<p class="no-subs">No submissions yet.</p>';return;}
+  const hasKey=Object.keys(answerKey).length>0;
+  let html='';
+  submissions.sort((a,b)=>b.id-a.id).forEach(sub=>{
+    let score=0;
+    if(hasKey) QUESTIONS.forEach(q=>{if(answerKey[q.n]&&sub.answers[q.n]===answerKey[q.n])score++;});
+    const scoreDisplay=hasKey?score+'/'+sub.total:'Pending key';
+    let pills='<div class="result-grid">';
+    QUESTIONS.forEach(q=>{const s=sub.answers[q.n]||'?';const k=answerKey[q.n];const cls=k?(s===k?'ok':'bad'):'neutral';pills+=`<div class="pill"><div class="pill-label">Q${q.n}</div><div class="pill-val ${cls}">${s}</div></div>`;});
+    pills+='</div>';
+    html+=`<div class="sub-card"><div class="sub-header"><div><div class="sub-name">${sub.name}</div><div class="sub-meta">${sub.submittedAt}</div></div><div style="display:flex;align-items:center;gap:10px;"><span class="sub-score">${scoreDisplay}</span><button class="btn-sm danger" onclick="deleteSub(${sub.id})">Delete</button></div></div>${pills}</div>`;
+  });
+  cnt.innerHTML=html;
+}
+function deleteSub(id){if(!confirm('Delete?'))return;submissions=submissions.filter(s=>s.id!==id);saveData();renderSubmissions();}
+
+function openReview(){
+  const hasKey=Object.keys(answerKey).length>0;
+  let html='';
+  QUESTIONS.forEach(q=>{
+    const qn=q.n;
+    const student=answers[qn]||null;
+    const correct=answerKey[qn]||null;
+    html+=`<div class="review-q"><div class="review-q-num">Question ${qn}</div>`;
+    (q.opts||[]).forEach(o=>{
+      const letter=o.l||o[0]||'';
+      const word=o.w||o[1]||'';
+      const isCorrect=correct&&letter===correct;
+      const isStudent=student&&letter===student;
+      const isWrong=isStudent&&correct&&letter!==correct;
+      let cls='neutral',icon='·';
+      if(isCorrect){cls='correct';icon='✓';}
+      if(isWrong){cls='wrong';icon='✗';}
+      if(isCorrect||isWrong||isStudent){
+        html+=`<div class="review-opt ${cls}"><span class="review-icon">${icon}</span><strong>${letter}</strong> &nbsp; ${word}</div>`;
+      } else {
+        html+=`<div class="review-opt neutral"><span class="review-icon">·</span>${letter} &nbsp; ${word}</div>`;
+      }
+    });
+    if(correct&&student&&student!==correct){
+      const cw=(q.opts||[]).find(o=>o.l===correct);
+      const sw=(q.opts||[]).find(o=>o.l===student);
+      html+=`<div class="review-note">You chose <span class="hl">${student}${sw?' — '+sw.w:''}</span> · Correct answer: <span class="hl">${correct}${cw?' — '+cw.w:''}</span></div>`;
+    } else if(!hasKey){
+      html+=`<div class="review-note">Answer key not set yet — your teacher will review.</div>`;
+    } else if(!student){
+      html+=`<div class="review-note">Not answered.</div>`;
+    }
+    html+='</div>';
+  });
+  document.getElementById('review-container').innerHTML=html;
+  goTo('review');
+}
+
+function signOutUser(){
+  if(confirm('Sign out? Your submitted answers are already saved.')){
+    localStorage.removeItem('cam_user');
+    document.getElementById('login-status').style.display='none';
+    const inp=document.getElementById('student-name');
+    if(inp) inp.value='';
+  }
+}
+
+// ── Supabase ─────────────────────────────────────────────────────────
+const SUPA_URL='https://dhvzvhdefhrfsbjmnnbz.supabase.co';
+const SUPA_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRodnp2aGRlZmhyZnNiam1ubmJ6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzMwODk1OTEsImV4cCI6MjA4ODY2NTU5MX0.SSkscvxvvgsbGaSfJT_1BbJSVbIzfxUMJaE03OQj5Xg';
+async function saveToSupabase(rec){
+  try{
+    const r=await fetch(SUPA_URL+'/rest/v1/submissions',{
+      method:'POST',
+      headers:{'Content-Type':'application/json','apikey':SUPA_KEY,'Authorization':'Bearer '+SUPA_KEY,'Prefer':'return=minimal'},
+      body:JSON.stringify(rec)
+    });
+    return r.ok;
+  }catch(e){return false;}
+}
+// ─────────────────────────────────────────────────────────────────────
+</script>
+
+<script>
+// Pre-fill student name and class from login session
+(function(){
+  try {
+    const u = JSON.parse(localStorage.getItem('cam_user') || 'null');
+    const bar = document.getElementById('login-status');
+    const inp = document.getElementById('student-name');
+    if (!u) { if(bar) bar.style.display='none'; return; }
+    if (inp && !inp.value) inp.value = u.name;
+    if (bar) {
+      bar.style.display = 'flex';
+      const nm = document.getElementById('login-status-name');
+      const cl = document.getElementById('login-status-class');
+      if (nm) nm.textContent = u.name;
+      if (cl) cl.textContent = 'Class: ' + u.cls;
+    }
+  } catch(e) {}
+})();
+</script>
+</body>
+</html>

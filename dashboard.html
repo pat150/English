@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Teacher Dashboard · Cambridge English</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Source+Serif+4:wght@300;400;600&display=swap');
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+  body{min-height:100vh;background:linear-gradient(135deg,#0f2027,#203a43,#2c5364);font-family:'Source Serif 4',serif;color:#e8e0d5;}
+  header{background:rgba(0,0,0,0.4);border-bottom:2px solid #c9a84c;padding:16px 32px;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;z-index:100;backdrop-filter:blur(12px);}
+  .logo{font-family:'Playfair Display',serif;color:#c9a84c;letter-spacing:3px;font-size:1rem;text-transform:uppercase;}
+  .page{display:none;}.page.active{display:block;}
+  /* Login */
+  .login-wrap{display:flex;align-items:center;justify-content:center;min-height:80vh;}
+  .login-card{background:rgba(255,255,255,0.05);border:1px solid rgba(201,168,76,0.3);border-radius:10px;padding:40px;max-width:380px;width:100%;text-align:center;}
+  .login-card h1{font-family:'Playfair Display',serif;color:#c9a84c;font-size:1.5rem;margin-bottom:8px;}
+  .login-card p{color:#888;font-size:0.88rem;margin-bottom:24px;}
+  input[type="password"]{width:100%;padding:12px 16px;background:rgba(255,255,255,0.08);border:1px solid rgba(201,168,76,0.5);border-radius:4px;color:#e8e0d5;font-size:1rem;font-family:inherit;margin-bottom:20px;text-align:center;letter-spacing:4px;outline:none;}
+  .btn-primary{background:#c9a84c;color:#0f2027;border:none;padding:12px 32px;font-size:1rem;font-weight:bold;border-radius:4px;cursor:pointer;letter-spacing:1px;font-family:inherit;}
+  .btn-primary:hover{background:#d9bb6a;}
+  .error-msg{color:#eb5757;margin-bottom:12px;font-size:0.9rem;}
+  /* Dashboard */
+  .dash{max-width:1100px;margin:0 auto;padding:30px 32px 60px;}
+  .dash-title{font-family:'Playfair Display',serif;color:#c9a84c;font-size:1.6rem;margin-bottom:4px;}
+  .dash-sub{color:#888;font-size:0.85rem;margin-bottom:28px;}
+  .stats-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:14px;margin-bottom:32px;}
+  .stat-box{background:rgba(255,255,255,0.05);border:1px solid rgba(201,168,76,0.2);border-radius:8px;padding:18px 20px;text-align:center;}
+  .stat-num{font-family:'Playfair Display',serif;font-size:2rem;color:#c9a84c;}
+  .stat-label{color:#777;font-size:0.75rem;letter-spacing:1px;margin-top:4px;text-transform:uppercase;}
+  .filter-row{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:22px;align-items:center;}
+  .filter-label{color:#888;font-size:0.78rem;letter-spacing:1px;margin-right:4px;}
+  .filter-btn{background:transparent;border:1px solid rgba(255,255,255,0.15);color:#aaa;padding:5px 14px;cursor:pointer;border-radius:3px;font-size:0.78rem;letter-spacing:1px;font-family:inherit;}
+  .filter-btn:hover,.filter-btn.active{border-color:#c9a84c;color:#c9a84c;background:rgba(201,168,76,0.08);}
+  .toolbar{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;}
+  .btn-sm{background:transparent;border:1px solid #c9a84c;color:#c9a84c;padding:6px 16px;cursor:pointer;border-radius:3px;font-size:0.78rem;letter-spacing:1px;font-family:inherit;}
+  .btn-sm:hover{background:rgba(201,168,76,0.1);}
+  .btn-sm.danger{border-color:#eb5757;color:#eb5757;}
+  .btn-sm.danger:hover{background:rgba(235,87,87,0.1);}
+  .table-wrap{overflow-x:auto;}
+  table{width:100%;border-collapse:collapse;font-size:0.85rem;}
+  th{color:#c9a84c;font-weight:bold;letter-spacing:1px;font-size:0.72rem;text-transform:uppercase;padding:10px 14px;border-bottom:2px solid rgba(201,168,76,0.3);text-align:left;white-space:nowrap;}
+  td{padding:10px 14px;border-bottom:1px solid rgba(255,255,255,0.05);color:#ccc;vertical-align:top;}
+  tr:hover td{background:rgba(255,255,255,0.03);}
+  .badge{display:inline-block;padding:2px 8px;border-radius:3px;font-size:0.72rem;font-weight:bold;letter-spacing:1px;}
+  .badge-C1{background:rgba(211,84,0,0.2);border:1px solid rgba(211,84,0,0.5);color:#d35400;}
+  .badge-C2{background:rgba(192,57,43,0.2);border:1px solid rgba(192,57,43,0.5);color:#e74c3c;}
+  .badge-B2{background:rgba(26,122,74,0.2);border:1px solid rgba(26,122,74,0.5);color:#2ecc71;}
+  .badge-B1{background:rgba(26,95,168,0.2);border:1px solid rgba(26,95,168,0.4);color:#3498db;}
+  .score-pill{display:inline-block;padding:2px 10px;border-radius:10px;font-size:0.8rem;font-weight:bold;}
+  .score-hi{background:rgba(111,207,151,0.15);color:#6fcf97;}
+  .score-mid{background:rgba(201,168,76,0.15);color:#c9a84c;}
+  .score-lo{background:rgba(235,87,87,0.15);color:#eb5757;}
+  .score-none{color:#555;font-style:italic;font-size:0.8rem;}
+  .no-data{text-align:center;padding:60px 20px;color:#555;font-style:italic;}
+  .loading{text-align:center;padding:60px;color:#888;}
+  .answers-expand{color:#777;font-size:0.75rem;cursor:pointer;letter-spacing:1px;}
+  .answers-expand:hover{color:#c9a84c;}
+  .answers-detail{font-size:0.78rem;color:#aaa;margin-top:6px;line-height:1.8;display:none;}
+  .header-btn{background:transparent;border:1px solid #c9a84c;color:#c9a84c;padding:6px 18px;cursor:pointer;border-radius:3px;font-size:0.8rem;letter-spacing:1px;font-family:inherit;}
+  .header-btn:hover{background:rgba(201,168,76,0.15);}
+  @media(max-width:700px){.dash{padding:20px 16px 40px;}th,td{padding:8px 10px;}}
+</style>
+</head>
+<body>
+<header>
+  <span class="logo">Teacher Dashboard</span>
+  <div style="display:flex;gap:10px;align-items:center;">
+    <a href="index.html" style="color:#888;font-size:0.8rem;text-decoration:none;letter-spacing:1px;">← Activities</a>
+    <button class="header-btn" id="logout-btn" style="display:none;" onclick="doLogout()">Logout</button>
+  </div>
+</header>
+
+<!-- LOGIN -->
+<div id="page-login" class="page active">
+  <div class="login-wrap">
+    <div class="login-card">
+      <h1>Teacher Dashboard</h1>
+      <p>Enter your password to view all student submissions</p>
+      <input type="password" id="admin-pass" placeholder="Password" onkeydown="if(event.key==='Enter')doLogin()"/>
+      <div class="error-msg" id="login-error" style="display:none;">Incorrect password</div>
+      <button class="btn-primary" onclick="doLogin()">Login →</button>
+    </div>
+  </div>
+</div>
+
+<!-- DASHBOARD -->
+<div id="page-dash" class="page">
+  <div class="dash">
+    <div class="dash-title">All Submissions</div>
+    <div class="dash-sub" id="dash-sub">Loading…</div>
+    <div class="stats-row" id="stats-row"></div>
+    <div class="filter-row">
+      <span class="filter-label">CLASS:</span>
+      <div id="class-filters"></div>
+      <span class="filter-label" style="margin-left:12px;">LEVEL:</span>
+      <div id="level-filters"></div>
+    </div>
+    <div class="toolbar">
+      <div style="color:#666;font-size:0.78rem;" id="showing-count"></div>
+      <div style="display:flex;gap:8px;">
+        <button class="btn-sm" onclick="loadData()">↺ Refresh</button>
+        <button class="btn-sm" onclick="exportCSV()">Export CSV ↓</button>
+      </div>
+    </div>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Student</th><th>Class</th><th>Activity</th><th>Level</th>
+            <th>Score</th><th>Answers</th><th>Submitted</th><th></th>
+          </tr>
+        </thead>
+        <tbody id="table-body"></tbody>
+      </table>
+      <div class="no-data" id="no-data" style="display:none;">No submissions found.</div>
+      <div class="loading" id="loading-msg" style="display:none;">Loading submissions…</div>
+    </div>
+  </div>
+</div>
+
+<script>
+const SUPA_URL='https://dhvzvhdefhrfsbjmnnbz.supabase.co';
+const SUPA_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRodnp2aGRlZmhyZnNiam1ubmJ6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzMwODk1OTEsImV4cCI6MjA4ODY2NTU5MX0.SSkscvxvvgsbGaSfJT_1BbJSVbIzfxUMJaE03OQj5Xg';
+const TEACHER_PASS='1996';
+let allRows=[], filterClass='all', filterLevel='all';
+
+function doLogin(){
+  if(document.getElementById('admin-pass').value===TEACHER_PASS){
+    document.getElementById('login-error').style.display='none';
+    document.getElementById('admin-pass').value='';
+    document.getElementById('logout-btn').style.display='inline-block';
+    goTo('dash');
+    loadData();
+  }else document.getElementById('login-error').style.display='block';
+}
+function doLogout(){
+  document.getElementById('logout-btn').style.display='none';
+  goTo('login');
+}
+function goTo(p){
+  document.querySelectorAll('.page').forEach(x=>x.classList.remove('active'));
+  document.getElementById('page-'+p).classList.add('active');
+}
+
+async function loadData(){
+  document.getElementById('loading-msg').style.display='block';
+  document.getElementById('no-data').style.display='none';
+  document.getElementById('table-body').innerHTML='';
+  document.getElementById('dash-sub').textContent='Loading submissions…';
+  try{
+    const res=await fetch(SUPA_URL+'/rest/v1/submissions?select=*&order=id.desc&limit=1000',{
+      headers:{'apikey':SUPA_KEY,'Authorization':'Bearer '+SUPA_KEY}
+    });
+    if(!res.ok) throw new Error('HTTP '+res.status);
+    allRows=await res.json();
+    document.getElementById('loading-msg').style.display='none';
+    document.getElementById('dash-sub').textContent=allRows.length+' submission'+(allRows.length!==1?'s':'');
+    buildStats();
+    buildFilters();
+    renderTable();
+  }catch(e){
+    document.getElementById('loading-msg').style.display='none';
+    document.getElementById('dash-sub').textContent='Error loading data: '+e.message;
+  }
+}
+
+function buildStats(){
+  const classes=new Set(allRows.map(r=>r.class_code).filter(Boolean));
+  const students=new Set(allRows.map(r=>r.student_name).filter(Boolean));
+  const scored=allRows.filter(r=>typeof r.score==='number'&&r.total);
+  const avg=scored.length?Math.round(scored.reduce((s,r)=>s+(r.score/r.total*100),0)/scored.length):null;
+  document.getElementById('stats-row').innerHTML=`
+    <div class="stat-box"><div class="stat-num">${allRows.length}</div><div class="stat-label">Submissions</div></div>
+    <div class="stat-box"><div class="stat-num">${students.size}</div><div class="stat-label">Students</div></div>
+    <div class="stat-box"><div class="stat-num">${classes.size}</div><div class="stat-label">Classes</div></div>
+    <div class="stat-box"><div class="stat-num">${avg!==null?avg+'%':'—'}</div><div class="stat-label">Avg Score</div></div>`;
+}
+
+function buildFilters(){
+  // Extract level from activity label (C1/C2/B2 etc)
+  const classes=['all',...new Set(allRows.map(r=>r.class_code).filter(Boolean))].sort();
+  const levels=['all',...new Set(allRows.map(r=>getLevelFromActivity(r.storage_key)))].sort();
+  document.getElementById('class-filters').innerHTML=
+    classes.map(c=>`<button class="filter-btn ${c===filterClass?'active':''}" onclick="setFilter('class','${c}',this)">${c==='all'?'All':c}</button>`).join('');
+  document.getElementById('level-filters').innerHTML=
+    levels.map(l=>`<button class="filter-btn ${l===filterLevel?'active':''}" onclick="setFilter('level','${l}',this)">${l==='all'?'All':l}</button>`).join('');
+}
+
+const LEVEL_MAP={'cpe':'C2','cae':'C1','b2':'B2','fce':'B2','pet':'B1'};
+function getLevelFromActivity(key){
+  if(!key) return '??';
+  if(key.startsWith('cpe')||key.startsWith('cpe')) return 'C2';
+  if(key.startsWith('cae')||key.startsWith('pt')||key.startsWith('pkw')) return 'C1';
+  if(key.startsWith('b2')||key.startsWith('fce')) return 'B2';
+  return '??';
+}
+
+function setFilter(type,val,btn){
+  if(type==='class'){filterClass=val;document.querySelectorAll('#class-filters .filter-btn').forEach(b=>b.classList.remove('active'));}
+  else{filterLevel=val;document.querySelectorAll('#level-filters .filter-btn').forEach(b=>b.classList.remove('active'));}
+  btn.classList.add('active');
+  renderTable();
+}
+
+function renderTable(){
+  let rows=[...allRows];
+  if(filterClass!=='all') rows=rows.filter(r=>r.class_code===filterClass);
+  if(filterLevel!=='all') rows=rows.filter(r=>getLevelFromActivity(r.storage_key)===filterLevel);
+  document.getElementById('showing-count').textContent=`Showing ${rows.length} of ${allRows.length}`;
+  const tbody=document.getElementById('table-body');
+  const noData=document.getElementById('no-data');
+  if(!rows.length){tbody.innerHTML='';noData.style.display='block';return;}
+  noData.style.display='none';
+  tbody.innerHTML=rows.map((r,i)=>{
+    const level=getLevelFromActivity(r.storage_key);
+    const scoreHtml=typeof r.score==='number'&&r.total
+      ?`<span class="score-pill ${r.score/r.total>=0.7?'score-hi':r.score/r.total>=0.5?'score-mid':'score-lo'}">${r.score}/${r.total}</span>`
+      :`<span class="score-none">No key set</span>`;
+    let answersHtml='<span class="score-none">—</span>';
+    if(r.answers){
+      try{
+        const ans=JSON.parse(r.answers);
+        const entries=Object.entries(ans);
+        if(entries.length){
+          const preview=entries.slice(0,4).map(([q,a])=>`Q${q}:${a}`).join(' ');
+          const more=entries.length>4?` +${entries.length-4} more`:'';
+          answersHtml=`<span class="answers-expand" onclick="toggleAnswers(${i})">${preview}${more} ▾</span>
+            <div class="answers-detail" id="ans-${i}">${entries.map(([q,a])=>`<strong>Q${q}</strong> ${a}`).join(' &nbsp;·&nbsp; ')}</div>`;
+        }
+      }catch(e){}
+    }
+    return `<tr>
+      <td style="font-weight:bold;color:#e8e0d5;">${esc(r.student_name||'—')}</td>
+      <td>${esc(r.class_code||'—')}</td>
+      <td style="font-size:0.82rem;">${esc(r.activity||r.storage_key||'—')}</td>
+      <td><span class="badge badge-${level}">${level}</span></td>
+      <td>${scoreHtml}</td>
+      <td>${answersHtml}</td>
+      <td style="color:#666;font-size:0.78rem;white-space:nowrap;">${r.submitted_at||'—'}</td>
+      <td><button class="btn-sm danger" onclick="deleteSub(${r.id})">✕</button></td>
+    </tr>`;
+  }).join('');
+}
+
+function toggleAnswers(i){
+  const el=document.getElementById('ans-'+i);
+  if(el) el.style.display=el.style.display==='block'?'none':'block';
+}
+
+function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+
+async function deleteSub(id){
+  if(!confirm('Delete this submission?')) return;
+  try{
+    await fetch(SUPA_URL+'/rest/v1/submissions?id=eq.'+id,{
+      method:'DELETE',
+      headers:{'apikey':SUPA_KEY,'Authorization':'Bearer '+SUPA_KEY}
+    });
+    loadData();
+  }catch(e){alert('Delete failed: '+e.message);}
+}
+
+function exportCSV(){
+  let rows=[...allRows];
+  if(filterClass!=='all') rows=rows.filter(r=>r.class_code===filterClass);
+  if(filterLevel!=='all') rows=rows.filter(r=>getLevelFromActivity(r.storage_key)===filterLevel);
+  const header=['Student','Class','Activity','Level','Score','Total','Percent','Answers','Submitted'];
+  const lines=[header.join(',')];
+  rows.forEach(r=>{
+    const pct=typeof r.score==='number'&&r.total?Math.round(r.score/r.total*100):'';
+    lines.push([csv(r.student_name),csv(r.class_code),csv(r.activity),getLevelFromActivity(r.storage_key),
+      r.score??'',r.total??'',pct,csv(r.answers),csv(r.submitted_at)].join(','));
+  });
+  const blob=new Blob([lines.join('\n')],{type:'text/csv'});
+  const a=document.createElement('a');
+  a.href=URL.createObjectURL(blob);
+  a.download='submissions_'+(new Date().toISOString().slice(0,10))+'.csv';
+  a.click();
+}
+function csv(v){return '"'+String(v||'').replace(/"/g,'""')+'"';}
+</script>
+</body>
+</html>
