@@ -85,6 +85,16 @@
   .bar-link:hover{color:#c9a84c;}
   .bar-signout{background:transparent;border:1px solid rgba(235,87,87,0.4);color:#eb5757;padding:3px 10px;cursor:pointer;border-radius:3px;font-size:0.72rem;font-family:inherit;letter-spacing:1px;}
   .bar-signout:hover{background:rgba(235,87,87,0.1);}
+  .review-q{margin-bottom:20px;padding:16px 20px;background:rgba(255,255,255,0.04);border-radius:8px;border:1px solid rgba(255,255,255,0.08);}
+  .review-q-num{color:#c9a84c;font-weight:bold;font-size:0.85rem;margin-bottom:10px;}
+  .review-opt{display:flex;align-items:center;gap:10px;padding:6px 10px;border-radius:4px;font-size:0.88rem;margin-bottom:4px;color:#aaa;}
+  .review-opt.correct{background:rgba(111,207,151,0.12);color:#6fcf97;}
+  .review-opt.wrong{background:rgba(235,87,87,0.12);color:#eb5757;}
+  .review-icon{width:18px;text-align:center;flex-shrink:0;}
+  .review-note{font-size:0.8rem;color:#888;margin-top:8px;padding-left:4px;}
+  .hl{color:#c9a84c;}
+  .btn-sm.danger{border-color:rgba(235,87,87,0.5);color:#eb5757;}
+  .btn-sm.danger:hover{background:rgba(235,87,87,0.1);}
 </style>
 </head>
 <body>
@@ -114,6 +124,72 @@
     </div>
   </div>
 </div>
+<!-- QUIZ -->
+<div id="page-quiz" class="page">
+  <div class="card">
+    <a class="home-link" href="#" onclick="goHome();return false;">← Back to Home</a>
+    <h1>CAE · Part 1</h1>
+    <p class="subtitle">Multiple Choice Cloze · <strong style="color:#c9a84c;">Midsummer Night's Eve</strong><br>Choose the best word (A, B, C or D) for each gap.</p>
+    <div class="passage-box">
+      <h2>Midsummer Night's Eve</h2>
+      <p>
+        The festival of Midsummer Night's Eve is still used to <span class="gap-label">(1)</span> the solstice in many parts of the world. It is held at a special
+        <span class="gap-label">(2)</span> on high ground where a bonfire is lit. According to tradition, an animal used to be
+        <span class="gap-label">(3)</span> and thrown into the flames to ensure that the fire would not be
+        <span class="gap-label">(4)</span> before midnight. This was believed to
+        <span class="gap-label">(5)</span> good crops for the following year. The custom
+        <span class="gap-label">(6)</span> from pre-Christian times and is associated with the
+        <span class="gap-label">(7)</span> of the new season. At one time, participation in this ritual was
+        <span class="gap-label">(8)</span> by the Church, which saw it as a
+        <span class="gap-label">(9)</span> to Christian values. Nevertheless, the
+        <span class="gap-label">(10)</span> survived and today is considered a
+        <span class="gap-label">(11)</span> part of local heritage. People gather to
+        <span class="gap-label">(12)</span> evil spirits, and the fire itself is regarded as a
+        <span class="gap-label">(13)</span> of protection. The event has become
+        <span class="gap-label">(14)</span> across many European countries, though the traditions vary. Participants hope the fire will
+        <span class="gap-label">(15)</span> the community from misfortune for another year.
+      </p>
+    </div>
+    <div class="progress-wrap">
+      <div class="progress-top"><span id="prog-text">0 of 15 answered</span><span id="prog-pct">0%</span></div>
+      <div class="progress-bar-bg"><div class="progress-bar" id="prog-bar"></div></div>
+    </div>
+    <div id="questions-container"></div>
+    <div style="text-align:center;margin-top:24px;">
+      <button class="btn-primary" onclick="submitQuiz()">Submit Answers →</button>
+    </div>
+  </div>
+</div>
+
+<!-- SUBMITTED -->
+<div id="page-submitted" class="page">
+  <div class="card">
+    <div class="score-box">
+      <div class="big-score" id="done-score"></div>
+      <div style="color:#aaa;margin-top:8px;font-size:1rem;" id="done-name"></div>
+      <div style="color:#c9a84c;margin-top:6px;font-size:1rem;" id="done-msg"></div>
+      <div style="color:#777;margin-top:6px;font-size:0.85rem;" id="done-note"></div>
+    </div>
+    <div id="done-breakdown"></div>
+    <div style="text-align:center;margin-top:28px;display:flex;gap:14px;justify-content:center;flex-wrap:wrap;">
+      <button class="btn-primary" onclick="openReview()">Review Answers</button>
+      <button class="btn-primary" style="background:transparent;border:1px solid #c9a84c;color:#c9a84c;" onclick="goHome()">← Back to Home</button>
+    </div>
+  </div>
+</div>
+
+<!-- REVIEW -->
+<div id="page-review" class="page">
+  <div class="card">
+    <a class="home-link" href="#" onclick="goTo('submitted');return false;">← Back to Results</a>
+    <h1 style="margin-bottom:20px;">Review</h1>
+    <div id="review-container"></div>
+    <div style="text-align:center;margin-top:24px;">
+      <button class="btn-primary" style="background:transparent;border:1px solid #c9a84c;color:#c9a84c;" onclick="goHome()">← Back to Home</button>
+    </div>
+  </div>
+</div>
+
 <div id="page-login" class="page">
   <div class="login-wrap">
     <div class="login-card">
