@@ -90,7 +90,22 @@
   .btn-sm { background:transparent; border:1px solid rgba(235,87,87,0.5); color:#eb5757; padding:4px 10px; cursor:pointer; border-radius:3px; font-size:0.75rem; font-family:inherit; }
   .btn-sm:hover { background:rgba(235,87,87,0.1); }
   .no-subs { color:#666; font-style:italic; text-align:center; padding:40px; }
-  @media(max-width:600px){.hero h1{font-size:2rem;}.sections-grid,.dash-wrap{padding:10px 14px 40px;}.filter-bar{padding:12px 14px;}header{padding:12px 16px;flex-wrap:wrap;gap:10px;}}
+  /* LEVEL SELECT */
+  .level-select-grid { display:flex; flex-direction:column; gap:0; max-width:600px; margin:0 auto; padding:20px 40px 60px; }
+  .level-card-link { display:flex; align-items:center; gap:20px; padding:22px 28px; text-decoration:none; color:inherit; border-bottom:1px solid rgba(255,255,255,0.07); transition:all 0.18s; position:relative; }
+  .level-card-link:first-child { border-top:1px solid rgba(255,255,255,0.07); }
+  .level-card-link:hover { background:rgba(255,255,255,0.04); padding-left:34px; }
+  .lc-badge { font-family:'Playfair Display',serif; font-size:1rem; font-weight:800; width:44px; height:44px; border-radius:8px; display:flex; align-items:center; justify-content:center; flex-shrink:0; }
+  .lc-body { flex:1; }
+  .lc-title { font-family:'Playfair Display',serif; font-size:1.1rem; margin-bottom:3px; }
+  .lc-sub { font-size:0.75rem; color:#888; letter-spacing:1px; }
+  .lc-arrow { color:#555; font-size:1rem; transition:all 0.18s; }
+  .level-card-link:hover .lc-arrow { color:var(--gold); transform:translateX(4px); }
+  .c2 .lc-badge { background:var(--c2-soft); color:var(--c2); border:2px solid var(--c2); } .c2 .lc-title { color:#e8a09a; }
+  .c1 .lc-badge { background:var(--c1-soft); color:var(--c1); border:2px solid var(--c1); } .c1 .lc-title { color:#f0a87a; }
+  .b2 .lc-badge { background:var(--b2-soft); color:var(--b2); border:2px solid var(--b2); } .b2 .lc-title { color:#7acca0; }
+  .b1 .lc-badge { background:var(--b1-soft); color:var(--b1); border:2px solid var(--b1); } .b1 .lc-title { color:#7ab0e8; }
+  @media(max-width:600px){.hero h1{font-size:2rem;}.sections-grid,.dash-wrap{padding:10px 14px 40px;}.filter-bar{padding:12px 14px;}header{padding:12px 16px;flex-wrap:wrap;gap:10px;}.level-select-grid{padding:20px 14px 40px;}}
 </style>
 </head>
 <body>
@@ -111,18 +126,42 @@
 <div id="page-home" class="page active">
   <div class="hero">
     <h1>Exam Practice Hub</h1>
-    <p>Select your level and choose an exam part or practice activity. All results are saved for your teacher to review.</p>
+    <p>Select your exam level to access full practice tests and activities. All results are saved for your teacher to review.</p>
   </div>
-  <div class="filter-bar">
-    <button class="nav-btn active" onclick="filterLevel('all',this)">All</button>
-    <button class="nav-btn" onclick="filterLevel('c2',this)">C2 · CPE</button>
-    <button class="nav-btn" onclick="filterLevel('c1',this)">C1 · CAE</button>
-    <button class="nav-btn" onclick="filterLevel('b2',this)">B2 · FCE</button>
-    <button class="nav-btn" onclick="filterLevel('b1',this)">B1 · PET</button>
-    <button class="nav-btn" onclick="filterLevel('practice',this)">Practice</button>
+  <div class="level-select-grid">
+    <a class="level-card-link c2" href="cpe.html">
+      <div class="lc-badge">C2</div>
+      <div class="lc-body">
+        <div class="lc-title">Cambridge Proficiency</div>
+        <div class="lc-sub">CPE · Proficiency</div>
+      </div>
+      <div class="lc-arrow">→</div>
+    </a>
+    <a class="level-card-link c1" href="cae.html">
+      <div class="lc-badge">C1</div>
+      <div class="lc-body">
+        <div class="lc-title">Cambridge Advanced</div>
+        <div class="lc-sub">CAE · Advanced</div>
+      </div>
+      <div class="lc-arrow">→</div>
+    </a>
+    <a class="level-card-link b2" href="fce.html">
+      <div class="lc-badge">B2</div>
+      <div class="lc-body">
+        <div class="lc-title">Cambridge First</div>
+        <div class="lc-sub">FCE · First Certificate</div>
+      </div>
+      <div class="lc-arrow">→</div>
+    </a>
+    <a class="level-card-link b1" href="b1.html">
+      <div class="lc-badge">B1</div>
+      <div class="lc-body">
+        <div class="lc-title">Cambridge Preliminary</div>
+        <div class="lc-sub">PET · Preliminary</div>
+      </div>
+      <div class="lc-arrow">→</div>
+    </a>
   </div>
-  <div id="loading" class="loading"><div class="spinner"></div><div>Loading exams...</div></div>
-  <div class="sections-grid" id="grid" style="display:none;"></div>
 </div>
 
 <!-- LOGIN -->
@@ -206,10 +245,6 @@ function parseFilename(name) {
   // FCE/B2 level practice: fce_practice_test_N.html
   const fpt = name.match(/^fce_practice_test_(\d+)\.html$/);
   if (fpt) return {type:'levelpractice', level:'fce', subtype:'test', label:'Practice Test '+fpt[1], sort:parseInt(fpt[1]), file:name};
-
-  // CAE Part 2 open cloze tests: cae_part2_testN.html
-  const caePt2 = name.match(/^cae_part2_test(\d+)\.html$/);
-  if (caePt2) return {type:'levelpractice', level:'cae', subtype:'pt2', label:'Open Cloze Test '+caePt2[1], sort:50+parseInt(caePt2[1]), file:name};
 
   // Level-specific practice: cae_practice_kwt_1.html, cpe_practice_test_2.html etc.
   const lp = name.match(/^(cpe|cae|fce|pet)_practice_kwt_(\d+)\.html$/);
@@ -307,12 +342,10 @@ function renderGrid(files) {
       const kwt=lp.filter(f=>f.subtype==='kwt');
       const tests=lp.filter(f=>f.subtype==='test');
       const keyword=lp.filter(f=>f.subtype==='keyword');
-      const pt2=lp.filter(f=>f.subtype==='pt2');
       const other=lp.filter(f=>f.subtype==='other');
       bodyHtml+=`<div class="exam-group" style="margin-top:18px;padding-top:16px;border-top:1px solid rgba(255,255,255,0.07);">`;
       bodyHtml+=`<div class="section-label" style="color:var(--practice);">Practice Activities</div>`;
-      if(pt2.length){ bodyHtml+=`<div class="section-label" style="margin-top:8px;">Part 2 · Open Cloze</div><div class="link-list">`; pt2.forEach(f=>{ bodyHtml+=`<a class="part-link" href="${f.file}" style="border-color:rgba(108,52,131,0.2);"><span class="part-num" style="background:var(--practice-soft);color:var(--practice);">PT2</span>${f.label}</a>`; }); bodyHtml+=`</div>`; }
-      if(tests.length){ bodyHtml+=`<div class="link-list" style="margin-top:5px;">`; tests.forEach(f=>{ bodyHtml+=`<a class="part-link" href="${f.file}" style="border-color:rgba(108,52,131,0.2);"><span class="part-num" style="background:var(--practice-soft);color:var(--practice);">TEST</span>${f.label}</a>`; }); bodyHtml+=`</div>`; }
+      if(tests.length){ bodyHtml+=`<div class="link-list">`; tests.forEach(f=>{ bodyHtml+=`<a class="part-link" href="${f.file}" style="border-color:rgba(108,52,131,0.2);"><span class="part-num" style="background:var(--practice-soft);color:var(--practice);">TEST</span>${f.label}</a>`; }); bodyHtml+=`</div>`; }
       if(kwt.length){ bodyHtml+=`<div class="link-list" style="margin-top:5px;">`; kwt.forEach(f=>{ bodyHtml+=`<a class="part-link" href="${f.file}" style="border-color:rgba(108,52,131,0.2);"><span class="part-num" style="background:var(--practice-soft);color:var(--practice);">KWT</span>${f.label}</a>`; }); bodyHtml+=`</div>`; }
       if(keyword.length){ bodyHtml+=`<div class="link-list" style="margin-top:5px;">`; keyword.forEach(f=>{ bodyHtml+=`<a class="part-link" href="${f.file}" style="border-color:rgba(108,52,131,0.2);"><span class="part-num" style="background:var(--practice-soft);color:var(--practice);">KW</span>${f.label}</a>`; }); bodyHtml+=`</div>`; }
       if(other.length){ bodyHtml+=`<div class="link-list" style="margin-top:5px;">`; other.forEach(f=>{ bodyHtml+=`<a class="part-link" href="${f.file}" style="border-color:rgba(108,52,131,0.2);"><span class="part-num" style="background:var(--practice-soft);color:var(--practice);">ACT</span>${f.label}</a>`; }); bodyHtml+=`</div>`; }
