@@ -181,11 +181,17 @@ function renderPage(files){
 
   // Practice activities
   const practiceGroups={};
+  const legacyTests=[1,2,3,4,5,10,13];
   files.forEach(f=>{
     const m=f.match(/^cpe_part(\d+)_test(\d+)\.html$/);
     if(m){const part=parseInt(m[1]),num=parseInt(m[2]);const key='part'+part;if(!practiceGroups[key])practiceGroups[key]={label:`Part ${part} · ${PART_TYPES[part]||'Part '+part}`,items:[],sort:part};practiceGroups[key].items.push({label:'Test '+num,file:f,sort:num});}
     const cpt=f.match(/^cpe_practice_test_(\d+)\.html$/);
     if(cpt){if(!practiceGroups['tests'])practiceGroups['tests']={label:'Mixed Practice Tests',items:[],sort:99};practiceGroups['tests'].items.push({label:'Practice Test '+cpt[1],file:f,sort:parseInt(cpt[1])});}
+    const leg=f.match(/^practice_test_(\d+)\.html$/);
+    if(leg&&legacyTests.includes(parseInt(leg[1]))){
+      if(!practiceGroups['legacy'])practiceGroups['legacy']={label:'Practice Tests',items:[],sort:98};
+      practiceGroups['legacy'].items.push({label:'Practice Test '+leg[1],file:f,sort:parseInt(leg[1])});
+    }
   });
 
   const practiceContainer=document.getElementById('practice-container');
