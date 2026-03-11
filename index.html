@@ -207,6 +207,10 @@ function parseFilename(name) {
   const fpt = name.match(/^fce_practice_test_(\d+)\.html$/);
   if (fpt) return {type:'levelpractice', level:'fce', subtype:'test', label:'Practice Test '+fpt[1], sort:parseInt(fpt[1]), file:name};
 
+  // CAE Part 2 open cloze tests: cae_part2_testN.html
+  const caePt2 = name.match(/^cae_part2_test(\d+)\.html$/);
+  if (caePt2) return {type:'levelpractice', level:'cae', subtype:'pt2', label:'Open Cloze Test '+caePt2[1], sort:50+parseInt(caePt2[1]), file:name};
+
   // Level-specific practice: cae_practice_kwt_1.html, cpe_practice_test_2.html etc.
   const lp = name.match(/^(cpe|cae|fce|pet)_practice_kwt_(\d+)\.html$/);
   if (lp) return {type:'levelpractice', level:lp[1], subtype:'kwt', label:'Key Word Transformations '+lp[2], sort:100+parseInt(lp[2]), file:name};
@@ -303,10 +307,12 @@ function renderGrid(files) {
       const kwt=lp.filter(f=>f.subtype==='kwt');
       const tests=lp.filter(f=>f.subtype==='test');
       const keyword=lp.filter(f=>f.subtype==='keyword');
+      const pt2=lp.filter(f=>f.subtype==='pt2');
       const other=lp.filter(f=>f.subtype==='other');
       bodyHtml+=`<div class="exam-group" style="margin-top:18px;padding-top:16px;border-top:1px solid rgba(255,255,255,0.07);">`;
       bodyHtml+=`<div class="section-label" style="color:var(--practice);">Practice Activities</div>`;
-      if(tests.length){ bodyHtml+=`<div class="link-list">`; tests.forEach(f=>{ bodyHtml+=`<a class="part-link" href="${f.file}" style="border-color:rgba(108,52,131,0.2);"><span class="part-num" style="background:var(--practice-soft);color:var(--practice);">TEST</span>${f.label}</a>`; }); bodyHtml+=`</div>`; }
+      if(pt2.length){ bodyHtml+=`<div class="section-label" style="margin-top:8px;">Part 2 · Open Cloze</div><div class="link-list">`; pt2.forEach(f=>{ bodyHtml+=`<a class="part-link" href="${f.file}" style="border-color:rgba(108,52,131,0.2);"><span class="part-num" style="background:var(--practice-soft);color:var(--practice);">PT2</span>${f.label}</a>`; }); bodyHtml+=`</div>`; }
+      if(tests.length){ bodyHtml+=`<div class="link-list" style="margin-top:5px;">`; tests.forEach(f=>{ bodyHtml+=`<a class="part-link" href="${f.file}" style="border-color:rgba(108,52,131,0.2);"><span class="part-num" style="background:var(--practice-soft);color:var(--practice);">TEST</span>${f.label}</a>`; }); bodyHtml+=`</div>`; }
       if(kwt.length){ bodyHtml+=`<div class="link-list" style="margin-top:5px;">`; kwt.forEach(f=>{ bodyHtml+=`<a class="part-link" href="${f.file}" style="border-color:rgba(108,52,131,0.2);"><span class="part-num" style="background:var(--practice-soft);color:var(--practice);">KWT</span>${f.label}</a>`; }); bodyHtml+=`</div>`; }
       if(keyword.length){ bodyHtml+=`<div class="link-list" style="margin-top:5px;">`; keyword.forEach(f=>{ bodyHtml+=`<a class="part-link" href="${f.file}" style="border-color:rgba(108,52,131,0.2);"><span class="part-num" style="background:var(--practice-soft);color:var(--practice);">KW</span>${f.label}</a>`; }); bodyHtml+=`</div>`; }
       if(other.length){ bodyHtml+=`<div class="link-list" style="margin-top:5px;">`; other.forEach(f=>{ bodyHtml+=`<a class="part-link" href="${f.file}" style="border-color:rgba(108,52,131,0.2);"><span class="part-num" style="background:var(--practice-soft);color:var(--practice);">ACT</span>${f.label}</a>`; }); bodyHtml+=`</div>`; }
