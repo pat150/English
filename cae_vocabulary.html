@@ -3,81 +3,62 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>CAE Vocabulary · Synonym Challenge</title>
+<title>CAE · Synonym Challenge</title>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Source+Serif+4:ital,wght@0,300;0,400;0,600;1,300&display=swap" rel="stylesheet"/>
 <style>
-  :root{--bg:#0a1628;--card:rgba(255,255,255,0.05);--ink:#e8e0d5;--accent:#c9a84c;--accent2:#e8a020;--muted:#888;--border:rgba(201,168,76,0.3);--correct:#6fcf97;--wrong:#eb5757;--c2:#c0392b;--radius:10px;}
-  *{box-sizing:border-box;margin:0;padding:0}
-  body{min-height:100vh;background:linear-gradient(160deg,#0a1628 0%,#112240 50%,#0d1f3c 100%);font-family:'Source Serif 4',serif;color:var(--ink);}
-  header{background:rgba(0,0,0,0.5);border-bottom:2px solid var(--accent);padding:14px 32px;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;z-index:100;backdrop-filter:blur(12px);}
-  .logo{font-family:'Playfair Display',serif;color:var(--accent);letter-spacing:2px;font-size:0.85rem;text-transform:uppercase;}
-  .back-link{color:var(--muted);font-size:0.78rem;letter-spacing:1px;text-decoration:none;padding:6px 14px;border:1px solid rgba(255,255,255,0.1);border-radius:3px;transition:all 0.2s;}
-  .back-link:hover{color:var(--accent);border-color:var(--border);}
-
-  .container{max-width:720px;margin:0 auto;padding:48px 24px 80px;}
-
-  /* Start screen */
-  .start-screen{text-align:center;padding:40px 0;}
-  .start-icon{font-size:3rem;margin-bottom:16px;}
-  .start-screen h1{font-family:'Playfair Display',serif;font-size:2.4rem;color:var(--accent);margin-bottom:10px;}
-  .start-screen .sub{color:var(--muted);font-size:0.95rem;margin-bottom:32px;line-height:1.6;}
-  .features{background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:var(--radius);padding:24px 28px;margin-bottom:32px;text-align:left;display:flex;flex-direction:column;gap:12px;}
-  .feature{display:flex;align-items:center;gap:12px;font-size:0.92rem;color:#ccc;}
-  .feature-icon{font-size:1.1rem;min-width:24px;}
-  .btn-primary{background:var(--accent);color:#0a1628;border:none;padding:14px 40px;font-size:1.05rem;font-weight:700;border-radius:6px;cursor:pointer;font-family:'Source Serif 4',serif;letter-spacing:1px;width:100%;transition:background 0.2s;}
-  .btn-primary:hover{background:#d9bb6a;}
-  .btn-primary:disabled{opacity:0.5;cursor:not-allowed;}
-
-  /* Loading */
-  .loading-screen{text-align:center;padding:80px 20px;}
-  .spinner{width:44px;height:44px;border:3px solid rgba(201,168,76,0.2);border-top-color:var(--accent);border-radius:50%;animation:spin 0.8s linear infinite;margin:0 auto 20px;}
-  @keyframes spin{to{transform:rotate(360deg)}}
-  .loading-text{color:var(--muted);font-size:0.95rem;}
-
+  :root{{--bg:#0a1628;--ink:#e8e0d5;--accent:#c9a84c;--muted:#888;--border:rgba(201,168,76,0.3);--correct:#6fcf97;--wrong:#eb5757;}}
+  *{{box-sizing:border-box;margin:0;padding:0}}
+  body{{min-height:100vh;background:linear-gradient(160deg,#0a1628 0%,#112240 50%,#0d1f3c 100%);font-family:'Source Serif 4',serif;color:var(--ink);}}
+  header{{background:rgba(0,0,0,0.5);border-bottom:2px solid var(--accent);padding:14px 32px;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;z-index:100;backdrop-filter:blur(12px);}}
+  .logo{{font-family:'Playfair Display',serif;color:var(--accent);letter-spacing:2px;font-size:0.85rem;text-transform:uppercase;}}
+  .back-link{{color:var(--muted);font-size:0.78rem;letter-spacing:1px;text-decoration:none;padding:6px 14px;border:1px solid rgba(255,255,255,0.1);border-radius:3px;transition:all 0.2s;}}
+  .back-link:hover{{color:var(--accent);border-color:var(--border);}}
+  .container{{max-width:720px;margin:0 auto;padding:48px 24px 80px;}}
+  /* Start */
+  .start-screen{{text-align:center;padding:40px 0;}}
+  .start-icon{{font-size:3rem;margin-bottom:16px;}}
+  .start-screen h1{{font-family:'Playfair Display',serif;font-size:2.4rem;color:var(--accent);margin-bottom:10px;}}
+  .start-screen .sub{{color:var(--muted);font-size:0.95rem;margin-bottom:32px;line-height:1.6;}}
+  .features{{background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:10px;padding:24px 28px;margin-bottom:32px;text-align:left;display:flex;flex-direction:column;gap:12px;}}
+  .feature{{display:flex;align-items:center;gap:12px;font-size:0.92rem;color:#ccc;}}
+  .feature-icon{{font-size:1.1rem;min-width:24px;}}
+  .btn-primary{{background:var(--accent);color:#0a1628;border:none;padding:14px 40px;font-size:1.05rem;font-weight:700;border-radius:6px;cursor:pointer;font-family:'Source Serif 4',serif;letter-spacing:1px;width:100%;transition:background 0.2s;}}
+  .btn-primary:hover{{background:#d9bb6a;}}
   /* Quiz */
-  .quiz-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;}
-  .q-counter{font-size:0.78rem;color:var(--muted);letter-spacing:1px;}
-  .q-score{font-family:'Playfair Display',serif;color:var(--accent);font-size:1rem;}
-  .progress-bg{height:4px;background:rgba(255,255,255,0.08);border-radius:2px;margin-bottom:28px;}
-  .progress-fill{height:100%;background:var(--accent);border-radius:2px;transition:width 0.4s;}
-
-  .q-card{background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:var(--radius);padding:28px 32px;margin-bottom:20px;}
-  .q-label{font-size:0.68rem;font-weight:700;letter-spacing:0.2em;text-transform:uppercase;color:var(--accent);margin-bottom:12px;}
-  .q-word{font-family:'Playfair Display',serif;font-size:1.9rem;color:#fff;margin-bottom:8px;}
-  .q-instruction{font-size:0.85rem;color:var(--muted);font-style:italic;}
-  .double-badge{display:inline-block;background:rgba(201,168,76,0.15);border:1px solid var(--border);color:var(--accent);font-size:0.72rem;font-weight:700;letter-spacing:0.1em;padding:2px 10px;border-radius:10px;margin-top:8px;}
-
-  .options{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:16px;}
-  @media(max-width:500px){.options{grid-template-columns:1fr;}}
-  .opt-btn{background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.1);color:#ccc;padding:12px 16px;cursor:pointer;border-radius:8px;text-align:left;font-family:'Source Serif 4',serif;font-size:0.92rem;transition:all 0.15s;display:flex;align-items:center;gap:10px;}
-  .opt-btn:hover:not(:disabled){border-color:var(--accent);color:var(--ink);background:rgba(201,168,76,0.08);}
-  .opt-btn:disabled{cursor:default;}
-  .opt-letter{font-weight:700;font-size:0.78rem;min-width:18px;color:var(--muted);}
-  .opt-btn.correct{border-color:var(--correct);background:rgba(111,207,151,0.12);color:var(--correct);}
-  .opt-btn.correct .opt-letter{color:var(--correct);}
-  .opt-btn.wrong{border-color:var(--wrong);background:rgba(235,87,87,0.1);color:var(--wrong);}
-  .opt-btn.wrong .opt-letter{color:var(--wrong);}
-  .opt-btn.dimmed{opacity:0.35;}
-
-  .explanation{background:rgba(0,0,0,0.25);border-left:3px solid var(--accent);border-radius:4px;padding:14px 18px;font-size:0.88rem;line-height:1.7;color:#ccc;margin-bottom:16px;display:none;}
-  .explanation .hl{color:var(--accent);font-weight:600;}
-
-  .next-btn{background:transparent;border:1px solid var(--border);color:var(--accent);padding:10px 28px;border-radius:6px;cursor:pointer;font-family:'Source Serif 4',serif;font-size:0.92rem;font-weight:600;letter-spacing:0.5px;transition:all 0.2s;display:none;}
-  .next-btn:hover{background:rgba(201,168,76,0.1);}
-
+  .quiz-header{{display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;}}
+  .q-counter{{font-size:0.78rem;color:var(--muted);letter-spacing:1px;}}
+  .q-score{{font-family:'Playfair Display',serif;color:var(--accent);font-size:1rem;}}
+  .progress-bg{{height:4px;background:rgba(255,255,255,0.08);border-radius:2px;margin-bottom:28px;}}
+  .progress-fill{{height:100%;background:var(--accent);border-radius:2px;transition:width 0.4s;}}
+  .q-card{{background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:10px;padding:28px 32px;margin-bottom:20px;}}
+  .q-label{{font-size:0.68rem;font-weight:700;letter-spacing:0.2em;text-transform:uppercase;color:var(--accent);margin-bottom:12px;}}
+  .q-word{{font-family:'Playfair Display',serif;font-size:1.9rem;color:#fff;margin-bottom:8px;}}
+  .q-instruction{{font-size:0.85rem;color:var(--muted);font-style:italic;}}
+  .double-badge{{display:inline-block;background:rgba(201,168,76,0.15);border:1px solid var(--border);color:var(--accent);font-size:0.72rem;font-weight:700;letter-spacing:0.1em;padding:2px 10px;border-radius:10px;margin-top:8px;}}
+  .options{{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:16px;}}
+  @media(max-width:500px){{.options{{grid-template-columns:1fr;}}}}
+  .opt-btn{{background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.1);color:#ccc;padding:12px 16px;cursor:pointer;border-radius:8px;text-align:left;font-family:'Source Serif 4',serif;font-size:0.92rem;transition:all 0.15s;display:flex;align-items:center;gap:10px;}}
+  .opt-btn:hover:not(:disabled){{border-color:var(--accent);color:var(--ink);background:rgba(201,168,76,0.08);}}
+  .opt-btn:disabled{{cursor:default;}}
+  .opt-letter{{font-weight:700;font-size:0.78rem;min-width:18px;color:var(--muted);}}
+  .opt-btn.correct{{border-color:var(--correct);background:rgba(111,207,151,0.12);color:var(--correct);}}
+  .opt-btn.correct .opt-letter{{color:var(--correct);}}
+  .opt-btn.wrong{{border-color:var(--wrong);background:rgba(235,87,87,0.1);color:var(--wrong);}}
+  .opt-btn.wrong .opt-letter{{color:var(--wrong);}}
+  .opt-btn.dimmed{{opacity:0.35;}}
+  .explanation{{background:rgba(0,0,0,0.25);border-left:3px solid var(--accent);border-radius:4px;padding:14px 18px;font-size:0.88rem;line-height:1.7;color:#ccc;margin-bottom:16px;display:none;}}
+  .explanation .hl{{color:var(--accent);font-weight:600;}}
+  .next-btn{{background:transparent;border:1px solid var(--border);color:var(--accent);padding:10px 28px;border-radius:6px;cursor:pointer;font-family:'Source Serif 4',serif;font-size:0.92rem;font-weight:600;letter-spacing:0.5px;transition:all 0.2s;display:none;}}
+  .next-btn:hover{{background:rgba(201,168,76,0.1);}}
   /* Results */
-  .results-screen{text-align:center;padding:20px 0;}
-  .results-screen h2{font-family:'Playfair Display',serif;font-size:1.8rem;color:var(--accent);margin-bottom:8px;}
-  .big-score{font-family:'Playfair Display',serif;font-size:4rem;color:var(--accent);font-weight:700;margin:20px 0 6px;}
-  .score-sub{color:var(--muted);font-size:0.92rem;margin-bottom:28px;}
-  .result-msg{font-size:1rem;color:#ccc;margin-bottom:28px;line-height:1.6;}
-  .result-btns{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;}
-  .btn-outline{background:transparent;border:1px solid var(--border);color:var(--accent);padding:11px 28px;border-radius:6px;cursor:pointer;font-family:'Source Serif 4',serif;font-size:0.92rem;font-weight:600;transition:all 0.2s;}
-  .btn-outline:hover{background:rgba(201,168,76,0.1);}
-
-  /* Error */
-  .error-box{background:rgba(235,87,87,0.08);border:1px solid rgba(235,87,87,0.3);border-radius:var(--radius);padding:20px 24px;text-align:center;color:#eb5757;margin-top:20px;}
-  .error-box p{margin-bottom:12px;font-size:0.9rem;line-height:1.6;}
+  .results-screen{{text-align:center;padding:20px 0;}}
+  .results-screen h2{{font-family:'Playfair Display',serif;font-size:1.8rem;color:var(--accent);margin-bottom:8px;}}
+  .big-score{{font-family:'Playfair Display',serif;font-size:4rem;color:var(--accent);font-weight:700;margin:20px 0 6px;}}
+  .score-sub{{color:var(--muted);font-size:0.92rem;margin-bottom:28px;}}
+  .result-msg{{font-size:1rem;color:#ccc;margin-bottom:28px;line-height:1.6;}}
+  .result-btns{{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;}}
+  .btn-outline{{background:transparent;border:1px solid var(--border);color:var(--accent);padding:11px 28px;border-radius:6px;cursor:pointer;font-family:'Source Serif 4',serif;font-size:0.92rem;font-weight:600;transition:all 0.2s;text-decoration:none;display:inline-block;}}
+  .btn-outline:hover{{background:rgba(201,168,76,0.1);}}
 </style>
 </head>
 <body>
@@ -85,74 +66,53 @@
   <div class="logo">C1 · CAE Vocabulary</div>
   <a href="cae.html" class="back-link">← Back to CAE</a>
 </header>
-
 <div class="container">
 
-  <!-- START -->
   <div id="screen-start" class="start-screen">
     <div class="start-icon">📖</div>
     <h1>CAE Vocabulary</h1>
-    <p class="sub">Synonym Challenge<br>100 advanced questions · C1 level · Single &amp; double synonyms</p>
+    <p class="sub">Synonym Challenge · C1 level · 121 questions in the bank, 20 per quiz</p>
     <div class="features">
-      <div class="feature"><span class="feature-icon">📋</span>100 sophisticated CAE-level words</div>
+      <div class="feature"><span class="feature-icon">📋</span>121 C1 level words — new selection every quiz</div>
       <div class="feature"><span class="feature-icon">🎯</span>4 options per question</div>
       <div class="feature"><span class="feature-icon">⚡</span>Some questions have 2 correct answers</div>
-      <div class="feature"><span class="feature-icon">💡</span>Explanations revealed after each answer</div>
+      <div class="feature"><span class="feature-icon">💡</span>Explanation revealed after each answer</div>
     </div>
-    <button class="btn-primary" id="generate-btn" onclick="generateQuiz()">Generate Quiz</button>
+    <button class="btn-primary" onclick="startQuiz()">Start Quiz</button>
   </div>
 
-  <!-- LOADING -->
-  <div id="screen-loading" class="loading-screen" style="display:none">
-    <div class="spinner"></div>
-    <div class="loading-text">Generating your vocabulary quiz…</div>
-  </div>
-
-  <!-- ERROR -->
-  <div id="screen-error" style="display:none">
-    <div class="error-box">
-      <p id="error-msg">Something went wrong generating the quiz.</p>
-      <button class="btn-primary" style="width:auto;padding:10px 28px;" onclick="showStart()">Try Again</button>
-    </div>
-  </div>
-
-  <!-- QUIZ -->
   <div id="screen-quiz" style="display:none">
     <div class="quiz-header">
       <span class="q-counter" id="q-counter">Question 1 of 20</span>
       <span class="q-score" id="q-score">0 / 0</span>
     </div>
     <div class="progress-bg"><div class="progress-fill" id="progress-fill" style="width:0%"></div></div>
-
     <div class="q-card">
       <div class="q-label">Find the synonym</div>
       <div class="q-word" id="q-word">—</div>
       <div class="q-instruction" id="q-instruction">Choose the word closest in meaning.</div>
       <div id="double-badge" class="double-badge" style="display:none">2 correct answers — select both</div>
     </div>
-
     <div class="options" id="options"></div>
     <div class="explanation" id="explanation"></div>
     <button class="next-btn" id="next-btn" onclick="nextQuestion()">Next →</button>
   </div>
 
-  <!-- RESULTS -->
   <div id="screen-results" style="display:none" class="results-screen">
     <h2>Quiz Complete!</h2>
     <div class="big-score" id="final-score">—</div>
-    <div class="score-sub" id="score-sub">out of 20 questions</div>
+    <div class="score-sub" id="score-sub"></div>
     <div class="result-msg" id="result-msg"></div>
     <div class="result-btns">
-      <button class="btn-outline" onclick="generateQuiz()">New Quiz</button>
-      <a href="cae.html" class="btn-outline" style="text-decoration:none;">← Back to CAE</a>
+      <button class="btn-outline" onclick="startQuiz()">New Quiz</button>
+      <a href="cae.html" class="btn-outline">← Back to CAE</a>
     </div>
   </div>
 
 </div>
-
 <script>
-const LEVEL = 'CAE (C1)';
-const TOTAL_Q = 20;
+const ALL_QUESTIONS = [{"word": "ADEQUATE", "options": ["insufficient", "sufficient", "enough", "excessive"], "correct": [1, 2], "explanation": "Adequate means satisfactory or acceptable in quality or quantity. 'Sufficient' and 'enough' both apply."}, {"word": "ADMIRE", "options": ["dislike", "respect", "appreciate", "despise"], "correct": [1, 2], "explanation": "Admire means regard with respect, approval, or satisfaction. 'Respect' and 'appreciate' both fit."}, {"word": "AFFLUENT", "options": ["poor", "wealthy", "prosperous", "destitute"], "correct": [1, 2], "explanation": "Affluent means having a great deal of money; wealthy. 'Wealthy' and 'prosperous' are direct synonyms."}, {"word": "AGGRESSIVE", "options": ["passive", "forceful", "assertive", "timid"], "correct": [1, 2], "explanation": "Aggressive means ready or likely to attack or confront. 'Forceful' and 'assertive' both apply."}, {"word": "AMBIGUOUS", "options": ["clear", "vague", "unclear", "precise"], "correct": [1, 2], "explanation": "Ambiguous means open to more than one interpretation. 'Vague' and 'unclear' are both synonyms."}, {"word": "AMPLE", "options": ["scarce", "abundant", "plentiful", "insufficient"], "correct": [1, 2], "explanation": "Ample means more than enough; plentiful. 'Abundant' and 'plentiful' are direct synonyms."}, {"word": "ANTAGONISE", "options": ["appease", "provoke", "irritate", "soothe"], "correct": [1, 2], "explanation": "Antagonise means cause someone to become hostile. 'Provoke' and 'irritate' both fit."}, {"word": "ANXIOUS", "options": ["calm", "worried", "apprehensive", "relaxed"], "correct": [1, 2], "explanation": "Anxious means feeling or showing worry. 'Worried' and 'apprehensive' are synonyms."}, {"word": "APPRAISE", "options": ["ignore", "evaluate", "assess", "disregard"], "correct": [1, 2], "explanation": "Appraise means assess the value or quality of. 'Evaluate' and 'assess' are direct synonyms."}, {"word": "ARBITRARY", "options": ["systematic", "random", "haphazard", "planned"], "correct": [1, 2], "explanation": "Arbitrary means based on random choice rather than reason. 'Random' and 'haphazard' both fit."}, {"word": "ASSIDUOUS", "options": ["lazy", "diligent", "hardworking", "careless"], "correct": [1, 2], "explanation": "Assiduous means showing great care and perseverance. 'Diligent' and 'hardworking' both apply."}, {"word": "ASSUME", "options": ["know", "presume", "suppose", "verify"], "correct": [1, 2], "explanation": "Assume means suppose to be the case without proof. 'Presume' and 'suppose' are synonyms."}, {"word": "ATTENTIVE", "options": ["distracted", "observant", "alert", "inattentive"], "correct": [1, 2], "explanation": "Attentive means paying close attention to something. 'Observant' and 'alert' both fit."}, {"word": "AUTHENTIC", "options": ["fake", "genuine", "real", "artificial"], "correct": [1, 2], "explanation": "Authentic means of undisputed origin; genuine. 'Genuine' and 'real' are direct synonyms."}, {"word": "BENEFICIAL", "options": ["harmful", "helpful", "advantageous", "detrimental"], "correct": [1, 2], "explanation": "Beneficial means resulting in good; advantageous. 'Helpful' and 'advantageous' both apply."}, {"word": "BEWILDERED", "options": ["clear-headed", "confused", "baffled", "certain"], "correct": [1, 2], "explanation": "Bewildered means completely puzzled or confused. 'Confused' and 'baffled' are direct synonyms."}, {"word": "BIASED", "options": ["impartial", "prejudiced", "partial", "fair"], "correct": [1, 2], "explanation": "Biased means unfairly prejudiced in favour of or against someone. 'Prejudiced' and 'partial' both fit."}, {"word": "BLUNT", "options": ["tactful", "direct", "outspoken", "diplomatic"], "correct": [1, 2], "explanation": "Blunt means uncompromisingly forthright. 'Direct' and 'outspoken' are both synonyms."}, {"word": "BOISTEROUS", "options": ["quiet", "noisy", "rowdy", "calm"], "correct": [1, 2], "explanation": "Boisterous means noisy, energetic, and cheerful. 'Noisy' and 'rowdy' both capture this."}, {"word": "BOUNTIFUL", "options": ["scarce", "generous", "plentiful", "meagre"], "correct": [1, 2], "explanation": "Bountiful means large in quantity; generous. 'Generous' and 'plentiful' both apply."}, {"word": "BRASH", "options": ["timid", "bold", "impudent", "cautious"], "correct": [1, 2], "explanation": "Brash means self-assertive in a rude, noisy way. 'Bold' and 'impudent' both fit."}, {"word": "CAPABLE", "options": ["incompetent", "able", "competent", "inept"], "correct": [1, 2], "explanation": "Capable means having the ability to do something. 'Able' and 'competent' are direct synonyms."}, {"word": "CAUTIOUS", "options": ["reckless", "careful", "wary", "impulsive"], "correct": [1, 2], "explanation": "Cautious means careful to avoid potential problems. 'Careful' and 'wary' both apply."}, {"word": "CLARITY", "options": ["confusion", "clearness", "lucidity", "vagueness"], "correct": [1, 2], "explanation": "Clarity means the quality of being clear and easy to understand. 'Clearness' and 'lucidity' both fit."}, {"word": "CLUMSY", "options": ["graceful", "awkward", "inept", "nimble"], "correct": [1, 2], "explanation": "Clumsy means awkward in movement or handling. 'Awkward' and 'inept' are both synonyms."}, {"word": "COLOSSAL", "options": ["tiny", "enormous", "gigantic", "small"], "correct": [1, 2], "explanation": "Colossal means extremely large. 'Enormous' and 'gigantic' are direct synonyms."}, {"word": "COMPASSIONATE", "options": ["cruel", "sympathetic", "caring", "heartless"], "correct": [1, 2], "explanation": "Compassionate means feeling sympathy and concern for others. 'Sympathetic' and 'caring' both fit."}, {"word": "COMPLIANT", "options": ["defiant", "obedient", "submissive", "rebellious"], "correct": [1, 2], "explanation": "Compliant means meeting rules or standards. 'Obedient' and 'submissive' both apply."}, {"word": "CONCISE", "options": ["wordy", "brief", "succinct", "verbose"], "correct": [1, 2], "explanation": "Concise means giving a lot of information clearly and in few words. 'Brief' and 'succinct' both fit."}, {"word": "CONFIDENT", "options": ["insecure", "self-assured", "assured", "timid"], "correct": [1, 2], "explanation": "Confident means feeling certain about one's abilities. 'Self-assured' and 'assured' are synonyms."}, {"word": "CONSISTENT", "options": ["erratic", "steady", "reliable", "inconsistent"], "correct": [1, 2], "explanation": "Consistent means acting or done in the same way over time. 'Steady' and 'reliable' both apply."}, {"word": "CONTEMPTUOUS", "options": ["respectful", "scornful", "disdainful", "admiring"], "correct": [1, 2], "explanation": "Contemptuous means showing contempt; scornful. 'Scornful' and 'disdainful' are synonyms."}, {"word": "CONVENIENT", "options": ["inconvenient", "practical", "handy", "awkward"], "correct": [1, 2], "explanation": "Convenient means fitting in well with a person's needs. 'Practical' and 'handy' both fit."}, {"word": "CORRUPT", "options": ["honest", "dishonest", "unscrupulous", "ethical"], "correct": [1, 2], "explanation": "Corrupt means having or showing a willingness to act dishonestly. 'Dishonest' and 'unscrupulous' apply."}, {"word": "COURAGEOUS", "options": ["cowardly", "brave", "fearless", "timid"], "correct": [1, 2], "explanation": "Courageous means not deterred by danger or pain. 'Brave' and 'fearless' are direct synonyms."}, {"word": "CREDIBLE", "options": ["implausible", "believable", "plausible", "unbelievable"], "correct": [1, 2], "explanation": "Credible means able to be believed; convincing. 'Believable' and 'plausible' both apply."}, {"word": "CRUDE", "options": ["refined", "rough", "unpolished", "sophisticated"], "correct": [1, 2], "explanation": "Crude means in a natural or raw state; lacking sophistication. 'Rough' and 'unpolished' both fit."}, {"word": "CURIOUS", "options": ["indifferent", "inquisitive", "nosy", "uninterested"], "correct": [1, 2], "explanation": "Curious means eager to know or learn. 'Inquisitive' and 'nosy' are both synonyms."}, {"word": "CUSTOMARY", "options": ["unusual", "habitual", "conventional", "rare"], "correct": [1, 2], "explanation": "Customary means according to the customs or usual practices. 'Habitual' and 'conventional' both apply."}, {"word": "DAUNTED", "options": ["encouraged", "intimidated", "discouraged", "motivated"], "correct": [1, 2], "explanation": "Daunted means having lost confidence or enthusiasm. 'Intimidated' and 'discouraged' both fit."}, {"word": "DECISIVE", "options": ["indecisive", "resolute", "determined", "hesitant"], "correct": [1, 2], "explanation": "Decisive means settling an issue; having the ability to make decisions quickly. 'Resolute' and 'determined' fit."}, {"word": "DEFIANT", "options": ["compliant", "rebellious", "disobedient", "obedient"], "correct": [1, 2], "explanation": "Defiant means showing defiance; boldly resistant. 'Rebellious' and 'disobedient' both apply."}, {"word": "DELIBERATE", "options": ["accidental", "intentional", "calculated", "unintentional"], "correct": [1, 2], "explanation": "Deliberate means done consciously and intentionally. 'Intentional' and 'calculated' both fit."}, {"word": "DENSE", "options": ["sparse", "thick", "compact", "thin"], "correct": [1, 2], "explanation": "Dense means closely compacted in substance. 'Thick' and 'compact' are both synonyms."}, {"word": "DEPENDABLE", "options": ["unreliable", "trustworthy", "reliable", "erratic"], "correct": [1, 2], "explanation": "Dependable means trustworthy and reliable. 'Trustworthy' and 'reliable' are direct synonyms."}, {"word": "DESOLATE", "options": ["populated", "empty", "deserted", "crowded"], "correct": [1, 2], "explanation": "Desolate means deserted of people and in a state of bleak emptiness. 'Empty' and 'deserted' both fit."}, {"word": "DETRIMENTAL", "options": ["beneficial", "harmful", "damaging", "helpful"], "correct": [1, 2], "explanation": "Detrimental means tending to cause harm. 'Harmful' and 'damaging' are direct synonyms."}, {"word": "DILIGENT", "options": ["careless", "hardworking", "assiduous", "lazy"], "correct": [1, 2], "explanation": "Diligent means having or showing care in one's work. 'Hardworking' and 'assiduous' both fit."}, {"word": "DIMINISH", "options": ["increase", "reduce", "decrease", "enlarge"], "correct": [1, 2], "explanation": "Diminish means make or become less. 'Reduce' and 'decrease' are direct synonyms."}, {"word": "DISCREET", "options": ["indiscreet", "tactful", "careful", "reckless"], "correct": [1, 2], "explanation": "Discreet means careful and circumspect in one's speech or actions. 'Tactful' and 'careful' both apply."}, {"word": "DISGUISE", "options": ["reveal", "conceal", "mask", "expose"], "correct": [1, 2], "explanation": "Disguise means give a different appearance to in order to conceal. 'Conceal' and 'mask' both fit."}, {"word": "DISTANT", "options": ["near", "remote", "far", "close"], "correct": [1, 2], "explanation": "Distant means far away in space or time. 'Remote' and 'far' are both synonyms."}, {"word": "DIVERSE", "options": ["uniform", "varied", "assorted", "homogeneous"], "correct": [1, 2], "explanation": "Diverse means showing a great deal of variety. 'Varied' and 'assorted' are direct synonyms."}, {"word": "DOMINANT", "options": ["subordinate", "prevailing", "prominent", "minor"], "correct": [1, 2], "explanation": "Dominant means most important, powerful, or influential. 'Prevailing' and 'prominent' both fit."}, {"word": "DUBIOUS", "options": ["certain", "doubtful", "suspicious", "definite"], "correct": [1, 2], "explanation": "Dubious means hesitating or doubting. 'Doubtful' and 'suspicious' are both synonyms."}, {"word": "EAGER", "options": ["apathetic", "keen", "enthusiastic", "indifferent"], "correct": [1, 2], "explanation": "Eager means wanting to do or have something very much. 'Keen' and 'enthusiastic' both apply."}, {"word": "EARNEST", "options": ["insincere", "sincere", "serious", "frivolous"], "correct": [1, 2], "explanation": "Earnest means resulting from or showing sincere and intense conviction. 'Sincere' and 'serious' fit."}, {"word": "ECCENTRIC", "options": ["conventional", "odd", "peculiar", "normal"], "correct": [1, 2], "explanation": "Eccentric means unconventional and slightly strange. 'Odd' and 'peculiar' are direct synonyms."}, {"word": "ELABORATE", "options": ["simple", "detailed", "complex", "plain"], "correct": [1, 2], "explanation": "Elaborate means involving many carefully arranged parts; detailed. 'Detailed' and 'complex' both fit."}, {"word": "ELATED", "options": ["depressed", "thrilled", "overjoyed", "miserable"], "correct": [1, 2], "explanation": "Elated means ecstatically happy. 'Thrilled' and 'overjoyed' are direct synonyms."}, {"word": "ELOQUENT", "options": ["inarticulate", "articulate", "fluent", "mumbling"], "correct": [1, 2], "explanation": "Eloquent means fluent and persuasive in speech or writing. 'Articulate' and 'fluent' both apply."}, {"word": "EMPHATIC", "options": ["hesitant", "forceful", "insistent", "tentative"], "correct": [1, 2], "explanation": "Emphatic means expressing something forcibly and clearly. 'Forceful' and 'insistent' both fit."}, {"word": "ENDURE", "options": ["quit", "tolerate", "withstand", "surrender"], "correct": [1, 2], "explanation": "Endure means suffer patiently; remain in existence. 'Tolerate' and 'withstand' are synonyms."}, {"word": "ERRATIC", "options": ["consistent", "unpredictable", "irregular", "steady"], "correct": [1, 2], "explanation": "Erratic means not regular or consistent. 'Unpredictable' and 'irregular' both apply."}, {"word": "ESSENTIAL", "options": ["optional", "necessary", "vital", "unnecessary"], "correct": [1, 2], "explanation": "Essential means absolutely necessary. 'Necessary' and 'vital' are direct synonyms."}, {"word": "EXCESSIVE", "options": ["moderate", "extreme", "exorbitant", "reasonable"], "correct": [1, 2], "explanation": "Excessive means more than is necessary or desirable. 'Extreme' and 'exorbitant' both fit."}, {"word": "EXHAUSTED", "options": ["energetic", "drained", "weary", "refreshed"], "correct": [1, 2], "explanation": "Exhausted means drained of one's physical or mental resources. 'Drained' and 'weary' both apply."}, {"word": "EXPLICIT", "options": ["vague", "clear", "unambiguous", "implicit"], "correct": [1, 2], "explanation": "Explicit means stated clearly and in detail. 'Clear' and 'unambiguous' are synonyms."}, {"word": "FACILITATE", "options": ["hinder", "enable", "assist", "obstruct"], "correct": [1, 2], "explanation": "Facilitate means make an action or process easy. 'Enable' and 'assist' both fit."}, {"word": "FAMILIAR", "options": ["unknown", "well-known", "recognisable", "unfamiliar"], "correct": [1, 2], "explanation": "Familiar means well known from long or close association. 'Well-known' and 'recognisable' both apply."}, {"word": "FLAW", "options": ["strength", "defect", "weakness", "perfection"], "correct": [1, 2], "explanation": "A flaw is a mark, blemish, or other imperfection. 'Defect' and 'weakness' are direct synonyms."}, {"word": "FLEXIBLE", "options": ["rigid", "adaptable", "versatile", "inflexible"], "correct": [1, 2], "explanation": "Flexible means able to change readily according to different circumstances. 'Adaptable' and 'versatile' fit."}, {"word": "FLOURISH", "options": ["wither", "thrive", "prosper", "decline"], "correct": [1, 2], "explanation": "Flourish means grow or develop in a healthy or vigorous way. 'Thrive' and 'prosper' are synonyms."}, {"word": "FOCUS", "options": ["distract", "concentrate", "centre", "divert"], "correct": [1, 2], "explanation": "Focus means pay particular attention to. 'Concentrate' and 'centre' both fit."}, {"word": "FORGIVING", "options": ["vengeful", "lenient", "merciful", "unforgiving"], "correct": [1, 2], "explanation": "Forgiving means ready and willing to forgive. 'Lenient' and 'merciful' both apply."}, {"word": "FRAGILE", "options": ["sturdy", "delicate", "frail", "robust"], "correct": [1, 2], "explanation": "Fragile means easily broken or damaged. 'Delicate' and 'frail' are direct synonyms."}, {"word": "FRANK", "options": ["evasive", "open", "candid", "diplomatic"], "correct": [1, 2], "explanation": "Frank means open, honest, and direct. 'Open' and 'candid' are both synonyms."}, {"word": "FREQUENT", "options": ["rare", "common", "regular", "occasional"], "correct": [1, 2], "explanation": "Frequent means occurring or done many times at short intervals. 'Common' and 'regular' both fit."}, {"word": "FRUSTRATING", "options": ["satisfying", "annoying", "irritating", "pleasing"], "correct": [1, 2], "explanation": "Frustrating means causing annoyance and upset. 'Annoying' and 'irritating' both apply."}, {"word": "GLOOMY", "options": ["cheerful", "dark", "dismal", "bright"], "correct": [1, 2], "explanation": "Gloomy means dark or poorly lit; causing despondency. 'Dark' and 'dismal' both fit."}, {"word": "GRADUAL", "options": ["sudden", "slow", "steady", "abrupt"], "correct": [1, 2], "explanation": "Gradual means taking place or progressing slowly. 'Slow' and 'steady' both apply."}, {"word": "HARSH", "options": ["gentle", "severe", "cruel", "mild"], "correct": [1, 2], "explanation": "Harsh means unpleasantly rough or jarring to the senses; cruel. 'Severe' and 'cruel' both fit."}, {"word": "HUMBLE", "options": ["arrogant", "modest", "unpretentious", "vain"], "correct": [1, 2], "explanation": "Humble means having or showing a low estimate of one's own importance. 'Modest' and 'unpretentious' fit."}, {"word": "IDENTICAL", "options": ["different", "same", "identical", "unique"], "correct": [1], "explanation": "Identical means similar in every detail; exactly alike. 'Same' is the direct synonym."}, {"word": "IMMENSE", "options": ["tiny", "vast", "enormous", "small"], "correct": [1, 2], "explanation": "Immense means extremely large or great. 'Vast' and 'enormous' are direct synonyms."}, {"word": "IMPARTIAL", "options": ["biased", "fair", "unbiased", "prejudiced"], "correct": [1, 2], "explanation": "Impartial means treating all rivals or disputants equally. 'Fair' and 'unbiased' are synonyms."}, {"word": "IMPEDE", "options": ["assist", "hinder", "obstruct", "facilitate"], "correct": [1, 2], "explanation": "Impede means delay or prevent by obstructing them. 'Hinder' and 'obstruct' both apply."}, {"word": "IMPROVE", "options": ["worsen", "enhance", "develop", "deteriorate"], "correct": [1, 2], "explanation": "Improve means make or become better. 'Enhance' and 'develop' both fit."}, {"word": "INQUISITIVE", "options": ["incurious", "curious", "nosy", "indifferent"], "correct": [1, 2], "explanation": "Inquisitive means curious or inquiring. 'Curious' and 'nosy' are both synonyms."}, {"word": "INSIGNIFICANT", "options": ["important", "trivial", "minor", "major"], "correct": [1, 2], "explanation": "Insignificant means too small or unimportant to be worth consideration. 'Trivial' and 'minor' fit."}, {"word": "INTRICATE", "options": ["simple", "complex", "elaborate", "plain"], "correct": [1, 2], "explanation": "Intricate means very complicated or detailed. 'Complex' and 'elaborate' are both synonyms."}, {"word": "JEOPARDISE", "options": ["protect", "endanger", "risk", "safeguard"], "correct": [1, 2], "explanation": "Jeopardise means put someone or something into a situation in which there is danger. 'Endanger' and 'risk' fit."}, {"word": "MEAGRE", "options": ["plentiful", "scarce", "inadequate", "abundant"], "correct": [1, 2], "explanation": "Meagre means lacking in quantity or quality. 'Scarce' and 'inadequate' both apply."}, {"word": "METICULOUS", "options": ["careless", "thorough", "precise", "hasty"], "correct": [1, 2], "explanation": "Meticulous means showing great attention to detail. 'Thorough' and 'precise' are both synonyms."}, {"word": "MUNDANE", "options": ["exciting", "ordinary", "commonplace", "extraordinary"], "correct": [1, 2], "explanation": "Mundane means lacking interest or excitement. 'Ordinary' and 'commonplace' both fit."}, {"word": "NAIVE", "options": ["sophisticated", "gullible", "innocent", "worldly"], "correct": [1, 2], "explanation": "Naive means showing a lack of experience or wisdom. 'Gullible' and 'innocent' are both synonyms."}, {"word": "NEGLIGENT", "options": ["careful", "careless", "irresponsible", "diligent"], "correct": [1, 2], "explanation": "Negligent means failing to take proper care over something. 'Careless' and 'irresponsible' both fit."}, {"word": "OBVIOUS", "options": ["hidden", "clear", "apparent", "unclear"], "correct": [1, 2], "explanation": "Obvious means easily perceived or understood. 'Clear' and 'apparent' are direct synonyms."}, {"word": "OPTIMISTIC", "options": ["pessimistic", "hopeful", "positive", "negative"], "correct": [1, 2], "explanation": "Optimistic means hopeful and confident about the future. 'Hopeful' and 'positive' both apply."}, {"word": "OUTSTANDING", "options": ["ordinary", "exceptional", "remarkable", "mediocre"], "correct": [1, 2], "explanation": "Outstanding means exceptionally good. 'Exceptional' and 'remarkable' are direct synonyms."}, {"word": "PECULIAR", "options": ["normal", "strange", "odd", "typical"], "correct": [1, 2], "explanation": "Peculiar means different from what is normal. 'Strange' and 'odd' are both synonyms."}, {"word": "PERSISTENT", "options": ["giving up", "determined", "tenacious", "quitting"], "correct": [1, 2], "explanation": "Persistent means continuing firmly despite difficulty. 'Determined' and 'tenacious' both fit."}, {"word": "PESSIMISTIC", "options": ["optimistic", "negative", "gloomy", "hopeful"], "correct": [1, 2], "explanation": "Pessimistic means tending to see the worst. 'Negative' and 'gloomy' are both synonyms."}, {"word": "PRECISE", "options": ["vague", "accurate", "exact", "imprecise"], "correct": [1, 2], "explanation": "Precise means marked by exactness. 'Accurate' and 'exact' are direct synonyms."}, {"word": "PROMINENT", "options": ["obscure", "notable", "conspicuous", "unknown"], "correct": [1, 2], "explanation": "Prominent means important; famous. 'Notable' and 'conspicuous' both apply."}, {"word": "RELUCTANT", "options": ["willing", "unwilling", "hesitant", "eager"], "correct": [1, 2], "explanation": "Reluctant means unwilling and hesitant. 'Unwilling' and 'hesitant' are both synonyms."}, {"word": "REMARKABLE", "options": ["ordinary", "extraordinary", "impressive", "unremarkable"], "correct": [1, 2], "explanation": "Remarkable means worthy of attention; extraordinary. 'Extraordinary' and 'impressive' both fit."}, {"word": "RIGOROUS", "options": ["lax", "strict", "thorough", "flexible"], "correct": [1, 2], "explanation": "Rigorous means extremely thorough and careful. 'Strict' and 'thorough' are both synonyms."}, {"word": "RECKLESS", "options": ["careful", "careless", "impulsive", "cautious"], "correct": [1, 2], "explanation": "Reckless means heedless of danger or the consequences of one's actions. 'Careless' and 'impulsive' fit."}, {"word": "TEDIOUS", "options": ["exciting", "boring", "monotonous", "thrilling"], "correct": [1, 2], "explanation": "Tedious means too long, slow, or dull. 'Boring' and 'monotonous' are direct synonyms."}, {"word": "TRANSPARENT", "options": ["opaque", "clear", "obvious", "hidden"], "correct": [1, 2], "explanation": "Transparent means easy to perceive or detect; frank and open. 'Clear' and 'obvious' both fit."}, {"word": "TRIVIAL", "options": ["important", "minor", "insignificant", "crucial"], "correct": [1, 2], "explanation": "Trivial means of little value or importance. 'Minor' and 'insignificant' are direct synonyms."}, {"word": "UNDERMINE", "options": ["support", "weaken", "damage", "strengthen"], "correct": [1, 2], "explanation": "Undermine means lessen the effectiveness of; damage. 'Weaken' and 'damage' both apply."}, {"word": "UNIQUE", "options": ["common", "one-of-a-kind", "distinctive", "ordinary"], "correct": [1, 2], "explanation": "Unique means being the only one of its kind. 'One-of-a-kind' and 'distinctive' both fit."}, {"word": "VAGUE", "options": ["precise", "unclear", "ambiguous", "specific"], "correct": [1, 2], "explanation": "Vague means of uncertain, indefinite, or unclear character. 'Unclear' and 'ambiguous' apply."}, {"word": "VAST", "options": ["tiny", "immense", "enormous", "small"], "correct": [1, 2], "explanation": "Vast means of very great extent or quantity. 'Immense' and 'enormous' are direct synonyms."}, {"word": "VIGILANT", "options": ["careless", "watchful", "alert", "inattentive"], "correct": [1, 2], "explanation": "Vigilant means keeping careful watch for possible danger. 'Watchful' and 'alert' both fit."}, {"word": "VIVID", "options": ["dull", "bright", "colourful", "faded"], "correct": [1, 2], "explanation": "Vivid means producing powerful feelings; bright and colourful. 'Bright' and 'colourful' both apply."}, {"word": "VULNERABLE", "options": ["safe", "exposed", "susceptible", "protected"], "correct": [1, 2], "explanation": "Vulnerable means exposed to the possibility of being harmed. 'Exposed' and 'susceptible' both fit."}, {"word": "WITHDRAW", "options": ["advance", "retreat", "pull back", "proceed"], "correct": [1, 2], "explanation": "Withdraw means remove or take away. 'Retreat' and 'pull back' both apply."}, {"word": "ZEALOUS", "options": ["indifferent", "enthusiastic", "fervent", "apathetic"], "correct": [1, 2], "explanation": "Zealous means having great energy or enthusiasm for a cause. 'Enthusiastic' and 'fervent' both apply."}];
+const QUIZ_SIZE = 20;
 
 let questions = [];
 let current = 0;
@@ -160,216 +120,116 @@ let score = 0;
 let selected = [];
 let answered = false;
 
-function showScreen(id) {
-  ['screen-start','screen-loading','screen-error','screen-quiz','screen-results'].forEach(s => {
-    document.getElementById(s).style.display = s === id ? 'block' : 'none';
-  });
-}
+function shuffle(arr) {{
+  const a = [...arr];
+  for (let i = a.length - 1; i > 0; i--) {{
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }}
+  return a;
+}}
 
-function showStart() { showScreen('screen-start'); }
+function startQuiz() {{
+  questions = shuffle(ALL_QUESTIONS).slice(0, QUIZ_SIZE);
+  current = 0; score = 0; selected = []; answered = false;
+  document.getElementById('screen-start').style.display = 'none';
+  document.getElementById('screen-results').style.display = 'none';
+  document.getElementById('screen-quiz').style.display = 'block';
+  renderQuestion();
+}}
 
-async function generateQuiz() {
-  showScreen('screen-loading');
-  document.getElementById('generate-btn').disabled = true;
-
-  const prompt = `Generate a ${LEVEL} vocabulary synonym quiz with exactly ${TOTAL_Q} questions for advanced English learners.
-
-Rules:
-- Each question gives ONE target word and FOUR options (A, B, C, D)
-- Most questions have exactly 1 correct synonym. About 4-5 questions should have exactly 2 correct synonyms (mark them clearly).
-- Words must be real, natural English used in academic, literary, or professional contexts. No archaic or obscure words.
-- Words should be at C1 level: sophisticated but genuinely used (e.g. ambiguous, eloquent, tenacious, reticent, pragmatic, lucid).
-- Distractors should be plausible but clearly wrong on reflection.
-- Include a brief explanation (1-2 sentences) for each answer.
-
-Respond ONLY with a valid JSON array. No markdown, no backticks, no preamble. Format:
-[
-  {
-    "word": "ELOQUENT",
-    "instruction": "Choose the word closest in meaning.",
-    "options": ["articulate","verbose","reticent","fluent"],
-    "correct": [0, 3],
-    "explanation": "Eloquent means fluent and persuasive in speech or writing. Both 'articulate' and 'fluent' capture this meaning."
-  }
-]
-
-The "correct" array uses 0-based indices into "options". Single-answer questions have one index, double-answer questions have two.`;
-
-  try {
-    const res = await fetch('https://api.anthropic.com/v1/messages', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        model: 'claude-sonnet-4-20250514',
-        max_tokens: 4000,
-        messages: [{ role: 'user', content: prompt }]
-      })
-    });
-
-    if (!res.ok) {
-      const err = await res.json();
-      throw new Error(err.error?.message || 'API error ' + res.status);
-    }
-
-    const data = await res.json();
-    const raw = data.content.filter(b => b.type === 'text').map(b => b.text).join('');
-
-    // Strip any accidental markdown fences
-    const clean = raw.replace(/```json|```/g, '').trim();
-    questions = JSON.parse(clean);
-
-    if (!Array.isArray(questions) || questions.length < 5) throw new Error('Invalid quiz data received.');
-
-    current = 0; score = 0; selected = []; answered = false;
-    showScreen('screen-quiz');
-    renderQuestion();
-
-  } catch(e) {
-    document.getElementById('error-msg').textContent = 'Could not generate quiz: ' + e.message;
-    showScreen('screen-error');
-  } finally {
-    document.getElementById('generate-btn').disabled = false;
-  }
-}
-
-function renderQuestion() {
+function renderQuestion() {{
   const q = questions[current];
-  answered = false;
-  selected = [];
-
-  // Header
+  answered = false; selected = [];
   document.getElementById('q-counter').textContent = 'Question ' + (current + 1) + ' of ' + questions.length;
   document.getElementById('q-score').textContent = score + ' / ' + current;
   document.getElementById('progress-fill').style.width = (current / questions.length * 100) + '%';
-
-  // Card
   document.getElementById('q-word').textContent = q.word;
   document.getElementById('q-instruction').textContent = q.instruction || 'Choose the word closest in meaning.';
   const isDouble = q.correct.length > 1;
-  const badge = document.getElementById('double-badge');
-  badge.style.display = isDouble ? 'inline-block' : 'none';
-
-  // Options
+  document.getElementById('double-badge').style.display = isDouble ? 'inline-block' : 'none';
   const opts = document.getElementById('options');
   opts.innerHTML = '';
   const letters = ['A','B','C','D'];
-  q.options.forEach((opt, i) => {
+  q.options.forEach((opt, i) => {{
     const btn = document.createElement('button');
     btn.className = 'opt-btn';
     btn.innerHTML = '<span class="opt-letter">' + letters[i] + '</span> ' + opt;
     btn.onclick = () => handleSelect(i, btn, isDouble);
     opts.appendChild(btn);
-  });
-
-  // Explanation + next
-  const exp = document.getElementById('explanation');
-  exp.style.display = 'none';
-  exp.innerHTML = '';
+  }});
+  document.getElementById('explanation').style.display = 'none';
   document.getElementById('next-btn').style.display = 'none';
-}
+}}
 
-function handleSelect(idx, btn, isDouble) {
+function handleSelect(idx, btn, isDouble) {{
   if (answered) return;
-
-  if (!isDouble) {
-    // Single answer — lock immediately
-    answered = true;
-    selected = [idx];
-    revealAnswers();
-  } else {
-    // Double answer — collect two selections
-    if (selected.includes(idx)) {
+  if (!isDouble) {{
+    answered = true; selected = [idx]; revealAnswers();
+  }} else {{
+    if (selected.includes(idx)) {{
       selected = selected.filter(i => i !== idx);
-      btn.classList.remove('selected');
-      btn.style.borderColor = '';
-      btn.style.color = '';
-    } else {
+      btn.style.borderColor = ''; btn.style.color = '';
+    }} else {{
       selected.push(idx);
       btn.style.borderColor = 'rgba(201,168,76,0.6)';
       btn.style.color = '#c9a84c';
-    }
-    if (selected.length === 2) {
-      answered = true;
-      revealAnswers();
-    }
-  }
-}
+    }}
+    if (selected.length === 2) {{ answered = true; revealAnswers(); }}
+  }}
+}}
 
-function revealAnswers() {
+function revealAnswers() {{
   const q = questions[current];
   const btns = document.querySelectorAll('.opt-btn');
   const isDouble = q.correct.length > 1;
-
-  // Score
   let thisScore = 0;
-  if (isDouble) {
-    const correctSet = new Set(q.correct);
-    const selectedSet = new Set(selected);
-    // Both must be correct
-    if (q.correct.every(i => selectedSet.has(i)) && selected.every(i => correctSet.has(i))) {
-      thisScore = 1;
-    }
-  } else {
+  if (isDouble) {{
+    const cs = new Set(q.correct), ss = new Set(selected);
+    if (q.correct.every(i => ss.has(i)) && selected.every(i => cs.has(i))) thisScore = 1;
+  }} else {{
     if (selected[0] === q.correct[0]) thisScore = 1;
-  }
+  }}
   score += thisScore;
-
-  // Style buttons
-  btns.forEach((btn, i) => {
+  btns.forEach((btn, i) => {{
     btn.disabled = true;
-    btn.style.borderColor = '';
-    btn.style.color = '';
-    const isCorrect = q.correct.includes(i);
-    const wasSelected = selected.includes(i);
-    if (isCorrect) {
-      btn.classList.add('correct');
-    } else if (wasSelected && !isCorrect) {
-      btn.classList.add('wrong');
-    } else {
-      btn.classList.add('dimmed');
-    }
-  });
-
-  // Explanation
+    btn.style.borderColor = ''; btn.style.color = '';
+    if (q.correct.includes(i)) btn.classList.add('correct');
+    else if (selected.includes(i)) btn.classList.add('wrong');
+    else btn.classList.add('dimmed');
+  }});
   const exp = document.getElementById('explanation');
   const correctWords = q.correct.map(i => '<span class="hl">' + q.options[i] + '</span>').join(' and ');
   exp.innerHTML = '✓ ' + correctWords + ' — ' + (q.explanation || '');
   exp.style.display = 'block';
-
-  // Update score display
   document.getElementById('q-score').textContent = score + ' / ' + (current + 1);
+  const nb = document.getElementById('next-btn');
+  nb.style.display = 'inline-block';
+  nb.textContent = current < questions.length - 1 ? 'Next →' : 'See Results →';
+}}
 
-  // Next button
-  const nextBtn = document.getElementById('next-btn');
-  nextBtn.style.display = 'inline-block';
-  nextBtn.textContent = current < questions.length - 1 ? 'Next →' : 'See Results →';
-}
-
-function nextQuestion() {
+function nextQuestion() {{
   current++;
-  if (current >= questions.length) {
-    showResults();
-  } else {
-    renderQuestion();
-  }
-}
+  if (current >= questions.length) showResults();
+  else renderQuestion();
+}}
 
-function showResults() {
-  showScreen('screen-results');
-  const total = questions.length;
-  const pct = Math.round(score / total * 100);
-  document.getElementById('final-score').textContent = score + ' / ' + total;
-  document.getElementById('score-sub').textContent = 'out of ' + total + ' questions · ' + pct + '%';
-  let msg = '';
-  if (pct >= 90) msg = 'Outstanding! Your C1 vocabulary is exceptional.';
-  else if (pct >= 75) msg = 'Excellent work. You have a strong command of advanced vocabulary.';
-  else if (pct >= 60) msg = 'Good effort. Keep building your C1 word bank.';
-  else if (pct >= 45) msg = 'A solid attempt. Regular vocabulary study will boost your score.';
-  else msg = 'Keep practising — C1 vocabulary takes time to develop. Try again!';
-  document.getElementById('result-msg').textContent = msg;
-  // Update progress bar to 100%
+function showResults() {{
+  document.getElementById('screen-quiz').style.display = 'none';
+  document.getElementById('screen-results').style.display = 'block';
+  const pct = Math.round(score / questions.length * 100);
+  document.getElementById('final-score').textContent = score + ' / ' + questions.length;
+  document.getElementById('score-sub').textContent = 'out of ' + questions.length + ' questions · ' + pct + '%';
+  const msgs = [
+    [90, 'Outstanding! Your C1 vocabulary is exceptional.'],
+    [75, 'Excellent work. You have a strong command of advanced vocabulary.'],
+    [60, 'Good effort. Keep building your C1 word bank.'],
+    [45, 'A solid attempt. Regular vocabulary study will boost your score.'],
+    [0,  'Keep practising — C1 vocabulary takes time to develop. Try again!']
+  ];
+  document.getElementById('result-msg').textContent = msgs.find(([t]) => pct >= t)[1];
   document.getElementById('progress-fill').style.width = '100%';
-}
+}}
 </script>
 </body>
 </html>
