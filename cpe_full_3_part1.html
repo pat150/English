@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CPE Full Test 3 – Part 1</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Source+Serif+4:ital,wght@0,300;0,400;0,600;1,300&display=swap" rel="stylesheet">
+<style>
+  :root { --bg:#f5f0e8; --card:#fffdf8; --ink:#1a1a2e; --accent:#8b2fc9; --accent2:#e8a020; --muted:#6b6b7b; --border:#d4ccbc; --correct:#2d7a4f; --wrong:#c0392b; --radius:10px; }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{background:var(--bg);font-family:'Source Serif 4',serif;color:var(--ink);min-height:100vh}
+  header{background:var(--ink);color:#fff;padding:24px 40px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100;box-shadow:0 2px 20px rgba(0,0,0,0.3)}
+  header h1{font-family:'Playfair Display',serif;font-size:1.3rem}
+  header span{font-size:0.8rem;color:var(--accent2);font-weight:600}
+  .container{max-width:800px;margin:0 auto;padding:40px 24px 80px}
+  .part-header{margin-bottom:32px}
+  .part-label{font-size:0.72rem;font-weight:700;letter-spacing:0.18em;text-transform:uppercase;color:var(--accent);margin-bottom:8px}
+  .part-title{font-family:'Playfair Display',serif;font-size:1.6rem;margin-bottom:12px}
+  .instructions{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:18px 22px;font-size:0.9rem;line-height:1.7;color:var(--muted);font-style:italic;margin-bottom:28px}
+  .instructions strong{color:var(--ink);font-style:normal}
+  .example-box{background:rgba(139,47,201,0.05);border:1px solid rgba(139,47,201,0.2);border-radius:var(--radius);padding:16px 20px;margin-bottom:28px}
+  .example-box .ex-label{font-size:0.68rem;font-weight:700;letter-spacing:0.15em;text-transform:uppercase;color:var(--accent);margin-bottom:8px}
+  .example-row{display:flex;gap:16px;flex-wrap:wrap;align-items:center;font-size:0.88rem}
+  .ex-num{font-weight:700;min-width:20px}
+  .ex-opt{padding:4px 12px;border-radius:6px;background:var(--card);border:1px solid var(--border)}
+  .ex-opt.selected{background:var(--accent);color:#fff;border-color:var(--accent)}
+  .passage{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:28px 32px;margin-bottom:32px;line-height:1.95;font-size:0.97rem}
+  .passage h3{font-family:'Playfair Display',serif;font-size:1.1rem;margin-bottom:18px}
+  .gap-num{font-size:0.78rem;font-weight:700;color:var(--muted);margin-right:2px}
+  .questions-section{display:flex;flex-direction:column;gap:16px;margin-bottom:36px}
+  .question-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:20px 22px}
+  .q-num{font-size:0.72rem;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:var(--accent);margin-bottom:10px}
+  .options-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+  .option-btn{display:flex;align-items:center;gap:10px;padding:10px 14px;border:1px solid var(--border);border-radius:8px;background:var(--bg);cursor:pointer;font-family:'Source Serif 4',serif;font-size:0.9rem;color:var(--ink);transition:all 0.15s;text-align:left}
+  .option-btn:hover{border-color:var(--accent);background:rgba(139,47,201,0.05)}
+  .option-btn.selected{border-color:var(--accent);background:rgba(139,47,201,0.08)}
+  .option-btn.correct{border-color:var(--correct);background:rgba(45,122,79,0.08);color:var(--correct)}
+  .option-btn.wrong{border-color:var(--wrong);background:rgba(192,57,43,0.08);color:var(--wrong)}
+  .option-btn.show-correct{border-color:var(--correct);background:rgba(45,122,79,0.08);color:var(--correct)}
+  .option-letter{font-weight:700;min-width:18px;font-size:0.85rem}
+  .option-btn:disabled{cursor:default}
+  .nav-row{display:flex;justify-content:flex-end;gap:12px;margin-top:8px}
+  .btn{background:var(--accent);color:#fff;border:none;padding:12px 28px;border-radius:8px;font-family:'Source Serif 4',serif;font-size:0.95rem;font-weight:600;cursor:pointer;transition:opacity 0.2s}
+  .btn:hover{opacity:0.88}
+  .ak-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.55);z-index:400;display:flex;align-items:flex-end;justify-content:center;animation:akFadeIn .2s ease}
+  @keyframes akFadeIn{from{opacity:0}to{opacity:1}}
+  .ak-panel{background:var(--card);border-radius:20px 20px 0 0;width:100%;max-width:860px;max-height:82vh;overflow-y:auto;padding:32px 36px 40px;box-shadow:0 -8px 40px rgba(0,0,0,0.18);animation:akSlideUp .35s cubic-bezier(0.34,1.56,0.64,1)}
+  @keyframes akSlideUp{from{transform:translateY(100%)}to{transform:translateY(0)}}
+  .ak-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:22px;padding-bottom:14px;border-bottom:2px solid var(--border)}
+  .ak-header h3{font-family:'Playfair Display',serif;font-size:1.25rem}
+  .ak-score-badge{background:var(--accent);color:#fff;font-family:'Playfair Display',serif;font-size:1.05rem;padding:5px 16px;border-radius:20px}
+  .ak-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:9px;margin-bottom:22px}
+  .ak-item{background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:9px 12px;display:flex;gap:8px;align-items:flex-start}
+  .ak-item.ak-correct{border-color:var(--correct);background:rgba(45,122,79,0.07)}
+  .ak-item.ak-wrong{border-color:var(--wrong);background:rgba(192,57,43,0.07)}
+  .ak-num{font-size:.7rem;font-weight:700;color:var(--muted);min-width:22px;padding-top:2px}
+  .ak-content{flex:1}
+  .ak-student{font-size:.86rem;color:var(--ink);margin-bottom:2px}
+  .ak-student.x{text-decoration:line-through;color:var(--wrong)}
+  .ak-corr{font-size:.86rem;color:var(--correct);font-weight:600}
+  .ak-icon{font-size:.85rem;margin-left:auto;flex-shrink:0}
+  .ak-foot{display:flex;justify-content:flex-end;padding-top:14px;border-top:1px solid var(--border)}
+  .result-screen{display:none;text-align:center;padding:60px 20px}
+  .result-screen h2{font-family:'Playfair Display',serif;font-size:2rem;margin-bottom:12px}
+  .result-score{font-size:3.5rem;font-family:'Playfair Display',serif;color:var(--accent);font-weight:700;margin:20px 0}
+  .result-screen p{color:var(--muted);font-size:0.95rem}
+  .progress-bar{height:4px;background:rgba(139,47,201,0.15);margin-bottom:32px;border-radius:2px}
+  .progress-fill{height:100%;background:var(--accent);border-radius:2px;transition:width 0.4s}
+  @media(max-width:580px){.options-grid{grid-template-columns:1fr}header{padding:16px 20px}}
+  .name-screen{max-width:480px;margin:80px auto;padding:40px 24px;text-align:center}
+  .name-screen h2{font-family:'Playfair Display',serif;font-size:1.8rem;margin-bottom:12px}
+  .name-screen p{color:var(--muted);font-size:0.95rem;margin-bottom:28px;line-height:1.6}
+  .name-input{width:100%;border:2px solid var(--border);border-radius:8px;padding:12px 16px;font-family:'Source Serif 4',serif;font-size:1rem;color:var(--ink);background:var(--card);outline:none;margin-bottom:16px;transition:border-color 0.2s}
+  .name-input:focus{border-color:var(--accent)}
+  .name-error{font-size:0.82rem;color:var(--wrong);margin-bottom:12px;display:none}
+  .login-bar{background:rgba(0,0,0,0.3);border-bottom:1px solid rgba(201,168,76,0.2);padding:8px 32px;display:none;justify-content:space-between;align-items:center;font-size:0.8rem;}
+  .login-bar-left{color:#888;} .login-bar-left strong{color:#c9a84c;}
+  .login-bar-right{display:flex;gap:10px;align-items:center;}
+  .bar-link{color:#888;text-decoration:none;font-size:0.75rem;letter-spacing:1px;} .bar-link:hover{color:#c9a84c;}
+  .bar-signout{background:transparent;border:1px solid rgba(235,87,87,0.4);color:#eb5757;padding:3px 10px;cursor:pointer;border-radius:3px;font-size:0.72rem;font-family:inherit;}
+</style>
+</head>
+<body>
+<header>
+  <h1>CPE Reading &amp; Use of English · Full Test 3</h1>
+  <span>PART 1 of 4</span>
+</header>
+<div class="login-bar" id="login-status">
+  <div class="login-bar-left">Signed in as <strong id="login-status-name"></strong> &nbsp;·&nbsp; <span id="login-status-class"></span></div>
+  <div class="login-bar-right">
+    <a href="login.html" class="bar-link">My Results</a>
+    <a href="index.html" class="bar-link">Activities</a>
+    <button class="bar-signout" onclick="signOutUser()">Sign Out</button>
+  </div>
+</div>
+
+<div class="name-screen" id="name-screen">
+  <div class="part-label" style="text-align:center;margin-bottom:8px">CPE Full Test 3</div>
+  <h2>Enter Your Name</h2>
+  <p>Please enter your full name before starting. Your results will be sent to your teacher automatically.</p>
+  <input class="name-input" id="student-name-input" type="text" placeholder="Your full name...">
+  <div class="name-error" id="name-error">Please enter your name before continuing.</div>
+  <button class="btn" style="width:100%" onclick="startTest()">Start Part 1 →</button>
+</div>
+
+<div class="container" style="display:none">
+  <div class="progress-bar"><div class="progress-fill" style="width:25%"></div></div>
+  <div class="part-header">
+    <div class="part-label">Paper 1 · Part 1</div>
+    <h2 class="part-title">Multiple Choice Cloze</h2>
+  </div>
+  <div class="instructions">
+    <strong>For questions 1–8</strong>, read the text below and decide which answer (<strong>A</strong>, <strong>B</strong>, <strong>C</strong> or <strong>D</strong>) best fits each gap. There is an example at the beginning (0).
+  </div>
+  <div class="example-box">
+    <div class="ex-label">Example — Question 0</div>
+    <div class="example-row">
+      <span class="ex-num">0</span>
+      <span class="ex-opt">A in particular</span>
+      <span class="ex-opt selected">B in any case</span>
+      <span class="ex-opt">C in turn</span>
+      <span class="ex-opt">D in the end</span>
+    </div>
+  </div>
+  <div class="passage">
+    <h3>Scientists and communication</h3>
+    <p>Scientists are often accused of being poor communicators, yet there are many reasons why scientists, (0) <strong>in any case</strong>, should be and often are good communicators. After all, science calls (<span class="gap-num">1</span>______) enthusiasm and scientists often possess this (<span class="gap-num">2</span>______) quality in large quantities. Enthusiasm can be infectious, but to command the interest of readers, scientists must develop their other (<span class="gap-num">3</span>______) talents: clarity, observation and knowledge.</p>
+    <p>Those scientists who are logical thinkers can usually write clearly, and the more clearly thoughts are (<span class="gap-num">4</span>______), the greater their potential value. In the same way, those who observe must take account of subtle differences for the observations they may (<span class="gap-num">5</span>______) as significant. Finally, those who write must have something of (<span class="gap-num">6</span>______) value to say.</p>
+    <p>A scientist whose work never sees the (<span class="gap-num">7</span>______) of day has achieved nothing of worth until somebody else hears about it. It is essential, therefore, for scientists to lay to (<span class="gap-num">8</span>______) the myth that they cannot communicate, once and for all.</p>
+  </div>
+  <div class="questions-section" id="questions"></div>
+  <div class="nav-row">
+    <button class="btn" onclick="checkAnswers()">Check Answers</button>
+  </div>
+</div>
+
+<div class="result-screen" id="result-screen">
+  <div class="part-label" style="text-align:center;margin-bottom:8px">Part 1 Complete</div>
+  <h2>Multiple Choice Cloze</h2>
+  <div class="result-score"><span id="score-display">0</span> / 8</div>
+  <p id="result-msg"></p>
+  <div style="margin-top:32px">
+    <a href="cpe_full_3_part2.html" class="btn" style="text-decoration:none;display:inline-block">Next: Part 2 →</a>
+  </div>
+</div>
+
+<script>
+const questions = [
+  { num:1, opts:['A on','B up','C for','D in'], answer:'C' },
+  { num:2, opts:['A arresting','B engaging','C catching','D fetching'], answer:'B' },
+  { num:3, opts:['A native','B innate','C standard','D typical'], answer:'B' },
+  { num:4, opts:['A put across','B come over','C given out','D set up'], answer:'A' },
+  { num:5, opts:['A document','B predict','C enter','D pronounce'], answer:'A' },
+  { num:6, opts:['A basic','B radical','C intrinsic','D central'], answer:'C' },
+  { num:7, opts:['A light','B start','C dawn','D birth'], answer:'A' },
+  { num:8, opts:['A sleep','B rest','C bed','D ground'], answer:'B' }
+];
+
+const selected = {};
+
+function buildQuestions() {
+  const container = document.getElementById('questions');
+  questions.forEach(q => {
+    const card = document.createElement('div');
+    card.className = 'question-card';
+    card.innerHTML = '<div class="q-num">Question ' + q.num + '</div><div class="options-grid" id="opts-' + q.num + '"></div>';
+    const grid = card.querySelector('#opts-' + q.num);
+    q.opts.forEach(opt => {
+      const letter = opt.charAt(0);
+      const text = opt.slice(2);
+      const btn = document.createElement('button');
+      btn.className = 'option-btn';
+      btn.dataset.q = q.num;
+      btn.dataset.letter = letter;
+      btn.innerHTML = '<span class="option-letter">' + letter + '</span><span>' + text + '</span>';
+      btn.onclick = function() {
+        if (btn.disabled) return;
+        document.querySelectorAll('.option-btn[data-q="' + q.num + '"]').forEach(b => b.classList.remove('selected'));
+        btn.classList.add('selected');
+        selected[q.num] = letter;
+      };
+      grid.appendChild(btn);
+    });
+    container.appendChild(card);
+  });
+}
+
+function checkAnswers() {
+  let correct = 0;
+  questions.forEach(q => {
+    const btns = document.querySelectorAll('.option-btn[data-q="' + q.num + '"]');
+    btns.forEach(btn => {
+      btn.disabled = true;
+      if (btn.dataset.letter === q.answer) btn.classList.add('show-correct');
+      if (btn.classList.contains('selected')) {
+        btn.classList.remove('selected');
+        if (btn.dataset.letter === q.answer) { correct++; btn.classList.add('correct'); }
+        else btn.classList.add('wrong');
+      }
+    });
+  });
+  showPanel(correct);
+}
+
+function showPanel(correct) {
+  const ov = document.createElement('div'); ov.className='ak-overlay'; ov.id='_akOv';
+  const pn = document.createElement('div'); pn.className='ak-panel';
+  pn.innerHTML = '<div class="ak-header"><h3>Answer Key · Part 1</h3><span class="ak-score-badge">' + correct + ' / 8</span></div>';
+  const grid = document.createElement('div'); grid.className='ak-grid';
+  questions.forEach(q => {
+    const s = selected[q.num] || null;
+    const ok = s === q.answer;
+    const correctOpt = q.opts.find(o => o.charAt(0) === q.answer);
+    const studentOpt = s ? q.opts.find(o => o.charAt(0) === s) : null;
+    const d = document.createElement('div');
+    d.className = 'ak-item ' + (ok ? 'ak-correct' : 'ak-wrong');
+    d.innerHTML = '<div class="ak-num">' + q.num + '</div><div class="ak-content">' +
+      '<div class="ak-student' + (ok ? '' : ' x') + '">' + (studentOpt || '(blank)') + '</div>' +
+      (!ok ? '<div class="ak-corr">' + correctOpt + '</div>' : '') +
+      '</div><div class="ak-icon">' + (ok ? '✅' : '❌') + '</div>';
+    grid.appendChild(d);
+  });
+  pn.appendChild(grid);
+  const foot = document.createElement('div'); foot.className='ak-foot';
+  foot.innerHTML = '<button class="btn" onclick="dismissPanel(' + correct + ')">Continue to Results →</button>';
+  pn.appendChild(foot);
+  ov.appendChild(pn);
+  document.body.appendChild(ov);
+}
+
+function dismissPanel(correct) {
+  submitResults(correct);
+  document.getElementById('_akOv').remove();
+  document.querySelector('.container').style.display = 'none';
+  const rs = document.getElementById('result-screen');
+  rs.style.display = 'block';
+  document.getElementById('score-display').textContent = correct;
+  const pct = correct / 8;
+  document.getElementById('result-msg').textContent = pct >= 0.75 ? 'Excellent work! Ready for Part 2.' : pct >= 0.5 ? 'Good effort. Review the answers above before moving on.' : 'Keep practising — review the answers carefully before continuing.';
+}
+
+buildQuestions();
+var studentName = '';
+
+function startTest() {
+  var val = document.getElementById('student-name-input').value.trim();
+  if (!val) { document.getElementById('name-error').style.display = 'block'; return; }
+  studentName = val;
+  document.getElementById('name-screen').style.display = 'none';
+  document.querySelector('.container').style.display = 'block';
+}
+
+function submitResults(correct) {
+  let detail = '';
+  questions.forEach(q => { detail += 'Q' + q.num + ':' + (selected[q.num] || '_') + ' '; });
+  try {
+    var _subs = JSON.parse(localStorage.getItem('cpe_full_3_p1_subs') || '[]');
+    _subs.push({ id: Date.now(), name: studentName, score: correct, total: 8, submittedAt: new Date().toLocaleString() });
+    localStorage.setItem('cpe_full_3_p1_subs', JSON.stringify(_subs));
+  } catch(e) {}
+  fetch('https://api.web3forms.com/submit', {
+    method: 'POST', headers: {'Content-Type':'application/json'},
+    body: JSON.stringify({ access_key:'0391ecad-04b5-4c9d-ab22-767e2606c7d7', subject:'CPE Result: ' + studentName + ' – CPE Full Test 3 – Part 1', student: studentName, test:'CPE Full Test 3 – Part 1: Multiple Choice Cloze', score: correct+'/8', answers: detail.trim() })
+  }).catch(function(){});
+}
+
+function signOutUser(){ if(confirm('Sign out?')){ localStorage.removeItem('cam_user'); document.getElementById('login-status').style.display='none'; } }
+</script>
+<script>
+(function(){
+  try {
+    const u = JSON.parse(localStorage.getItem('cam_user') || 'null');
+    const bar = document.getElementById('login-status');
+    if (!u) { if(bar) bar.style.display='none'; return; }
+    bar.style.display = 'flex';
+    document.getElementById('login-status-name').textContent = u.name;
+    document.getElementById('login-status-class').textContent = 'Class: ' + u.cls;
+  } catch(e) {}
+})();
+</script>
+</body>
+</html>

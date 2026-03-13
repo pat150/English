@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CPE Full Test 3 – Part 4</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Source+Serif+4:ital,wght@0,300;0,400;0,600;1,300&display=swap" rel="stylesheet">
+<style>
+  :root { --bg:#f5f0e8; --card:#fffdf8; --ink:#1a1a2e; --accent:#8b2fc9; --accent2:#e8a020; --muted:#6b6b7b; --border:#d4ccbc; --correct:#2d7a4f; --wrong:#c0392b; --radius:10px; }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{background:var(--bg);font-family:'Source Serif 4',serif;color:var(--ink);min-height:100vh}
+  header{background:var(--ink);color:#fff;padding:24px 40px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100;box-shadow:0 2px 20px rgba(0,0,0,0.3)}
+  header h1{font-family:'Playfair Display',serif;font-size:1.3rem}
+  header span{font-size:0.8rem;color:var(--accent2);font-weight:600}
+  .container{max-width:800px;margin:0 auto;padding:40px 24px 80px}
+  .part-label{font-size:0.72rem;font-weight:700;letter-spacing:0.18em;text-transform:uppercase;color:var(--accent);margin-bottom:8px}
+  .part-title{font-family:'Playfair Display',serif;font-size:1.6rem;margin-bottom:12px}
+  .instructions{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:18px 22px;font-size:0.9rem;line-height:1.7;color:var(--muted);font-style:italic;margin-bottom:28px}
+  .instructions strong{color:var(--ink);font-style:normal}
+  .kwt-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:22px 24px;margin-bottom:16px}
+  .kwt-num{font-size:0.72rem;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:var(--accent);margin-bottom:12px}
+  .kwt-original{font-size:0.95rem;line-height:1.7;margin-bottom:14px;color:var(--ink)}
+  .kwt-keyword{display:inline-block;background:rgba(139,47,201,0.1);border:1px solid rgba(139,47,201,0.25);color:var(--accent);font-weight:700;padding:3px 10px;border-radius:5px;font-size:0.88rem;margin-bottom:14px;letter-spacing:0.05em;text-transform:uppercase}
+  .kwt-rewrite{font-size:0.95rem;line-height:1.9;color:var(--ink)}
+  .gap-input{border:none;border-bottom:2px solid var(--border);background:transparent;font-family:'Source Serif 4',serif;font-size:0.95rem;color:var(--ink);width:240px;padding:2px 6px;outline:none;transition:border-color 0.2s;text-align:center}
+  .gap-input:focus{border-bottom-color:var(--accent)}
+  .gap-input.correct{border-bottom-color:var(--correct);color:var(--correct)}
+  .gap-input.wrong{border-bottom-color:var(--wrong);color:var(--wrong)}
+  .hint{font-size:0.78rem;color:var(--muted);margin-top:8px;font-style:italic}
+  .nav-row{display:flex;justify-content:flex-end;gap:12px;margin-top:8px}
+  .btn{background:var(--accent);color:#fff;border:none;padding:12px 28px;border-radius:8px;font-family:'Source Serif 4',serif;font-size:0.95rem;font-weight:600;cursor:pointer;transition:opacity 0.2s}
+  .btn:hover{opacity:0.88}
+  .ak-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.55);z-index:400;display:flex;align-items:flex-end;justify-content:center;animation:akFadeIn .2s ease}
+  @keyframes akFadeIn{from{opacity:0}to{opacity:1}}
+  .ak-panel{background:var(--card);border-radius:20px 20px 0 0;width:100%;max-width:860px;max-height:82vh;overflow-y:auto;padding:32px 36px 40px;box-shadow:0 -8px 40px rgba(0,0,0,0.18);animation:akSlideUp .35s cubic-bezier(0.34,1.56,0.64,1)}
+  @keyframes akSlideUp{from{transform:translateY(100%)}to{transform:translateY(0)}}
+  .ak-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:22px;padding-bottom:14px;border-bottom:2px solid var(--border)}
+  .ak-header h3{font-family:'Playfair Display',serif;font-size:1.25rem}
+  .ak-score-badge{background:var(--accent);color:#fff;font-family:'Playfair Display',serif;font-size:1.05rem;padding:5px 16px;border-radius:20px}
+  .ak-list{display:flex;flex-direction:column;gap:10px;margin-bottom:22px}
+  .ak-item{background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:12px 16px}
+  .ak-item.ak-correct{border-color:var(--correct);background:rgba(45,122,79,0.07)}
+  .ak-item.ak-wrong{border-color:var(--wrong);background:rgba(192,57,43,0.07)}
+  .ak-item-header{display:flex;justify-content:space-between;margin-bottom:6px}
+  .ak-num{font-size:.72rem;font-weight:700;color:var(--muted)}
+  .ak-icon{font-size:.85rem}
+  .ak-student{font-size:.88rem;color:var(--ink);margin-bottom:4px}
+  .ak-student.x{text-decoration:line-through;color:var(--wrong)}
+  .ak-corr{font-size:.88rem;color:var(--correct);font-weight:600}
+  .ak-foot{display:flex;justify-content:flex-end;padding-top:14px;border-top:1px solid var(--border)}
+  .result-screen{display:none;text-align:center;padding:60px 20px}
+  .result-screen h2{font-family:'Playfair Display',serif;font-size:2rem;margin-bottom:12px}
+  .result-score{font-size:3.5rem;font-family:'Playfair Display',serif;color:var(--accent);font-weight:700;margin:20px 0}
+  .result-screen p{color:var(--muted);font-size:0.95rem}
+  .progress-bar{height:4px;background:rgba(139,47,201,0.15);margin-bottom:32px;border-radius:2px}
+  .progress-fill{height:100%;background:var(--accent);border-radius:2px}
+  .scoring-note{font-size:0.82rem;color:var(--muted);font-style:italic;margin-bottom:20px;background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:12px 16px}
+  .login-bar{background:rgba(0,0,0,0.3);border-bottom:1px solid rgba(201,168,76,0.2);padding:8px 32px;display:none;justify-content:space-between;align-items:center;font-size:0.8rem;}
+  .login-bar-left{color:#888;} .login-bar-left strong{color:#c9a84c;}
+  .login-bar-right{display:flex;gap:10px;align-items:center;}
+  .bar-link{color:#888;text-decoration:none;font-size:0.75rem;} .bar-link:hover{color:#c9a84c;}
+  .bar-signout{background:transparent;border:1px solid rgba(235,87,87,0.4);color:#eb5757;padding:3px 10px;cursor:pointer;border-radius:3px;font-size:0.72rem;font-family:inherit;}
+  @media(max-width:580px){header{padding:16px 20px}.gap-input{width:180px}}
+</style>
+</head>
+<body>
+<header>
+  <h1>CPE Reading &amp; Use of English · Full Test 3</h1>
+  <span>PART 4 of 4</span>
+</header>
+<div class="login-bar" id="login-status">
+  <div class="login-bar-left">Signed in as <strong id="login-status-name"></strong> &nbsp;·&nbsp; <span id="login-status-class"></span></div>
+  <div class="login-bar-right">
+    <a href="login.html" class="bar-link">My Results</a>
+    <a href="index.html" class="bar-link">Activities</a>
+    <button class="bar-signout" onclick="signOutUser()">Sign Out</button>
+  </div>
+</div>
+
+<div class="container" id="main-container">
+  <div class="progress-bar"><div class="progress-fill" style="width:100%"></div></div>
+  <div class="part-label">Paper 1 · Part 4</div>
+  <h2 class="part-title">Key Word Transformations</h2>
+  <div class="instructions">
+    <strong>For questions 25–30</strong>, complete the second sentence so that it has a similar meaning to the first sentence, using the word given. <strong>Do not change the word given.</strong> You must use between <strong>three</strong> and <strong>eight</strong> words, including the word given.
+  </div>
+  <div class="scoring-note">Note: In the real exam each question is worth 2 marks. This exercise marks whole answers only — if your answer is close but not exact, check the accepted answers carefully.</div>
+
+  <!-- Q25 -->
+  <div class="kwt-card">
+    <div class="kwt-num">Question 25</div>
+    <div class="kwt-original">It can be difficult to make a decision when there is too much time to think.</div>
+    <div class="kwt-keyword">REACH</div>
+    <div class="kwt-rewrite">Having too much time to think may <input class="gap-input" id="g25" type="text" maxlength="60" autocomplete="off" spellcheck="false"> a decision.</div>
+    <div class="hint">3–8 words including REACH</div>
+  </div>
+
+  <!-- Q26 -->
+  <div class="kwt-card">
+    <div class="kwt-num">Question 26</div>
+    <div class="kwt-original">Visitors can only enter the exhibition if they have booked online.</div>
+    <div class="kwt-keyword">RESTRICTED</div>
+    <div class="kwt-rewrite">Entrance <input class="gap-input" id="g26" type="text" maxlength="60" autocomplete="off" spellcheck="false"> have booked online.</div>
+    <div class="hint">3–8 words including RESTRICTED</div>
+  </div>
+
+  <!-- Q27 -->
+  <div class="kwt-card">
+    <div class="kwt-num">Question 27</div>
+    <div class="kwt-original">If Stevie hadn't acted promptly to put out the fire, there might have been more damage to the kitchen.</div>
+    <div class="kwt-keyword">IN</div>
+    <div class="kwt-rewrite">But <input class="gap-input" id="g27" type="text" maxlength="60" autocomplete="off" spellcheck="false"> out the fire, there might have been more damage to the kitchen.</div>
+    <div class="hint">3–8 words including IN</div>
+  </div>
+
+  <!-- Q28 -->
+  <div class="kwt-card">
+    <div class="kwt-num">Question 28</div>
+    <div class="kwt-original">Taxes will most probably rise next year.</div>
+    <div class="kwt-keyword">EVERY</div>
+    <div class="kwt-rewrite">There <input class="gap-input" id="g28" type="text" maxlength="60" autocomplete="off" spellcheck="false"> next year.</div>
+    <div class="hint">3–8 words including EVERY</div>
+  </div>
+
+  <!-- Q29 -->
+  <div class="kwt-card">
+    <div class="kwt-num">Question 29</div>
+    <div class="kwt-original">Although she didn't agree with the management's decision, Chloe was forced to accept it.</div>
+    <div class="kwt-keyword">CHOICE</div>
+    <div class="kwt-rewrite">Much as she disagreed with it, Chloe <input class="gap-input" id="g29" type="text" maxlength="60" autocomplete="off" spellcheck="false"> the management's decision.</div>
+    <div class="hint">3–8 words including CHOICE</div>
+  </div>
+
+  <!-- Q30 -->
+  <div class="kwt-card">
+    <div class="kwt-num">Question 30</div>
+    <div class="kwt-original">We have taken to going to the cinema on Fridays.</div>
+    <div class="kwt-keyword">HABIT</div>
+    <div class="kwt-rewrite">We <input class="gap-input" id="g30" type="text" maxlength="60" autocomplete="off" spellcheck="false"> going to the cinema on Fridays.</div>
+    <div class="hint">3–8 words including HABIT</div>
+  </div>
+
+  <div class="nav-row">
+    <button class="btn" onclick="checkAnswers()">Check Answers</button>
+  </div>
+</div>
+
+<div class="result-screen" id="result-screen">
+  <div class="part-label" style="text-align:center;margin-bottom:8px">Test Complete!</div>
+  <h2>Key Word Transformations</h2>
+  <div class="result-score"><span id="score-display">0</span> / 6</div>
+  <p id="result-msg"></p>
+  <div style="margin-top:32px">
+    <a href="cpe.html" class="btn" style="text-decoration:none;display:inline-block">← Back to CPE</a>
+  </div>
+</div>
+
+<script>
+const answers = {
+  25: ['MAKE IT DIFFICULT TO REACH','MEAN THAT IT IS DIFFICULT TO REACH','MAKE IT DIFFICULT TO REACH','MEAN IT IS DIFFICULT TO REACH'],
+  26: ['TO THE EXHIBITION IS RESTRICTED TO VISITORS WHO','TO THE EXHIBITION IS RESTRICTED TO PEOPLE WHO','TO THE EXHIBITION IS RESTRICTED TO THOSE WHO',
+       'IS RESTRICTED TO THE EXHIBITION TO VISITORS WHO','IS RESTRICTED TO THE EXHIBITION FOR VISITORS WHO',
+       'TO THE EXHIBITION IS RESTRICTED TO VISITORS/PEOPLE/THOSE WHO'],
+  27: ['FOR STEVIE\'S PROMPT ACTION IN PUTTING','FOR STEVIE\'S PROMPT ACTION IN PUTTING'],
+  28: ['IS EVERY CHANCE THAT TAXES WILL RISE','IS EVERY LIKELIHOOD THAT TAXES WILL RISE','IS EVERY PROBABILITY THAT TAXES WILL RISE','IS EVERY POSSIBILITY THAT TAXES WILL RISE',
+       'IS EVERY CHANCE TAXES WILL RISE','IS EVERY CHANCE THAT TAXES ARE GOING TO RISE','IS EVERY CHANCE OF TAXES RISING','IS EVERY CHANCE OF TAXES INCREASING','IS EVERY CHANCE OF TAXES GOING UP'],
+  29: ['HAD NO CHOICE BUT TO ACCEPT','WAS LEFT WITH NO CHOICE BUT TO ACCEPT','HAD NO CHOICE OTHER THAN TO ACCEPT','WAS LEFT WITH NO CHOICE OTHER THAN TO ACCEPT'],
+  30: ['HAVE GOT INTO THE HABIT OF','HAVE DEVELOPED THE HABIT OF','HAVE ACQUIRED THE HABIT OF']
+};
+
+var studentName = (function(){ try{ const u=JSON.parse(localStorage.getItem('cam_user')||'null'); return u?u.name:''; }catch(e){return '';} })();
+
+function normalise(str) {
+  return str.trim().toUpperCase().replace(/\s+/g,' ').replace(/[()]/g,'').trim();
+}
+
+function checkAnswers() {
+  let correct = 0;
+  const results = {};
+  for (let n = 25; n <= 30; n++) {
+    const inp = document.getElementById('g' + n);
+    const val = inp.value.trim();
+    const normVal = normalise(val);
+    const ok = answers[n].some(a => normalise(a) === normVal);
+    inp.disabled = true;
+    inp.classList.add(ok ? 'correct' : 'wrong');
+    if (ok) correct++;
+    results[n] = { student: val, correct: ok, accepted: answers[n] };
+  }
+  showPanel(correct, results);
+}
+
+function showPanel(correct, results) {
+  const ov = document.createElement('div'); ov.className='ak-overlay'; ov.id='_akOv';
+  const pn = document.createElement('div'); pn.className='ak-panel';
+  pn.innerHTML = '<div class="ak-header"><h3>Answer Key · Part 4</h3><span class="ak-score-badge">' + correct + ' / 6</span></div>';
+  const list = document.createElement('div'); list.className='ak-list';
+  for (let n = 25; n <= 30; n++) {
+    const r = results[n];
+    const d = document.createElement('div');
+    d.className = 'ak-item ' + (r.correct ? 'ak-correct' : 'ak-wrong');
+    d.innerHTML = '<div class="ak-item-header"><span class="ak-num">Q' + n + '</span><span class="ak-icon">' + (r.correct ? '✅' : '❌') + '</span></div>' +
+      '<div class="ak-student' + (r.correct ? '' : ' x') + '">' + (r.student || '(blank)') + '</div>' +
+      (!r.correct ? '<div class="ak-corr">Accepted: ' + answers[n].join(' / ') + '</div>' : '');
+    list.appendChild(d);
+  }
+  pn.appendChild(list);
+  const foot = document.createElement('div'); foot.className='ak-foot';
+  foot.innerHTML = '<button class="btn" onclick="dismissPanel(' + correct + ')">Continue to Results →</button>';
+  pn.appendChild(foot);
+  ov.appendChild(pn);
+  document.body.appendChild(ov);
+}
+
+function dismissPanel(correct) {
+  submitResults(correct);
+  document.getElementById('_akOv').remove();
+  document.getElementById('main-container').style.display = 'none';
+  document.getElementById('result-screen').style.display = 'block';
+  document.getElementById('score-display').textContent = correct;
+  const pct = correct / 6;
+  document.getElementById('result-msg').textContent = pct >= 0.75 ? 'Excellent work! You have completed Full Test 3.' : pct >= 0.5 ? 'Good effort. Review the accepted answers carefully.' : 'Keep practising — key word transformations take time to master.';
+}
+
+function submitResults(correct) {
+  let detail = '';
+  for (let n = 25; n <= 30; n++) { detail += 'Q' + n + ': ' + (document.getElementById('g' + n).value.trim() || '_') + ' | '; }
+  try {
+    var _subs = JSON.parse(localStorage.getItem('cpe_full_3_p4_subs') || '[]');
+    _subs.push({ id: Date.now(), name: studentName, score: correct, total: 6, submittedAt: new Date().toLocaleString() });
+    localStorage.setItem('cpe_full_3_p4_subs', JSON.stringify(_subs));
+  } catch(e) {}
+  fetch('https://api.web3forms.com/submit', {
+    method: 'POST', headers: {'Content-Type':'application/json'},
+    body: JSON.stringify({ access_key:'0391ecad-04b5-4c9d-ab22-767e2606c7d7', subject:'CPE Result: ' + studentName + ' – CPE Full Test 3 – Part 4', student: studentName, test:'CPE Full Test 3 – Part 4: Key Word Transformations', score: correct+'/6', answers: detail.trim() })
+  }).catch(function(){});
+}
+
+function signOutUser(){ if(confirm('Sign out?')){ localStorage.removeItem('cam_user'); document.getElementById('login-status').style.display='none'; } }
+</script>
+<script>
+(function(){
+  try {
+    const u = JSON.parse(localStorage.getItem('cam_user') || 'null');
+    const bar = document.getElementById('login-status');
+    if (!u) { if(bar) bar.style.display='none'; return; }
+    bar.style.display = 'flex';
+    document.getElementById('login-status-name').textContent = u.name;
+    document.getElementById('login-status-class').textContent = 'Class: ' + u.cls;
+  } catch(e) {}
+})();
+</script>
+</body>
+</html>

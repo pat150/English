@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CPE Full Test 3 – Part 3</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Source+Serif+4:ital,wght@0,300;0,400;0,600;1,300&display=swap" rel="stylesheet">
+<style>
+  :root { --bg:#f5f0e8; --card:#fffdf8; --ink:#1a1a2e; --accent:#8b2fc9; --accent2:#e8a020; --muted:#6b6b7b; --border:#d4ccbc; --correct:#2d7a4f; --wrong:#c0392b; --radius:10px; }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{background:var(--bg);font-family:'Source Serif 4',serif;color:var(--ink);min-height:100vh}
+  header{background:var(--ink);color:#fff;padding:24px 40px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100;box-shadow:0 2px 20px rgba(0,0,0,0.3)}
+  header h1{font-family:'Playfair Display',serif;font-size:1.3rem}
+  header span{font-size:0.8rem;color:var(--accent2);font-weight:600}
+  .container{max-width:800px;margin:0 auto;padding:40px 24px 80px}
+  .part-label{font-size:0.72rem;font-weight:700;letter-spacing:0.18em;text-transform:uppercase;color:var(--accent);margin-bottom:8px}
+  .part-title{font-family:'Playfair Display',serif;font-size:1.6rem;margin-bottom:12px}
+  .instructions{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:18px 22px;font-size:0.9rem;line-height:1.7;color:var(--muted);font-style:italic;margin-bottom:28px}
+  .instructions strong{color:var(--ink);font-style:normal}
+  .wf-table{width:100%;border-collapse:collapse;background:var(--card);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;margin-bottom:32px;font-size:0.95rem}
+  .wf-table thead tr{background:var(--ink);color:#fff}
+  .wf-table thead th{padding:12px 16px;text-align:left;font-family:'Playfair Display',serif;font-weight:600;font-size:0.88rem}
+  .wf-table tbody tr{border-bottom:1px solid var(--border)}
+  .wf-table tbody tr:last-child{border-bottom:none}
+  .wf-table tbody td{padding:12px 16px;vertical-align:middle}
+  .wf-num{font-size:0.75rem;font-weight:700;color:var(--accent);min-width:28px}
+  .wf-sentence{line-height:1.7;flex:1}
+  .wf-keyword{font-size:0.82rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:var(--muted);text-align:right;white-space:nowrap;padding-left:12px}
+  .gap-input{border:none;border-bottom:2px solid var(--border);background:transparent;font-family:'Source Serif 4',serif;font-size:0.95rem;color:var(--ink);width:140px;padding:2px 4px;outline:none;transition:border-color 0.2s;text-align:center}
+  .gap-input:focus{border-bottom-color:var(--accent)}
+  .gap-input.correct{border-bottom-color:var(--correct);color:var(--correct)}
+  .gap-input.wrong{border-bottom-color:var(--wrong);color:var(--wrong)}
+  .nav-row{display:flex;justify-content:flex-end;gap:12px;margin-top:8px}
+  .btn{background:var(--accent);color:#fff;border:none;padding:12px 28px;border-radius:8px;font-family:'Source Serif 4',serif;font-size:0.95rem;font-weight:600;cursor:pointer;transition:opacity 0.2s}
+  .btn:hover{opacity:0.88}
+  .ak-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.55);z-index:400;display:flex;align-items:flex-end;justify-content:center;animation:akFadeIn .2s ease}
+  @keyframes akFadeIn{from{opacity:0}to{opacity:1}}
+  .ak-panel{background:var(--card);border-radius:20px 20px 0 0;width:100%;max-width:860px;max-height:82vh;overflow-y:auto;padding:32px 36px 40px;box-shadow:0 -8px 40px rgba(0,0,0,0.18);animation:akSlideUp .35s cubic-bezier(0.34,1.56,0.64,1)}
+  @keyframes akSlideUp{from{transform:translateY(100%)}to{transform:translateY(0)}}
+  .ak-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:22px;padding-bottom:14px;border-bottom:2px solid var(--border)}
+  .ak-header h3{font-family:'Playfair Display',serif;font-size:1.25rem}
+  .ak-score-badge{background:var(--accent);color:#fff;font-family:'Playfair Display',serif;font-size:1.05rem;padding:5px 16px;border-radius:20px}
+  .ak-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:9px;margin-bottom:22px}
+  .ak-item{background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:9px 12px;display:flex;gap:8px;align-items:flex-start}
+  .ak-item.ak-correct{border-color:var(--correct);background:rgba(45,122,79,0.07)}
+  .ak-item.ak-wrong{border-color:var(--wrong);background:rgba(192,57,43,0.07)}
+  .ak-num{font-size:.7rem;font-weight:700;color:var(--muted);min-width:22px;padding-top:2px}
+  .ak-content{flex:1}
+  .ak-student{font-size:.86rem;color:var(--ink);margin-bottom:2px}
+  .ak-student.x{text-decoration:line-through;color:var(--wrong)}
+  .ak-corr{font-size:.86rem;color:var(--correct);font-weight:600}
+  .ak-icon{font-size:.85rem;margin-left:auto;flex-shrink:0}
+  .ak-foot{display:flex;justify-content:flex-end;padding-top:14px;border-top:1px solid var(--border)}
+  .result-screen{display:none;text-align:center;padding:60px 20px}
+  .result-screen h2{font-family:'Playfair Display',serif;font-size:2rem;margin-bottom:12px}
+  .result-score{font-size:3.5rem;font-family:'Playfair Display',serif;color:var(--accent);font-weight:700;margin:20px 0}
+  .result-screen p{color:var(--muted);font-size:0.95rem}
+  .progress-bar{height:4px;background:rgba(139,47,201,0.15);margin-bottom:32px;border-radius:2px}
+  .progress-fill{height:100%;background:var(--accent);border-radius:2px}
+  .login-bar{background:rgba(0,0,0,0.3);border-bottom:1px solid rgba(201,168,76,0.2);padding:8px 32px;display:none;justify-content:space-between;align-items:center;font-size:0.8rem;}
+  .login-bar-left{color:#888;} .login-bar-left strong{color:#c9a84c;}
+  .login-bar-right{display:flex;gap:10px;align-items:center;}
+  .bar-link{color:#888;text-decoration:none;font-size:0.75rem;} .bar-link:hover{color:#c9a84c;}
+  .bar-signout{background:transparent;border:1px solid rgba(235,87,87,0.4);color:#eb5757;padding:3px 10px;cursor:pointer;border-radius:3px;font-size:0.72rem;font-family:inherit;}
+  @media(max-width:580px){header{padding:16px 20px}.wf-table{font-size:0.85rem}}
+</style>
+</head>
+<body>
+<header>
+  <h1>CPE Reading &amp; Use of English · Full Test 3</h1>
+  <span>PART 3 of 4</span>
+</header>
+<div class="login-bar" id="login-status">
+  <div class="login-bar-left">Signed in as <strong id="login-status-name"></strong> &nbsp;·&nbsp; <span id="login-status-class"></span></div>
+  <div class="login-bar-right">
+    <a href="login.html" class="bar-link">My Results</a>
+    <a href="index.html" class="bar-link">Activities</a>
+    <button class="bar-signout" onclick="signOutUser()">Sign Out</button>
+  </div>
+</div>
+
+<div class="container" id="main-container">
+  <div class="progress-bar"><div class="progress-fill" style="width:75%"></div></div>
+  <div class="part-label">Paper 1 · Part 3</div>
+  <h2 class="part-title">Word Formation</h2>
+  <div class="instructions">
+    <strong>For questions 17–24</strong>, read the text below. Use the word given in capitals at the end of some of the lines to form a word that fits in the space in the same line. Write your answers in <strong>CAPITAL LETTERS</strong>.
+  </div>
+
+  <table class="wf-table">
+    <thead><tr><th>#</th><th>Text</th><th>Key word</th></tr></thead>
+    <tbody>
+      <tr>
+        <td class="wf-num">0</td>
+        <td class="wf-sentence"><em>Extreme Weather</em> is packed with facts about the great forces of nature and is a (0) <strong>BEAUTIFULLY</strong> illustrated science book by the meteorologist, H. Michael Mogil.</td>
+        <td class="wf-keyword">BEAUTY</td>
+      </tr>
+      <tr>
+        <td class="wf-num">17</td>
+        <td class="wf-sentence">The aim of the book is to present enough knowledge to understand the many <input class="gap-input" id="g17" type="text" maxlength="25" autocomplete="off" spellcheck="false"> of the debate about climate change.</td>
+        <td class="wf-keyword">COMPLEX</td>
+      </tr>
+      <tr>
+        <td class="wf-num">18</td>
+        <td class="wf-sentence">Mogil is alarmed about the way the public has been <input class="gap-input" id="g18" type="text" maxlength="25" autocomplete="off" spellcheck="false"> on this issue, being pushed towards certain positions on climate change by the campaigning of politicians and the news media's need for a good story.</td>
+        <td class="wf-keyword">LEAD</td>
+      </tr>
+      <tr>
+        <td class="wf-num">19</td>
+        <td class="wf-sentence">He wants to demonstrate that climate change is an (20) credible issue, and that making overly simplistic (21) assumptions will inevitably impair our understanding. He therefore repeatedly emphasises that weather records are short, often incomplete and tricky to compare. Many <input class="gap-input" id="g19" type="text" maxlength="25" autocomplete="off" spellcheck="false"> and the news media's need for a good story.</td>
+        <td class="wf-keyword">POLITICS</td>
+      </tr>
+      <tr>
+        <td class="wf-num">20</td>
+        <td class="wf-sentence">He wants to demonstrate that climate change is an <input class="gap-input" id="g20" type="text" maxlength="25" autocomplete="off" spellcheck="false"> complicated issue,</td>
+        <td class="wf-keyword">CREDIBLE</td>
+      </tr>
+      <tr>
+        <td class="wf-num">21</td>
+        <td class="wf-sentence">and that making overly simplistic <input class="gap-input" id="g21" type="text" maxlength="25" autocomplete="off" spellcheck="false"> will inevitably</td>
+        <td class="wf-keyword">ASSUME</td>
+      </tr>
+      <tr>
+        <td class="wf-num">22</td>
+        <td class="wf-sentence"><input class="gap-input" id="g22" type="text" maxlength="25" autocomplete="off" spellcheck="false"> our understanding. He therefore</td>
+        <td class="wf-keyword">PAIR</td>
+      </tr>
+      <tr>
+        <td class="wf-num">23</td>
+        <td class="wf-sentence"><input class="gap-input" id="g23" type="text" maxlength="25" autocomplete="off" spellcheck="false"> emphasises that weather records are short, often incomplete and tricky to compare.</td>
+        <td class="wf-keyword">REPEAT</td>
+      </tr>
+      <tr>
+        <td class="wf-num">24</td>
+        <td class="wf-sentence">Mogil suggests that, in the distant past, changes in climate occurred in magnitudes far greater than in recent times. It is the <input class="gap-input" id="g24" type="text" maxlength="25" autocomplete="off" spellcheck="false"> detail with which these recent events have been recorded that differentiates them from the past.</td>
+        <td class="wf-keyword">FINITE</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="nav-row">
+    <button class="btn" onclick="checkAnswers()">Check Answers</button>
+  </div>
+</div>
+
+<div class="result-screen" id="result-screen">
+  <div class="part-label" style="text-align:center;margin-bottom:8px">Part 3 Complete</div>
+  <h2>Word Formation</h2>
+  <div class="result-score"><span id="score-display">0</span> / 8</div>
+  <p id="result-msg"></p>
+  <div style="margin-top:32px">
+    <a href="cpe_full_3_part4.html" class="btn" style="text-decoration:none;display:inline-block">Next: Part 4 →</a>
+  </div>
+</div>
+
+<script>
+const answers = {
+  17: ['COMPLEXITIES'],
+  18: ['MISLED'],
+  19: ['POLITICIANS'],
+  20: ['INCREDIBLY'],
+  21: ['ASSUMPTIONS'],
+  22: ['IMPAIR'],
+  23: ['REPEATEDLY'],
+  24: ['INFINITE']
+};
+
+var studentName = (function(){ try{ const u=JSON.parse(localStorage.getItem('cam_user')||'null'); return u?u.name:''; }catch(e){return '';} })();
+
+function checkAnswers() {
+  let correct = 0;
+  const results = {};
+  for (let n = 17; n <= 24; n++) {
+    const inp = document.getElementById('g' + n);
+    const val = inp.value.trim().toUpperCase();
+    const ok = answers[n].includes(val);
+    inp.disabled = true;
+    inp.classList.add(ok ? 'correct' : 'wrong');
+    if (ok) correct++;
+    results[n] = { student: val, correct: ok, accepted: answers[n] };
+  }
+  showPanel(correct, results);
+}
+
+function showPanel(correct, results) {
+  const ov = document.createElement('div'); ov.className='ak-overlay'; ov.id='_akOv';
+  const pn = document.createElement('div'); pn.className='ak-panel';
+  pn.innerHTML = '<div class="ak-header"><h3>Answer Key · Part 3</h3><span class="ak-score-badge">' + correct + ' / 8</span></div>';
+  const grid = document.createElement('div'); grid.className='ak-grid';
+  for (let n = 17; n <= 24; n++) {
+    const r = results[n];
+    const d = document.createElement('div');
+    d.className = 'ak-item ' + (r.correct ? 'ak-correct' : 'ak-wrong');
+    d.innerHTML = '<div class="ak-num">' + n + '</div><div class="ak-content">' +
+      '<div class="ak-student' + (r.correct ? '' : ' x') + '">' + (r.student || '(blank)') + '</div>' +
+      (!r.correct ? '<div class="ak-corr">' + r.accepted.join(' / ') + '</div>' : '') +
+      '</div><div class="ak-icon">' + (r.correct ? '✅' : '❌') + '</div>';
+    grid.appendChild(d);
+  }
+  pn.appendChild(grid);
+  const foot = document.createElement('div'); foot.className='ak-foot';
+  foot.innerHTML = '<button class="btn" onclick="dismissPanel(' + correct + ')">Continue to Results →</button>';
+  pn.appendChild(foot);
+  ov.appendChild(pn);
+  document.body.appendChild(ov);
+}
+
+function dismissPanel(correct) {
+  submitResults(correct);
+  document.getElementById('_akOv').remove();
+  document.getElementById('main-container').style.display = 'none';
+  document.getElementById('result-screen').style.display = 'block';
+  document.getElementById('score-display').textContent = correct;
+  const pct = correct / 8;
+  document.getElementById('result-msg').textContent = pct >= 0.75 ? 'Excellent work!' : pct >= 0.5 ? 'Good effort. Review before moving on.' : 'Keep practising — review the answers carefully.';
+}
+
+function submitResults(correct) {
+  let detail = '';
+  for (let n = 17; n <= 24; n++) { detail += 'Q' + n + ':' + (document.getElementById('g' + n).value.trim().toUpperCase() || '_') + ' '; }
+  try {
+    var _subs = JSON.parse(localStorage.getItem('cpe_full_3_p3_subs') || '[]');
+    _subs.push({ id: Date.now(), name: studentName, score: correct, total: 8, submittedAt: new Date().toLocaleString() });
+    localStorage.setItem('cpe_full_3_p3_subs', JSON.stringify(_subs));
+  } catch(e) {}
+  fetch('https://api.web3forms.com/submit', {
+    method: 'POST', headers: {'Content-Type':'application/json'},
+    body: JSON.stringify({ access_key:'0391ecad-04b5-4c9d-ab22-767e2606c7d7', subject:'CPE Result: ' + studentName + ' – CPE Full Test 3 – Part 3', student: studentName, test:'CPE Full Test 3 – Part 3: Word Formation', score: correct+'/8', answers: detail.trim() })
+  }).catch(function(){});
+}
+
+function signOutUser(){ if(confirm('Sign out?')){ localStorage.removeItem('cam_user'); document.getElementById('login-status').style.display='none'; } }
+</script>
+<script>
+(function(){
+  try {
+    const u = JSON.parse(localStorage.getItem('cam_user') || 'null');
+    const bar = document.getElementById('login-status');
+    if (!u) { if(bar) bar.style.display='none'; return; }
+    bar.style.display = 'flex';
+    document.getElementById('login-status-name').textContent = u.name;
+    document.getElementById('login-status-class').textContent = 'Class: ' + u.cls;
+  } catch(e) {}
+})();
+</script>
+</body>
+</html>
