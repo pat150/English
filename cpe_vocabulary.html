@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>CPE Vocabulary · Synonym Challenge</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Source+Serif+4:ital,wght@0,300;0,400;0,600;1,300&display=swap" rel="stylesheet"/>
+<style>
+  :root{--bg:#0a1628;--card:rgba(255,255,255,0.05);--ink:#e8e0d5;--accent:#c9a84c;--accent2:#e8a020;--muted:#888;--border:rgba(201,168,76,0.3);--correct:#6fcf97;--wrong:#eb5757;--c2:#c0392b;--radius:10px;}
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{min-height:100vh;background:linear-gradient(160deg,#0a1628 0%,#112240 50%,#0d1f3c 100%);font-family:'Source Serif 4',serif;color:var(--ink);}
+  header{background:rgba(0,0,0,0.5);border-bottom:2px solid var(--accent);padding:14px 32px;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;z-index:100;backdrop-filter:blur(12px);}
+  .logo{font-family:'Playfair Display',serif;color:var(--accent);letter-spacing:2px;font-size:0.85rem;text-transform:uppercase;}
+  .back-link{color:var(--muted);font-size:0.78rem;letter-spacing:1px;text-decoration:none;padding:6px 14px;border:1px solid rgba(255,255,255,0.1);border-radius:3px;transition:all 0.2s;}
+  .back-link:hover{color:var(--accent);border-color:var(--border);}
+
+  .container{max-width:720px;margin:0 auto;padding:48px 24px 80px;}
+
+  /* Start screen */
+  .start-screen{text-align:center;padding:40px 0;}
+  .start-icon{font-size:3rem;margin-bottom:16px;}
+  .start-screen h1{font-family:'Playfair Display',serif;font-size:2.4rem;color:var(--accent);margin-bottom:10px;}
+  .start-screen .sub{color:var(--muted);font-size:0.95rem;margin-bottom:32px;line-height:1.6;}
+  .features{background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:var(--radius);padding:24px 28px;margin-bottom:32px;text-align:left;display:flex;flex-direction:column;gap:12px;}
+  .feature{display:flex;align-items:center;gap:12px;font-size:0.92rem;color:#ccc;}
+  .feature-icon{font-size:1.1rem;min-width:24px;}
+  .btn-primary{background:var(--accent);color:#0a1628;border:none;padding:14px 40px;font-size:1.05rem;font-weight:700;border-radius:6px;cursor:pointer;font-family:'Source Serif 4',serif;letter-spacing:1px;width:100%;transition:background 0.2s;}
+  .btn-primary:hover{background:#d9bb6a;}
+  .btn-primary:disabled{opacity:0.5;cursor:not-allowed;}
+
+  /* Loading */
+  .loading-screen{text-align:center;padding:80px 20px;}
+  .spinner{width:44px;height:44px;border:3px solid rgba(201,168,76,0.2);border-top-color:var(--accent);border-radius:50%;animation:spin 0.8s linear infinite;margin:0 auto 20px;}
+  @keyframes spin{to{transform:rotate(360deg)}}
+  .loading-text{color:var(--muted);font-size:0.95rem;}
+
+  /* Quiz */
+  .quiz-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;}
+  .q-counter{font-size:0.78rem;color:var(--muted);letter-spacing:1px;}
+  .q-score{font-family:'Playfair Display',serif;color:var(--accent);font-size:1rem;}
+  .progress-bg{height:4px;background:rgba(255,255,255,0.08);border-radius:2px;margin-bottom:28px;}
+  .progress-fill{height:100%;background:var(--accent);border-radius:2px;transition:width 0.4s;}
+
+  .q-card{background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:var(--radius);padding:28px 32px;margin-bottom:20px;}
+  .q-label{font-size:0.68rem;font-weight:700;letter-spacing:0.2em;text-transform:uppercase;color:var(--accent);margin-bottom:12px;}
+  .q-word{font-family:'Playfair Display',serif;font-size:1.9rem;color:#fff;margin-bottom:8px;}
+  .q-instruction{font-size:0.85rem;color:var(--muted);font-style:italic;}
+  .double-badge{display:inline-block;background:rgba(201,168,76,0.15);border:1px solid var(--border);color:var(--accent);font-size:0.72rem;font-weight:700;letter-spacing:0.1em;padding:2px 10px;border-radius:10px;margin-top:8px;}
+
+  .options{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:16px;}
+  @media(max-width:500px){.options{grid-template-columns:1fr;}}
+  .opt-btn{background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.1);color:#ccc;padding:12px 16px;cursor:pointer;border-radius:8px;text-align:left;font-family:'Source Serif 4',serif;font-size:0.92rem;transition:all 0.15s;display:flex;align-items:center;gap:10px;}
+  .opt-btn:hover:not(:disabled){border-color:var(--accent);color:var(--ink);background:rgba(201,168,76,0.08);}
+  .opt-btn:disabled{cursor:default;}
+  .opt-letter{font-weight:700;font-size:0.78rem;min-width:18px;color:var(--muted);}
+  .opt-btn.correct{border-color:var(--correct);background:rgba(111,207,151,0.12);color:var(--correct);}
+  .opt-btn.correct .opt-letter{color:var(--correct);}
+  .opt-btn.wrong{border-color:var(--wrong);background:rgba(235,87,87,0.1);color:var(--wrong);}
+  .opt-btn.wrong .opt-letter{color:var(--wrong);}
+  .opt-btn.dimmed{opacity:0.35;}
+
+  .explanation{background:rgba(0,0,0,0.25);border-left:3px solid var(--accent);border-radius:4px;padding:14px 18px;font-size:0.88rem;line-height:1.7;color:#ccc;margin-bottom:16px;display:none;}
+  .explanation .hl{color:var(--accent);font-weight:600;}
+
+  .next-btn{background:transparent;border:1px solid var(--border);color:var(--accent);padding:10px 28px;border-radius:6px;cursor:pointer;font-family:'Source Serif 4',serif;font-size:0.92rem;font-weight:600;letter-spacing:0.5px;transition:all 0.2s;display:none;}
+  .next-btn:hover{background:rgba(201,168,76,0.1);}
+
+  /* Results */
+  .results-screen{text-align:center;padding:20px 0;}
+  .results-screen h2{font-family:'Playfair Display',serif;font-size:1.8rem;color:var(--accent);margin-bottom:8px;}
+  .big-score{font-family:'Playfair Display',serif;font-size:4rem;color:var(--accent);font-weight:700;margin:20px 0 6px;}
+  .score-sub{color:var(--muted);font-size:0.92rem;margin-bottom:28px;}
+  .result-msg{font-size:1rem;color:#ccc;margin-bottom:28px;line-height:1.6;}
+  .result-btns{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;}
+  .btn-outline{background:transparent;border:1px solid var(--border);color:var(--accent);padding:11px 28px;border-radius:6px;cursor:pointer;font-family:'Source Serif 4',serif;font-size:0.92rem;font-weight:600;transition:all 0.2s;}
+  .btn-outline:hover{background:rgba(201,168,76,0.1);}
+
+  /* Error */
+  .error-box{background:rgba(235,87,87,0.08);border:1px solid rgba(235,87,87,0.3);border-radius:var(--radius);padding:20px 24px;text-align:center;color:#eb5757;margin-top:20px;}
+  .error-box p{margin-bottom:12px;font-size:0.9rem;line-height:1.6;}
+</style>
+</head>
+<body>
+<header>
+  <div class="logo">C2 · CPE Vocabulary</div>
+  <a href="cpe.html" class="back-link">← Back to CPE</a>
+</header>
+
+<div class="container">
+
+  <!-- START -->
+  <div id="screen-start" class="start-screen">
+    <div class="start-icon">📖</div>
+    <h1>CPE Vocabulary</h1>
+    <p class="sub">Synonym Challenge<br>100 advanced questions · C2 level · Single &amp; double synonyms</p>
+    <div class="features">
+      <div class="feature"><span class="feature-icon">📋</span>100 sophisticated CPE-level words</div>
+      <div class="feature"><span class="feature-icon">🎯</span>4 options per question</div>
+      <div class="feature"><span class="feature-icon">⚡</span>Some questions have 2 correct answers</div>
+      <div class="feature"><span class="feature-icon">💡</span>Explanations revealed after each answer</div>
+    </div>
+    <button class="btn-primary" id="generate-btn" onclick="generateQuiz()">Generate Quiz</button>
+  </div>
+
+  <!-- LOADING -->
+  <div id="screen-loading" class="loading-screen" style="display:none">
+    <div class="spinner"></div>
+    <div class="loading-text">Generating your vocabulary quiz…</div>
+  </div>
+
+  <!-- ERROR -->
+  <div id="screen-error" style="display:none">
+    <div class="error-box">
+      <p id="error-msg">Something went wrong generating the quiz.</p>
+      <button class="btn-primary" style="width:auto;padding:10px 28px;" onclick="showStart()">Try Again</button>
+    </div>
+  </div>
+
+  <!-- QUIZ -->
+  <div id="screen-quiz" style="display:none">
+    <div class="quiz-header">
+      <span class="q-counter" id="q-counter">Question 1 of 20</span>
+      <span class="q-score" id="q-score">0 / 0</span>
+    </div>
+    <div class="progress-bg"><div class="progress-fill" id="progress-fill" style="width:0%"></div></div>
+
+    <div class="q-card">
+      <div class="q-label">Find the synonym</div>
+      <div class="q-word" id="q-word">—</div>
+      <div class="q-instruction" id="q-instruction">Choose the word closest in meaning.</div>
+      <div id="double-badge" class="double-badge" style="display:none">2 correct answers — select both</div>
+    </div>
+
+    <div class="options" id="options"></div>
+    <div class="explanation" id="explanation"></div>
+    <button class="next-btn" id="next-btn" onclick="nextQuestion()">Next →</button>
+  </div>
+
+  <!-- RESULTS -->
+  <div id="screen-results" style="display:none" class="results-screen">
+    <h2>Quiz Complete!</h2>
+    <div class="big-score" id="final-score">—</div>
+    <div class="score-sub" id="score-sub">out of 20 questions</div>
+    <div class="result-msg" id="result-msg"></div>
+    <div class="result-btns">
+      <button class="btn-outline" onclick="generateQuiz()">New Quiz</button>
+      <a href="cpe.html" class="btn-outline" style="text-decoration:none;">← Back to CPE</a>
+    </div>
+  </div>
+
+</div>
+
+<script>
+const LEVEL = 'CPE (C2)';
+const TOTAL_Q = 20;
+
+let questions = [];
+let current = 0;
+let score = 0;
+let selected = [];
+let answered = false;
+
+function showScreen(id) {
+  ['screen-start','screen-loading','screen-error','screen-quiz','screen-results'].forEach(s => {
+    document.getElementById(s).style.display = s === id ? 'block' : 'none';
+  });
+}
+
+function showStart() { showScreen('screen-start'); }
+
+async function generateQuiz() {
+  showScreen('screen-loading');
+  document.getElementById('generate-btn').disabled = true;
+
+  const prompt = `Generate a ${LEVEL} vocabulary synonym quiz with exactly ${TOTAL_Q} questions for advanced English learners.
+
+Rules:
+- Each question gives ONE target word and FOUR options (A, B, C, D)
+- Most questions have exactly 1 correct synonym. About 4-5 questions should have exactly 2 correct synonyms (mark them clearly).
+- Words must be real, natural English used in academic, literary, or professional contexts. No archaic or obscure words.
+- Words should be at C2 level: sophisticated but genuinely used (e.g. ambiguous, eloquent, tenacious, reticent, pragmatic, lucid).
+- Distractors should be plausible but clearly wrong on reflection.
+- Include a brief explanation (1-2 sentences) for each answer.
+
+Respond ONLY with a valid JSON array. No markdown, no backticks, no preamble. Format:
+[
+  {
+    "word": "ELOQUENT",
+    "instruction": "Choose the word closest in meaning.",
+    "options": ["articulate","verbose","reticent","fluent"],
+    "correct": [0, 3],
+    "explanation": "Eloquent means fluent and persuasive in speech or writing. Both 'articulate' and 'fluent' capture this meaning."
+  }
+]
+
+The "correct" array uses 0-based indices into "options". Single-answer questions have one index, double-answer questions have two.`;
+
+  try {
+    const res = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        model: 'claude-sonnet-4-20250514',
+        max_tokens: 4000,
+        messages: [{ role: 'user', content: prompt }]
+      })
+    });
+
+    if (!res.ok) {
+      const err = await res.json();
+      throw new Error(err.error?.message || 'API error ' + res.status);
+    }
+
+    const data = await res.json();
+    const raw = data.content.filter(b => b.type === 'text').map(b => b.text).join('');
+
+    // Strip any accidental markdown fences
+    const clean = raw.replace(/```json|```/g, '').trim();
+    questions = JSON.parse(clean);
+
+    if (!Array.isArray(questions) || questions.length < 5) throw new Error('Invalid quiz data received.');
+
+    current = 0; score = 0; selected = []; answered = false;
+    showScreen('screen-quiz');
+    renderQuestion();
+
+  } catch(e) {
+    document.getElementById('error-msg').textContent = 'Could not generate quiz: ' + e.message;
+    showScreen('screen-error');
+  } finally {
+    document.getElementById('generate-btn').disabled = false;
+  }
+}
+
+function renderQuestion() {
+  const q = questions[current];
+  answered = false;
+  selected = [];
+
+  // Header
+  document.getElementById('q-counter').textContent = 'Question ' + (current + 1) + ' of ' + questions.length;
+  document.getElementById('q-score').textContent = score + ' / ' + current;
+  document.getElementById('progress-fill').style.width = (current / questions.length * 100) + '%';
+
+  // Card
+  document.getElementById('q-word').textContent = q.word;
+  document.getElementById('q-instruction').textContent = q.instruction || 'Choose the word closest in meaning.';
+  const isDouble = q.correct.length > 1;
+  const badge = document.getElementById('double-badge');
+  badge.style.display = isDouble ? 'inline-block' : 'none';
+
+  // Options
+  const opts = document.getElementById('options');
+  opts.innerHTML = '';
+  const letters = ['A','B','C','D'];
+  q.options.forEach((opt, i) => {
+    const btn = document.createElement('button');
+    btn.className = 'opt-btn';
+    btn.innerHTML = '<span class="opt-letter">' + letters[i] + '</span> ' + opt;
+    btn.onclick = () => handleSelect(i, btn, isDouble);
+    opts.appendChild(btn);
+  });
+
+  // Explanation + next
+  const exp = document.getElementById('explanation');
+  exp.style.display = 'none';
+  exp.innerHTML = '';
+  document.getElementById('next-btn').style.display = 'none';
+}
+
+function handleSelect(idx, btn, isDouble) {
+  if (answered) return;
+
+  if (!isDouble) {
+    // Single answer — lock immediately
+    answered = true;
+    selected = [idx];
+    revealAnswers();
+  } else {
+    // Double answer — collect two selections
+    if (selected.includes(idx)) {
+      selected = selected.filter(i => i !== idx);
+      btn.classList.remove('selected');
+      btn.style.borderColor = '';
+      btn.style.color = '';
+    } else {
+      selected.push(idx);
+      btn.style.borderColor = 'rgba(201,168,76,0.6)';
+      btn.style.color = '#c9a84c';
+    }
+    if (selected.length === 2) {
+      answered = true;
+      revealAnswers();
+    }
+  }
+}
+
+function revealAnswers() {
+  const q = questions[current];
+  const btns = document.querySelectorAll('.opt-btn');
+  const isDouble = q.correct.length > 1;
+
+  // Score
+  let thisScore = 0;
+  if (isDouble) {
+    const correctSet = new Set(q.correct);
+    const selectedSet = new Set(selected);
+    // Both must be correct
+    if (q.correct.every(i => selectedSet.has(i)) && selected.every(i => correctSet.has(i))) {
+      thisScore = 1;
+    }
+  } else {
+    if (selected[0] === q.correct[0]) thisScore = 1;
+  }
+  score += thisScore;
+
+  // Style buttons
+  btns.forEach((btn, i) => {
+    btn.disabled = true;
+    btn.style.borderColor = '';
+    btn.style.color = '';
+    const isCorrect = q.correct.includes(i);
+    const wasSelected = selected.includes(i);
+    if (isCorrect) {
+      btn.classList.add('correct');
+    } else if (wasSelected && !isCorrect) {
+      btn.classList.add('wrong');
+    } else {
+      btn.classList.add('dimmed');
+    }
+  });
+
+  // Explanation
+  const exp = document.getElementById('explanation');
+  const correctWords = q.correct.map(i => '<span class="hl">' + q.options[i] + '</span>').join(' and ');
+  exp.innerHTML = '✓ ' + correctWords + ' — ' + (q.explanation || '');
+  exp.style.display = 'block';
+
+  // Update score display
+  document.getElementById('q-score').textContent = score + ' / ' + (current + 1);
+
+  // Next button
+  const nextBtn = document.getElementById('next-btn');
+  nextBtn.style.display = 'inline-block';
+  nextBtn.textContent = current < questions.length - 1 ? 'Next →' : 'See Results →';
+}
+
+function nextQuestion() {
+  current++;
+  if (current >= questions.length) {
+    showResults();
+  } else {
+    renderQuestion();
+  }
+}
+
+function showResults() {
+  showScreen('screen-results');
+  const total = questions.length;
+  const pct = Math.round(score / total * 100);
+  document.getElementById('final-score').textContent = score + ' / ' + total;
+  document.getElementById('score-sub').textContent = 'out of ' + total + ' questions · ' + pct + '%';
+  let msg = '';
+  if (pct >= 90) msg = 'Outstanding! Your C2 vocabulary is exceptional.';
+  else if (pct >= 75) msg = 'Excellent work. You have a strong command of advanced vocabulary.';
+  else if (pct >= 60) msg = 'Good effort. Keep building your C2 word bank.';
+  else if (pct >= 45) msg = 'A solid attempt. Regular vocabulary study will boost your score.';
+  else msg = 'Keep practising — C2 vocabulary takes time to develop. Try again!';
+  document.getElementById('result-msg').textContent = msg;
+  // Update progress bar to 100%
+  document.getElementById('progress-fill').style.width = '100%';
+}
+</script>
+</body>
+</html>
