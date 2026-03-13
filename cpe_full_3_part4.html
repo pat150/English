@@ -61,6 +61,41 @@
   .bar-link{color:#888;text-decoration:none;font-size:0.75rem;} .bar-link:hover{color:#c9a84c;}
   .bar-signout{background:transparent;border:1px solid rgba(235,87,87,0.4);color:#eb5757;padding:3px 10px;cursor:pointer;border-radius:3px;font-size:0.72rem;font-family:inherit;}
   @media(max-width:580px){header{padding:16px 20px}.gap-input{width:180px}}
+
+  /* ── Teacher panel ── */
+  .teacher-btn{position:fixed;bottom:20px;right:20px;background:var(--ink);color:var(--accent2);border:1px solid var(--accent2);padding:8px 18px;border-radius:20px;font-family:'Source Serif 4',serif;font-size:0.78rem;font-weight:700;letter-spacing:0.1em;cursor:pointer;z-index:300;opacity:0.7;transition:opacity 0.2s;}
+  .teacher-btn:hover{opacity:1;}
+  .tp-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.6);z-index:500;display:flex;align-items:flex-end;justify-content:center;}
+  .tp-panel{background:var(--card);border-radius:20px 20px 0 0;width:100%;max-width:860px;max-height:88vh;overflow-y:auto;padding:32px 36px 48px;box-shadow:0 -8px 40px rgba(0,0,0,0.25);}
+  .tp-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;padding-bottom:14px;border-bottom:2px solid var(--border);}
+  .tp-header h3{font-family:'Playfair Display',serif;font-size:1.2rem;}
+  .tp-close{background:transparent;border:1px solid var(--border);color:var(--muted);padding:5px 14px;border-radius:6px;cursor:pointer;font-family:'Source Serif 4',serif;font-size:0.82rem;}
+  .tp-section{font-size:0.7rem;font-weight:700;letter-spacing:0.15em;text-transform:uppercase;color:var(--accent);margin:18px 0 10px;padding-bottom:6px;border-bottom:1px solid var(--border);}
+  .tp-key-grid{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:16px;}
+  .tp-key-item{display:flex;align-items:center;gap:6px;font-size:0.85rem;}
+  .tp-key-item label{color:var(--muted);min-width:28px;}
+  .tp-key-select{background:var(--bg);border:1px solid var(--border);color:var(--ink);padding:4px 8px;border-radius:4px;font-family:'Source Serif 4',serif;cursor:pointer;font-size:0.85rem;}
+  .tp-key-input{background:var(--bg);border:1px solid var(--border);color:var(--ink);padding:4px 8px;border-radius:4px;font-family:'Source Serif 4',serif;font-size:0.85rem;width:160px;}
+  .tp-save-btn{background:var(--accent);color:#fff;border:none;padding:10px 24px;border-radius:6px;font-family:'Source Serif 4',serif;font-size:0.88rem;font-weight:600;cursor:pointer;margin-bottom:8px;}
+  .tp-save-btn:hover{opacity:0.88;}
+  .tp-sub-card{background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:12px 16px;margin-bottom:10px;}
+  .tp-sub-head{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:8px;}
+  .tp-sub-name{font-weight:700;font-size:0.9rem;}
+  .tp-sub-meta{font-size:0.72rem;color:var(--muted);margin-top:2px;}
+  .tp-sub-score{color:var(--accent);font-weight:700;font-size:0.9rem;}
+  .tp-del-btn{background:transparent;border:1px solid rgba(192,57,43,0.4);color:var(--wrong);padding:3px 10px;cursor:pointer;border-radius:4px;font-size:0.72rem;font-family:'Source Serif 4',serif;}
+  .tp-del-btn:hover{background:rgba(192,57,43,0.08);}
+  .tp-pills{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px;}
+  .tp-pill{background:var(--card);border:1px solid var(--border);border-radius:5px;padding:3px 8px;font-size:0.75rem;text-align:center;}
+  .tp-pill.ok{border-color:var(--correct);color:var(--correct);}
+  .tp-pill.bad{border-color:var(--wrong);color:var(--wrong);}
+  .tp-no-subs{color:var(--muted);font-style:italic;font-size:0.85rem;}
+  .tp-login-wrap{max-width:320px;margin:0 auto;text-align:center;padding:20px 0;}
+  .tp-login-wrap p{color:var(--muted);font-size:0.88rem;margin-bottom:16px;}
+  .tp-pass-input{width:100%;border:2px solid var(--border);border-radius:6px;padding:10px 14px;font-family:'Source Serif 4',serif;font-size:1rem;color:var(--ink);background:var(--card);outline:none;text-align:center;letter-spacing:4px;margin-bottom:12px;}
+  .tp-pass-input:focus{border-color:var(--accent);}
+  .tp-err{color:var(--wrong);font-size:0.82rem;margin-bottom:10px;display:none;}
+
 </style>
 </head>
 <body>
@@ -249,6 +284,166 @@ function signOutUser(){ if(confirm('Sign out?')){ localStorage.removeItem('cam_u
     document.getElementById('login-status-class').textContent = 'Class: ' + u.cls;
   } catch(e) {}
 })();
+</script>
+
+<!-- ── Teacher floating button ── -->
+<button class="teacher-btn" onclick="tpOpen()">Teacher ▲</button>
+
+<!-- ── Teacher panel overlay ── -->
+<div class="tp-overlay" id="tp-overlay" style="display:none">
+  <div class="tp-panel">
+    <div class="tp-header">
+      <h3 id="tp-title">Teacher Panel</h3>
+      <button class="tp-close" onclick="tpClose()">Close ✕</button>
+    </div>
+    <!-- Login view -->
+    <div id="tp-login-view">
+      <div class="tp-login-wrap">
+        <p>Enter your teacher password to manage this activity.</p>
+        <input class="tp-pass-input" type="password" id="tp-pass" placeholder="Password" onkeydown="if(event.key==='Enter')tpLogin()">
+        <div class="tp-err" id="tp-err">Incorrect password</div>
+        <button class="tp-save-btn" onclick="tpLogin()">Login →</button>
+      </div>
+    </div>
+    <!-- Admin view -->
+    <div id="tp-admin-view" style="display:none">
+      <div class="tp-section">Answer Key</div>
+      <div class="tp-key-grid" id="tp-key-grid"></div>
+      <button class="tp-save-btn" onclick="tpSaveKey()">Save Answer Key</button>
+      <div class="tp-section" id="tp-sub-title">Student Submissions</div>
+      <div id="tp-subs"></div>
+    </div>
+  </div>
+</div>
+
+<script>
+
+var _TP_STORAGE_KEY = 'cpe_full_3_p4';
+
+// ── Teacher Panel ────────────────────────────────────────────────────
+var _tpLoggedIn = false;
+
+function tpOpen() {
+  document.getElementById('tp-overlay').style.display = 'flex';
+  document.getElementById('tp-title').textContent = document.title.replace(' – Part','') + ' · Teacher';
+  if (_tpLoggedIn) tpRenderAdmin();
+}
+function tpClose() { document.getElementById('tp-overlay').style.display = 'none'; }
+
+function tpLogin() {
+  if (document.getElementById('tp-pass').value === '1996') {
+    document.getElementById('tp-err').style.display = 'none';
+    document.getElementById('tp-pass').value = '';
+    document.getElementById('tp-login-view').style.display = 'none';
+    document.getElementById('tp-admin-view').style.display = 'block';
+    _tpLoggedIn = true;
+    tpRenderAdmin();
+  } else {
+    document.getElementById('tp-err').style.display = 'block';
+  }
+}
+
+function tpRenderAdmin() {
+  tpRenderKeyEditor();
+  tpRenderSubs();
+}
+
+function tpRenderKeyEditor() {
+  var grid = document.getElementById('tp-key-grid');
+  grid.innerHTML = '';
+  // Detect part type from STORAGE_KEY suffix
+  var isP1 = typeof questions !== 'undefined'; // Part 1 MC
+  var isP2 = typeof answers !== 'undefined' && !isP1; // Part 2/3 open inputs (but questions undefined)
+  // Actually just check what's available
+  if (typeof questions !== 'undefined') {
+    // Part 1: multiple choice
+    questions.forEach(function(q) {
+      var saved = tpGetKey();
+      var cur = (saved && saved[q.num]) ? saved[q.num] : q.answer;
+      var sel = '<select class="tp-key-select" id="tpk-' + q.num + '">';
+      ['A','B','C','D'].forEach(function(l) {
+        sel += '<option value="' + l + '"' + (cur === l ? ' selected' : '') + '>' + l + '</option>';
+      });
+      sel += '</select>';
+      grid.innerHTML += '<div class="tp-key-item"><label>Q' + q.num + '</label>' + sel + '</div>';
+    });
+  } else if (typeof answers !== 'undefined') {
+    // Part 2/3: open cloze / word formation — show text inputs
+    var saved = tpGetKey() || {};
+    Object.keys(answers).forEach(function(n) {
+      var cur = (saved[n] && saved[n].length) ? saved[n].join(' / ') : answers[n].join(' / ');
+      grid.innerHTML += '<div class="tp-key-item"><label>Q' + n + '</label><input class="tp-key-input" id="tpk-' + n + '" value="' + cur + '" title="Separate multiple accepted answers with /"></div>';
+    });
+  }
+}
+
+function tpGetKey() {
+  try { return JSON.parse(localStorage.getItem(_TP_STORAGE_KEY + '_tpkey') || 'null'); } catch(e) { return null; }
+}
+
+function tpSaveKey() {
+  var saved = {};
+  if (typeof questions !== 'undefined') {
+    questions.forEach(function(q) {
+      var el = document.getElementById('tpk-' + q.num);
+      if (el) saved[q.num] = el.value;
+    });
+    // Update live answer key
+    questions.forEach(function(q) { if (saved[q.num]) q.answer = saved[q.num]; });
+  } else if (typeof answers !== 'undefined') {
+    Object.keys(answers).forEach(function(n) {
+      var el = document.getElementById('tpk-' + n);
+      if (el) {
+        var vals = el.value.split('/').map(function(v){ return v.trim().toUpperCase(); }).filter(Boolean);
+        saved[n] = vals;
+        answers[n] = vals; // update live
+      }
+    });
+  }
+  localStorage.setItem(_TP_STORAGE_KEY + '_tpkey', JSON.stringify(saved));
+  alert('Answer key saved!');
+}
+
+function tpRenderSubs() {
+  var subs = [];
+  try { subs = JSON.parse(localStorage.getItem(_TP_STORAGE_KEY + '_subs') || '[]'); } catch(e) {}
+  var el = document.getElementById('tp-subs');
+  document.getElementById('tp-sub-title').textContent = 'Student Submissions (' + subs.length + ')';
+  if (!subs.length) { el.innerHTML = '<p class="tp-no-subs">No submissions yet.</p>'; return; }
+  var html = '';
+  subs.forEach(function(sub, idx) {
+    html += '<div class="tp-sub-card">';
+    html += '<div class="tp-sub-head"><div><div class="tp-sub-name">' + (sub.name||'Unknown') + '</div>';
+    html += '<div class="tp-sub-meta">' + (sub.submittedAt||'') + '</div></div>';
+    html += '<div style="display:flex;align-items:center;gap:8px;"><span class="tp-sub-score">' + sub.score + '/' + sub.total + '</span>';
+    html += '<button class="tp-del-btn" onclick="tpDeleteSub(' + idx + ')">Delete</button></div></div>';
+    html += '</div>';
+  });
+  el.innerHTML = html;
+}
+
+function tpDeleteSub(idx) {
+  if (!confirm('Delete this submission?')) return;
+  var subs = [];
+  try { subs = JSON.parse(localStorage.getItem(_TP_STORAGE_KEY + '_subs') || '[]'); } catch(e) {}
+  subs.splice(idx, 1);
+  localStorage.setItem(_TP_STORAGE_KEY + '_subs', JSON.stringify(subs));
+  tpRenderSubs();
+}
+
+// Load saved key on startup
+(function() {
+  var saved = null;
+  try { saved = JSON.parse(localStorage.getItem(_TP_STORAGE_KEY + '_tpkey') || 'null'); } catch(e) {}
+  if (!saved) return;
+  if (typeof questions !== 'undefined') {
+    questions.forEach(function(q) { if (saved[q.num]) q.answer = saved[q.num]; });
+  } else if (typeof answers !== 'undefined') {
+    Object.keys(saved).forEach(function(n) { if (answers[n]) answers[n] = saved[n]; });
+  }
+})();
+// ─────────────────────────────────────────────────────────────────────
+
 </script>
 </body>
 </html>
