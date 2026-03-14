@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>CPE Speaking · Part 1</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --bg: #f5f0e8; --bg2: #ede7d9; --ink: #1a1410; --ink2: #4a3f30; --ink3: #8a7a65;
+  --accent: #c0392b; --gold: #c9a84c;
+  --border: rgba(26,20,16,0.12); --card-bg: #fffdf8;
+  --banned-bg: rgba(192,57,43,0.07); --good-bg: rgba(201,168,76,0.1);
+}
+body { min-height:100vh; background:var(--bg); font-family:'DM Sans',sans-serif; color:var(--ink); display:flex; flex-direction:column; }
+body::before { content:''; position:fixed; inset:0; background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E"); pointer-events:none; z-index:0; }
+.topbar { position:sticky; top:0; z-index:100; background:rgba(245,240,232,0.92); backdrop-filter:blur(12px); border-bottom:1px solid var(--border); display:flex; align-items:center; justify-content:space-between; padding:0 40px; height:58px; }
+.topbar-left { display:flex; align-items:center; gap:10px; text-decoration:none; }
+.topbar-left:hover .back-arrow { transform:translateX(-3px); }
+.back-arrow { width:28px; height:28px; border:1px solid var(--border); border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:0.85rem; color:var(--ink2); transition:transform 0.2s; }
+.topbar-home { font-size:0.78rem; letter-spacing:2px; text-transform:uppercase; color:var(--ink3); }
+.level-pill { background:var(--accent); color:#fff; font-size:0.7rem; font-weight:500; letter-spacing:2px; padding:3px 10px; border-radius:2px; text-transform:uppercase; }
+main { flex:1; position:relative; z-index:1; display:flex; flex-direction:column; align-items:center; padding:40px 24px 60px; }
+.page-header { text-align:center; margin-bottom:36px; }
+.eyebrow { font-size:0.7rem; letter-spacing:3px; text-transform:uppercase; color:var(--accent); margin-bottom:10px; }
+.page-title { font-family:'Cormorant Garamond',serif; font-size:2.6rem; font-weight:300; color:var(--ink); letter-spacing:-0.3px; line-height:1.1; }
+.page-title em { font-style:italic; color:var(--accent); }
+.page-desc { font-size:0.85rem; color:var(--ink3); margin-top:10px; line-height:1.6; max-width:420px; margin-left:auto; margin-right:auto; }
+.counter { font-size:0.75rem; letter-spacing:2px; text-transform:uppercase; color:var(--ink3); margin-bottom:20px; }
+.counter span { color:var(--ink); font-weight:500; }
+.card-scene { width:100%; max-width:620px; perspective:1200px; margin-bottom:32px; cursor:pointer; }
+.card-scene:focus { outline:none; }
+.card { width:100%; position:relative; transform-style:preserve-3d; transition:transform 0.55s cubic-bezier(0.4,0.2,0.2,1); }
+.card.flipped { transform:rotateY(180deg); }
+.card-face { width:100%; backface-visibility:hidden; -webkit-backface-visibility:hidden; border-radius:12px; border:1px solid var(--border); background:var(--card-bg); box-shadow:0 4px 24px rgba(26,20,16,0.08),0 1px 4px rgba(26,20,16,0.06); }
+.card-back { position:absolute; top:0; left:0; transform:rotateY(180deg); }
+.card-front-inner { padding:40px 44px 36px; min-height:320px; display:flex; flex-direction:column; }
+.card-face-label { font-size:0.64rem; letter-spacing:2.5px; text-transform:uppercase; color:var(--ink3); margin-bottom:28px; display:flex; align-items:center; gap:10px; }
+.card-face-label::after { content:''; flex:1; height:1px; background:var(--border); }
+.questions-area { flex:1; display:flex; flex-direction:column; gap:24px; justify-content:center; }
+.question-item { display:flex; gap:16px; align-items:flex-start; }
+.q-num { font-family:'Cormorant Garamond',serif; font-size:1.1rem; font-weight:600; color:var(--accent); min-width:20px; padding-top:2px; line-height:1; }
+.q-text { font-family:'Cormorant Garamond',serif; font-size:1.55rem; font-weight:400; color:var(--ink); line-height:1.35; letter-spacing:0.1px; }
+.flip-hint { margin-top:28px; text-align:center; font-size:0.72rem; letter-spacing:1.5px; text-transform:uppercase; color:var(--ink3); display:flex; align-items:center; justify-content:center; gap:8px; opacity:0.7; }
+.flip-hint-icon { width:22px; height:22px; border:1px solid var(--border); border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:0.7rem; }
+.card-back-inner { padding:36px 44px 36px; min-height:320px; display:flex; flex-direction:column; gap:24px; }
+.back-section-label { font-size:0.64rem; letter-spacing:2.5px; text-transform:uppercase; margin-bottom:10px; display:flex; align-items:center; gap:10px; }
+.back-section-label::after { content:''; flex:1; height:1px; background:var(--border); }
+.banned-label { color:var(--accent); }
+.good-label { color:#6b7c3a; }
+.banned-area { background:var(--banned-bg); border:1px solid rgba(192,57,43,0.15); border-radius:8px; padding:16px 20px; }
+.banned-pills { display:flex; flex-wrap:wrap; gap:8px; }
+.banned-pill { background:rgba(192,57,43,0.12); border:1px solid rgba(192,57,43,0.25); color:var(--accent); font-size:0.82rem; font-weight:500; padding:4px 12px; border-radius:3px; }
+.banned-pill::before { content:'✕  '; font-size:0.65rem; opacity:0.7; }
+.good-area { background:var(--good-bg); border:1px solid rgba(201,168,76,0.2); border-radius:8px; padding:16px 20px; }
+.good-items { display:flex; flex-direction:column; gap:8px; }
+.good-item { display:flex; align-items:baseline; gap:10px; }
+.good-word { font-family:'Cormorant Garamond',serif; font-size:1.05rem; font-weight:600; color:var(--ink); min-width:150px; flex-shrink:0; }
+.good-gloss { font-size:0.8rem; color:var(--ink3); font-style:italic; line-height:1.4; }
+.controls { display:flex; align-items:center; gap:16px; }
+.nav-btn { width:48px; height:48px; border:1px solid var(--border); border-radius:50%; background:var(--card-bg); color:var(--ink2); font-size:1rem; cursor:pointer; display:flex; align-items:center; justify-content:center; transition:all 0.18s; box-shadow:0 2px 8px rgba(26,20,16,0.06); }
+.nav-btn:hover { border-color:var(--accent); color:var(--accent); transform:scale(1.05); }
+.nav-btn:disabled { opacity:0.3; cursor:not-allowed; transform:none; }
+.shuffle-btn { border:1px solid var(--border); border-radius:24px; background:var(--card-bg); color:var(--ink3); font-size:0.78rem; letter-spacing:1.5px; text-transform:uppercase; padding:10px 22px; cursor:pointer; font-family:'DM Sans',sans-serif; transition:all 0.18s; box-shadow:0 2px 8px rgba(26,20,16,0.06); display:flex; align-items:center; gap:8px; }
+.shuffle-btn:hover { border-color:var(--accent); color:var(--accent); }
+.progress-dots { display:flex; gap:5px; margin-bottom:8px; flex-wrap:wrap; justify-content:center; max-width:620px; }
+.dot { width:6px; height:6px; border-radius:50%; background:var(--border); transition:background 0.2s; }
+.dot.active { background:var(--accent); }
+.dot.seen { background:var(--ink3); }
+@media (max-width:640px) {
+  .topbar { padding:0 16px; } main { padding:28px 16px 48px; }
+  .card-front-inner, .card-back-inner { padding:28px 24px 24px; }
+  .q-text { font-size:1.3rem; } .page-title { font-size:2rem; }
+}
+</style>
+</head>
+<body>
+
+<nav class="topbar">
+  <a class="topbar-left" href="cpe.html">
+    <div class="back-arrow">←</div>
+    <span class="topbar-home">Cambridge Exam Practice</span>
+  </a>
+  <div style="display:flex;align-items:center;gap:10px;">
+    <span style="font-size:0.75rem;letter-spacing:1.5px;text-transform:uppercase;color:var(--ink3);">C2 Proficiency</span>
+    <span class="level-pill">CPE</span>
+  </div>
+</nav>
+
+<main>
+  <div class="page-header">
+    <div class="eyebrow">Cambridge C2 Proficiency</div>
+    <h1 class="page-title">Speaking — <em>Part 1</em></h1>
+    <p class="page-desc">Tap each card to reveal banned words and C2-level alternatives. Aim for precision, nuance, and natural sophistication in every answer.</p>
+  </div>
+
+  <div class="progress-dots" id="progress-dots"></div>
+  <div class="counter" id="counter">Card <span id="cur">1</span> of <span id="tot">20</span></div>
+
+  <div class="card-scene" id="card-scene" tabindex="0" onclick="flipCard()" onkeydown="handleKey(event)" role="button" aria-label="Flashcard — click to flip">
+    <div class="card" id="card">
+      <div class="card-face card-front">
+        <div class="card-front-inner">
+          <div class="card-face-label">Questions</div>
+          <div class="questions-area">
+            <div class="question-item">
+              <span class="q-num">1</span>
+              <span class="q-text" id="q1">—</span>
+            </div>
+            <div class="question-item">
+              <span class="q-num">2</span>
+              <span class="q-text" id="q2">—</span>
+            </div>
+          </div>
+          <div class="flip-hint">
+            <span class="flip-hint-icon">↺</span>
+            Flip for vocabulary guidance
+          </div>
+        </div>
+      </div>
+      <div class="card-face card-back">
+        <div class="card-back-inner">
+          <div>
+            <div class="back-section-label banned-label">Avoid these words</div>
+            <div class="banned-area"><div class="banned-pills" id="banned-pills"></div></div>
+          </div>
+          <div>
+            <div class="back-section-label good-label">Use these instead</div>
+            <div class="good-area"><div class="good-items" id="good-items"></div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="controls">
+    <button class="nav-btn" id="prev-btn" onclick="prevCard()" title="Previous (←)">←</button>
+    <button class="shuffle-btn" onclick="shuffleDeck()">⇄ Shuffle</button>
+    <button class="nav-btn" id="next-btn" onclick="nextCard()" title="Next (→)">→</button>
+  </div>
+</main>
+
+<script>
+const RAW_CARDS = [
+  {
+    q1: "Where are you from originally, and how has living there shaped who you are?",
+    q2: "Would you say your hometown reflects the broader character of your country?",
+    banned: ["nice", "good", "shaped", "changed", "think"],
+    good: [
+      { word: "instilled in me…", gloss: "gradually built values or habits in a person" },
+      { word: "emblematic of / synonymous with", gloss: "strongly associated with a particular quality" },
+      { word: "I'd argue that…", gloss: "introduces a confident, reasoned opinion" },
+      { word: "a microcosm of…", gloss: "a small-scale version of something larger" },
+    ]
+  },
+  {
+    q1: "To what extent has your upbringing influenced your values and outlook on life?",
+    q2: "Are there aspects of your childhood you would choose to recreate for future generations?",
+    banned: ["think", "good", "nice", "changed", "influenced"],
+    good: [
+      { word: "profoundly shaped / moulded", gloss: "deeply formed character or beliefs" },
+      { word: "to a considerable degree", gloss: "more nuanced than 'a lot'" },
+      { word: "I'm inclined to believe…", gloss: "hedged but confident — very C2" },
+      { word: "pass on / perpetuate", gloss: "transmit values or traditions to others" },
+    ]
+  },
+  {
+    q1: "How would you describe your relationship with the city or town you currently live in?",
+    q2: "In what ways do you think urban and rural living reflect different attitudes to life?",
+    banned: ["like", "nice", "good", "think", "different"],
+    good: [
+      { word: "I have a deep affinity with…", gloss: "strong emotional connection to a place" },
+      { word: "divergent attitudes / contrasting outlooks", gloss: "better than 'different ways of thinking'" },
+      { word: "pace of life", gloss: "how fast or slow everyday life feels" },
+      { word: "it's worth noting that…", gloss: "introduces a significant observation" },
+    ]
+  },
+  {
+    q1: "What do you consider to be the most significant challenge facing people of your generation?",
+    q2: "Do you feel optimistic or pessimistic about the future, and why?",
+    banned: ["think", "big", "hard", "problem", "good"],
+    good: [
+      { word: "the defining challenge of…", gloss: "the most characteristic difficulty of an era" },
+      { word: "I oscillate between optimism and…", gloss: "move back and forth between two positions" },
+      { word: "there are grounds for cautious optimism", gloss: "sophisticated hedged positive view" },
+      { word: "unprecedented / systemic", gloss: "never seen before / embedded in the whole system" },
+    ]
+  },
+  {
+    q1: "How important is creative expression in your life, and what form does it take?",
+    q2: "Do you think creativity is an innate talent or something that can be cultivated?",
+    banned: ["important", "like", "think", "good", "do"],
+    good: [
+      { word: "it occupies a central place in…", gloss: "more precise than 'it's important to me'" },
+      { word: "innate / inherent vs. acquired", gloss: "born with vs. developed through practice" },
+      { word: "I'm firmly of the view that…", gloss: "strong confident opinion marker" },
+      { word: "nurture creativity", gloss: "cultivate and develop it intentionally" },
+    ]
+  },
+  {
+    q1: "To what extent do you think language shapes the way we perceive the world?",
+    q2: "Has learning English altered the way you think or express yourself?",
+    banned: ["think", "changed", "good", "affect", "use"],
+    good: [
+      { word: "frames our perception of…", gloss: "language sets the boundaries of how we see things" },
+      { word: "there's a compelling case for…", gloss: "introduces a well-supported argument" },
+      { word: "broaden one's conceptual repertoire", gloss: "extend the range of ideas you can express" },
+      { word: "subtly / imperceptibly", gloss: "in a way that's hard to notice — precise adverbs" },
+    ]
+  },
+  {
+    q1: "How do you think social media has changed the way people form relationships?",
+    q2: "Do you believe genuine human connection is harder or easier to achieve today?",
+    banned: ["changed", "think", "hard", "easy", "good"],
+    good: [
+      { word: "fundamentally altered / reshaped", gloss: "changed in a deep and lasting way" },
+      { word: "superficial vs. meaningful connections", gloss: "shallow vs. deep relationships" },
+      { word: "I'd venture to suggest that…", gloss: "cautious but confident opinion — C2 register" },
+      { word: "erode / foster", gloss: "gradually destroy vs. actively encourage" },
+    ]
+  },
+  {
+    q1: "What role has travel played in broadening your perspective on life?",
+    q2: "Do you think mass tourism has more benefits or drawbacks for local communities?",
+    banned: ["nice", "good", "changed", "think", "like"],
+    good: [
+      { word: "it has been instrumental in…", gloss: "crucial in bringing about a result" },
+      { word: "challenge preconceptions", gloss: "force you to question existing beliefs" },
+      { word: "the drawbacks arguably outweigh…", gloss: "disadvantages are greater — balanced argument" },
+      { word: "cultural erosion / commodification", gloss: "loss of local culture / treating it as a product" },
+    ]
+  },
+  {
+    q1: "How do you balance ambition with personal wellbeing in your own life?",
+    q2: "Do you think modern society places too much emphasis on professional success?",
+    banned: ["think", "work", "good", "important", "balance"],
+    good: [
+      { word: "strike a balance between…", gloss: "find an equilibrium — more precise than 'balance'" },
+      { word: "there is an undue emphasis on…", gloss: "too much focus on something" },
+      { word: "at the expense of…", gloss: "by sacrificing something else" },
+      { word: "redefine success", gloss: "question and change how we understand achievement" },
+    ]
+  },
+  {
+    q1: "To what degree do you think formal education prepares people for real life?",
+    q2: "What do you consider the most valuable thing you have ever learned, inside or outside school?",
+    banned: ["think", "good", "important", "learn", "teach"],
+    good: [
+      { word: "equips individuals with…", gloss: "provides necessary tools or skills" },
+      { word: "falls short of…", gloss: "fails to fully achieve something" },
+      { word: "the most enduring lesson has been…", gloss: "lasting, permanent — more precise than 'important'" },
+      { word: "self-reliance / emotional intelligence", gloss: "C2 vocabulary for qualities education may neglect" },
+    ]
+  },
+  {
+    q1: "How has your relationship with technology evolved over the course of your life?",
+    q2: "Do you think there are aspects of modern life that would benefit from less technology?",
+    banned: ["changed", "use", "think", "good", "better"],
+    good: [
+      { word: "my relationship with technology has evolved…", gloss: "developed gradually — precise verb" },
+      { word: "there is a strong case for…", gloss: "introduces a well-reasoned argument" },
+      { word: "digital detox / unplugging", gloss: "deliberately stepping back from technology" },
+      { word: "pervasive / all-encompassing", gloss: "present everywhere — C2 adjectives" },
+    ]
+  },
+  {
+    q1: "What draws you to the kinds of books, films, or music you enjoy most?",
+    q2: "Do you think art has the power to genuinely change people's minds or behaviour?",
+    banned: ["like", "good", "nice", "interesting", "think"],
+    good: [
+      { word: "I'm drawn to works that…", gloss: "more nuanced than 'I like'" },
+      { word: "resonate on a deeper level", gloss: "connect in a meaningful, lasting way" },
+      { word: "art has the capacity to…", gloss: "more precise than 'art can'" },
+      { word: "provoke reflection / challenge assumptions", gloss: "make people think and question" },
+    ]
+  },
+  {
+    q1: "How has your attitude towards risk changed as you've grown older?",
+    q2: "Do you think taking risks is essential to living a fulfilling life?",
+    banned: ["changed", "think", "good", "important", "like"],
+    good: [
+      { word: "my disposition towards risk has…", gloss: "your natural tendency or attitude" },
+      { word: "calculated risk", gloss: "a risk taken with careful thought — not reckless" },
+      { word: "I would contend that…", gloss: "formal, confident way to present an argument" },
+      { word: "indispensable to / integral to", gloss: "absolutely necessary for — C2 preposition use" },
+    ]
+  },
+  {
+    q1: "In what ways do you think your cultural background has shaped your identity?",
+    q2: "Do you see yourself primarily as a citizen of your country or of the world?",
+    banned: ["think", "shaped", "changed", "good", "made"],
+    good: [
+      { word: "it has been foundational to…", gloss: "formed the very basis of something" },
+      { word: "a sense of belonging / cultural identity", gloss: "precise vocabulary for this topic" },
+      { word: "transcend national boundaries", gloss: "go beyond the limits of one country" },
+      { word: "dual identity / hybrid identity", gloss: "belonging to more than one culture simultaneously" },
+    ]
+  },
+  {
+    q1: "How important is it to you to maintain a strong sense of personal integrity?",
+    q2: "Have you ever had to make a decision that conflicted with what others expected of you?",
+    banned: ["important", "think", "good", "hard", "do"],
+    good: [
+      { word: "it's of paramount importance to me…", gloss: "more emphatic than 'very important'" },
+      { word: "I place great store by…", gloss: "I value something highly — idiomatic C2 phrase" },
+      { word: "at odds with…", gloss: "in conflict or disagreement with" },
+      { word: "stand one's ground", gloss: "maintain your position under pressure" },
+    ]
+  },
+  {
+    q1: "What do you think is the most pressing environmental issue of our time?",
+    q2: "Do you believe individual action can make a meaningful difference to global problems?",
+    banned: ["think", "big", "important", "problem", "good"],
+    good: [
+      { word: "the most urgent / pressing concern is…", gloss: "needing immediate attention — C2 adjectives" },
+      { word: "collective vs. individual responsibility", gloss: "key distinction for this topic" },
+      { word: "make a tangible difference", gloss: "a real, measurable impact — not just 'help'" },
+      { word: "I'm sceptical as to whether…", gloss: "doubt expressed with precision and nuance" },
+    ]
+  },
+  {
+    q1: "How do you think the concept of work has changed for your generation compared to your parents'?",
+    q2: "Do you believe people today have a healthier relationship with work than in the past?",
+    banned: ["changed", "think", "work", "better", "good"],
+    good: [
+      { word: "the notion of work has been fundamentally…", gloss: "'notion' is more precise than 'concept'" },
+      { word: "work-life integration", gloss: "modern term replacing 'work-life balance'" },
+      { word: "I'm not entirely convinced that…", gloss: "nuanced scepticism — C2 register" },
+      { word: "precarious / flexible employment", gloss: "unstable vs. adaptable work arrangements" },
+    ]
+  },
+  {
+    q1: "What do you think makes a society genuinely fair and equal?",
+    q2: "In your view, is complete equality of outcome a realistic or even desirable goal?",
+    banned: ["think", "fair", "good", "same", "equal"],
+    good: [
+      { word: "equitable / egalitarian", gloss: "fair in a deeper sense — key vocabulary" },
+      { word: "equality of opportunity vs. outcome", gloss: "essential distinction for this topic" },
+      { word: "a utopian ideal vs. a practical goal", gloss: "idealistic vs. achievable — useful contrast" },
+      { word: "I have reservations about…", gloss: "I'm not fully convinced — measured scepticism" },
+    ]
+  },
+  {
+    q1: "How do you think people's sense of national identity will evolve in the coming decades?",
+    q2: "Do you think globalisation strengthens or weakens cultural diversity?",
+    banned: ["think", "changed", "good", "lose", "keep"],
+    good: [
+      { word: "national identity may well…", gloss: "'may well' is a confident hedged prediction" },
+      { word: "homogenisation vs. pluralism", gloss: "flattening diversity vs. celebrating many cultures" },
+      { word: "it remains to be seen whether…", gloss: "we don't yet know — precise future hedge" },
+      { word: "erode / preserve / celebrate", gloss: "precise verbs for identity and culture" },
+    ]
+  },
+  {
+    q1: "What does personal happiness mean to you, and how do you pursue it?",
+    q2: "Do you think happiness is primarily a matter of circumstance or of mindset?",
+    banned: ["think", "good", "nice", "want", "like"],
+    good: [
+      { word: "I conceive of happiness as…", gloss: "how you understand or define something — C2 verb" },
+      { word: "a matter of disposition rather than…", gloss: "depends on your nature, not just your situation" },
+      { word: "contentment vs. fulfilment", gloss: "quiet satisfaction vs. deep sense of purpose" },
+      { word: "I'm inclined to think that…", gloss: "tentative but thoughtful — ideal C2 hedging" },
+    ]
+  },
+];
+
+let deck = [], current = 0, flipped = false;
+const seen = new Set();
+
+function shuffle(arr) {
+  const a = [...arr];
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+
+function shuffleDeck() {
+  deck = shuffle(RAW_CARDS);
+  current = 0;
+  seen.clear();
+  flipped = false;
+  document.getElementById('card').classList.remove('flipped');
+  renderCard();
+  renderDots();
+}
+
+function renderCard() {
+  const c = deck[current];
+  document.getElementById('q1').textContent = c.q1;
+  document.getElementById('q2').textContent = c.q2;
+  document.getElementById('banned-pills').innerHTML = c.banned.map(w => `<span class="banned-pill">${w}</span>`).join('');
+  document.getElementById('good-items').innerHTML = c.good.map(g => `<div class="good-item"><span class="good-word">${g.word}</span><span class="good-gloss">${g.gloss}</span></div>`).join('');
+  document.getElementById('cur').textContent = current + 1;
+  document.getElementById('tot').textContent = deck.length;
+  document.getElementById('prev-btn').disabled = current === 0;
+  document.getElementById('next-btn').disabled = current === deck.length - 1;
+  seen.add(current);
+  renderDots();
+}
+
+function renderDots() {
+  document.getElementById('progress-dots').innerHTML = deck.map((_, i) => {
+    let cls = 'dot';
+    if (i === current) cls += ' active';
+    else if (seen.has(i)) cls += ' seen';
+    return `<div class="${cls}"></div>`;
+  }).join('');
+}
+
+function flipCard() {
+  flipped = !flipped;
+  document.getElementById('card').classList.toggle('flipped', flipped);
+}
+
+function nextCard() {
+  if (current < deck.length - 1) { current++; flipped = false; document.getElementById('card').classList.remove('flipped'); renderCard(); }
+}
+
+function prevCard() {
+  if (current > 0) { current--; flipped = false; document.getElementById('card').classList.remove('flipped'); renderCard(); }
+}
+
+function handleKey(e) {
+  if (e.key === 'ArrowRight') nextCard();
+  else if (e.key === 'ArrowLeft') prevCard();
+  else if (e.key === ' ' || e.key === 'Enter') { e.preventDefault(); flipCard(); }
+}
+
+document.addEventListener('keydown', e => {
+  if (['ArrowRight','ArrowLeft'].includes(e.key)) { e.preventDefault(); e.key === 'ArrowRight' ? nextCard() : prevCard(); }
+});
+
+shuffleDeck();
+</script>
+</body>
+</html>

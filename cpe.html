@@ -69,8 +69,6 @@ body::before { content:''; position:fixed; inset:0; background-image:url("data:i
 .loading-state { text-align:center; padding:60px 20px; color:var(--ink3); font-size:0.88rem; letter-spacing:1px; }
 .spinner { width:28px; height:28px; border:2px solid var(--border); border-top-color:var(--accent); border-radius:50%; animation:spin 0.8s linear infinite; margin:0 auto 16px; }
 @keyframes spin { to { transform:rotate(360deg); } }
-
-/* Speaking section styles */
 .speaking-parts { display:flex; flex-direction:column; gap:8px; margin-bottom:8px; }
 .speaking-part-link { display:flex; align-items:center; gap:16px; padding:16px 20px; background:var(--card-bg); border:1px solid var(--border); border-radius:6px; text-decoration:none; color:var(--ink); transition:all 0.15s; position:relative; overflow:hidden; }
 .speaking-part-link::after { content:'→'; position:absolute; right:18px; opacity:0; transform:translateX(-6px); transition:all 0.2s; font-size:0.85rem; color:var(--accent); }
@@ -82,7 +80,6 @@ body::before { content:''; position:fixed; inset:0; background-image:url("data:i
 .speaking-part-name { font-size:0.9rem; font-weight:400; color:var(--ink); }
 .speaking-part-desc { font-size:0.76rem; color:var(--ink3); margin-top:3px; }
 .speaking-soon-pill { font-size:0.62rem; letter-spacing:1.5px; text-transform:uppercase; color:var(--ink3); border:1px solid var(--border); padding:3px 9px; border-radius:20px; margin-left:auto; margin-right:8px; white-space:nowrap; }
-
 @media(max-width:640px){.topbar{padding:0 20px;}.hero{padding:40px 20px 36px;}.content{padding:0 20px 60px;}.exam-parts{grid-template-columns:1fr;}.part-row{border-right:none;}.hero h1{font-size:2.4rem;}.hero-stats{gap:24px;}}
 </style>
 </head>
@@ -127,19 +124,18 @@ body::before { content:''; position:fixed; inset:0; background-image:url("data:i
     <div id="practice-container"><div class="loading-state"><div class="spinner"></div>Loading activities…</div></div>
   </div>
 
-  <!-- SPEAKING — above Listening and Writing -->
+  <!-- SPEAKING -->
   <div class="section-header" style="margin-top:20px;">
     <div class="section-title">Speaking</div>
     <div class="section-tag">Parts 1–3</div>
   </div>
   <div class="speaking-parts">
-    <a class="speaking-part-link soon" href="#">
+    <a class="speaking-part-link" href="cpe_speaking_part1.html">
       <div class="speaking-part-num">Pt 1</div>
       <div class="speaking-part-info">
         <div class="speaking-part-name">Interview</div>
-        <div class="speaking-part-desc">Personal questions on familiar topics — work, interests, opinions.</div>
+        <div class="speaking-part-desc">20 flashcards with C2 questions, banned words &amp; sophisticated vocabulary.</div>
       </div>
-      <span class="speaking-soon-pill">Coming Soon</span>
     </a>
     <a class="speaking-part-link soon" href="#">
       <div class="speaking-part-num">Pt 2</div>
