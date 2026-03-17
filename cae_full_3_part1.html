@@ -1,0 +1,583 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CAE Test 1 – Reading & Use of English Parts 1–4</title>
+<style>
+  :root {
+    --navy: #1a2a4a;
+    --blue: #2563eb;
+    --light-blue: #dbeafe;
+    --green: #16a34a;
+    --green-bg: #dcfce7;
+    --red: #dc2626;
+    --red-bg: #fee2e2;
+    --grey: #6b7280;
+    --border: #d1d5db;
+    --bg: #f8fafc;
+    --white: #ffffff;
+    --teacher-bg: #fffbeb;
+    --teacher-border: #f59e0b;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Georgia', serif; background: var(--bg); color: #1f2937; line-height: 1.7; }
+  header { background: var(--navy); color: white; padding: 20px 32px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px; }
+  header h1 { font-size: 1.2rem; font-weight: normal; letter-spacing: 0.05em; }
+  header h2 { font-size: 1rem; opacity: 0.75; font-weight: normal; }
+  .header-right { display: flex; gap: 10px; align-items: center; }
+  #teacher-toggle-btn { background: transparent; border: 1px solid rgba(255,255,255,0.4); color: white; padding: 6px 14px; border-radius: 4px; cursor: pointer; font-size: 0.85rem; transition: background 0.2s; }
+  #teacher-toggle-btn:hover { background: rgba(255,255,255,0.1); }
+  #teacher-toggle-btn.active { background: var(--teacher-border); border-color: var(--teacher-border); color: #1a1a1a; }
+  .main { max-width: 860px; margin: 0 auto; padding: 32px 24px 60px; }
+  #teacher-banner { display: none; background: var(--teacher-bg); border: 2px solid var(--teacher-border); border-radius: 8px; padding: 12px 20px; margin-bottom: 28px; font-size: 0.9rem; color: #92400e; font-family: sans-serif; }
+  #teacher-banner.visible { display: block; }
+  .section { background: var(--white); border: 1px solid var(--border); border-radius: 10px; padding: 28px 32px; margin-bottom: 32px; box-shadow: 0 1px 4px rgba(0,0,0,0.05); }
+  .section-header { border-bottom: 2px solid var(--navy); padding-bottom: 10px; margin-bottom: 20px; }
+  .section-header h3 { font-size: 1.1rem; font-weight: bold; color: var(--navy); text-transform: uppercase; letter-spacing: 0.08em; }
+  .section-header p { font-size: 0.88rem; color: var(--grey); margin-top: 4px; font-family: sans-serif; }
+  .instructions { background: var(--light-blue); border-left: 3px solid var(--blue); padding: 12px 16px; margin-bottom: 20px; font-size: 0.9rem; font-family: sans-serif; border-radius: 0 4px 4px 0; }
+  .passage { background: #f9fafb; border: 1px solid var(--border); border-radius: 6px; padding: 20px 24px; margin-bottom: 22px; font-size: 0.97rem; line-height: 1.85; }
+  .passage h4 { text-align: center; font-size: 1.05rem; margin-bottom: 14px; color: var(--navy); }
+  .gap { display: inline-block; font-weight: bold; color: var(--navy); margin: 0 2px; }
+  .mcq-grid { display: flex; flex-direction: column; gap: 12px; margin-top: 16px; }
+  .mcq-item { border: 1px solid var(--border); border-radius: 6px; padding: 12px 16px; font-family: sans-serif; font-size: 0.9rem; }
+  .mcq-item .qnum { font-weight: bold; color: var(--navy); margin-right: 8px; }
+  .mcq-options { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 8px; }
+  .mcq-options label { display: flex; align-items: center; gap: 6px; cursor: pointer; padding: 5px 12px; border: 1px solid var(--border); border-radius: 4px; min-width: 160px; transition: background 0.15s, border-color 0.15s; }
+  .mcq-options label:hover { background: var(--light-blue); border-color: var(--blue); }
+  .mcq-options input[type=radio] { accent-color: var(--blue); }
+  .mcq-options label.correct { background: var(--green-bg); border-color: var(--green); }
+  .mcq-options label.wrong { background: var(--red-bg); border-color: var(--red); }
+  .mcq-options label.show-correct { background: var(--green-bg); border-color: var(--green); }
+  .p2-passage { font-size: 0.97rem; line-height: 2.2; }
+  .p2-input { display: inline-block; border: none; border-bottom: 2px solid var(--navy); width: 120px; font-size: 0.95rem; font-family: Georgia, serif; text-align: center; background: transparent; outline: none; padding: 0 4px; color: var(--navy); text-transform: uppercase; vertical-align: bottom; }
+  .p2-input.correct { border-bottom-color: var(--green); background: var(--green-bg); }
+  .p2-input.wrong { border-bottom-color: var(--red); background: var(--red-bg); }
+  .p3-table { width: 100%; border-collapse: collapse; margin-top: 12px; }
+  .p3-table td, .p3-table th { padding: 10px 14px; border: 1px solid var(--border); font-size: 0.92rem; }
+  .p3-table th { background: var(--navy); color: white; font-family: sans-serif; font-size: 0.83rem; text-transform: uppercase; }
+  .p3-table tr:nth-child(even) td { background: #f9fafb; }
+  .p3-table td.stem { font-weight: bold; color: var(--navy); font-family: sans-serif; text-transform: uppercase; }
+  .p3-table td.linetext { font-size: 0.92rem; line-height: 1.6; }
+  .p3-input { border: 1px solid var(--border); border-radius: 4px; padding: 4px 8px; width: 160px; font-size: 0.92rem; font-family: sans-serif; text-transform: uppercase; outline: none; }
+  .p3-input:focus { border-color: var(--blue); }
+  .p3-input.correct { border-color: var(--green); background: var(--green-bg); }
+  .p3-input.wrong { border-color: var(--red); background: var(--red-bg); }
+  .p4-item { border: 1px solid var(--border); border-radius: 6px; padding: 16px 20px; margin-bottom: 14px; font-family: sans-serif; font-size: 0.92rem; }
+  .p4-qnum { font-weight: bold; color: var(--navy); margin-right: 6px; }
+  .p4-keyword { display: inline-block; font-weight: bold; text-transform: uppercase; color: var(--navy); background: var(--light-blue); padding: 2px 10px; border-radius: 3px; margin: 8px 0; font-size: 0.88rem; letter-spacing: 0.05em; }
+  .p4-sentence { line-height: 1.8; margin: 6px 0; }
+  .p4-gap-input { border: none; border-bottom: 2px solid var(--navy); min-width: 220px; font-size: 0.92rem; font-family: sans-serif; background: transparent; outline: none; padding: 0 6px; text-transform: uppercase; vertical-align: bottom; color: var(--navy); }
+  .p4-gap-input.correct { border-bottom-color: var(--green); background: var(--green-bg); }
+  .p4-gap-input.wrong { border-bottom-color: var(--red); background: var(--red-bg); }
+  .answer-reveal { display: none; font-size: 0.8rem; color: var(--green); font-family: sans-serif; margin-top: 4px; font-style: italic; }
+  body.teacher-mode .answer-reveal { display: block; }
+  .score-block { background: var(--light-blue); border: 1px solid var(--blue); border-radius: 8px; padding: 16px 22px; margin-top: 20px; font-family: sans-serif; display: none; }
+  .score-block.visible { display: block; }
+  .score-block h4 { color: var(--navy); margin-bottom: 8px; font-size: 1rem; }
+  .score-breakdown { font-size: 0.88rem; color: #374151; }
+  .score-total { font-size: 1.2rem; font-weight: bold; color: var(--navy); margin-top: 8px; }
+  .btn-row { display: flex; gap: 12px; flex-wrap: wrap; margin-top: 22px; }
+  .btn { padding: 10px 24px; border-radius: 5px; border: none; font-size: 0.9rem; font-family: sans-serif; cursor: pointer; transition: opacity 0.2s, transform 0.1s; }
+  .btn:hover { opacity: 0.9; transform: translateY(-1px); }
+  .btn:active { transform: translateY(0); }
+  .btn-primary { background: var(--navy); color: white; }
+  .btn-reset { background: var(--grey); color: white; }
+  .name-row { display: flex; align-items: center; gap: 12px; margin-bottom: 24px; font-family: sans-serif; font-size: 0.9rem; }
+  .name-row input { border: 1px solid var(--border); border-radius: 4px; padding: 7px 12px; font-size: 0.9rem; width: 240px; }
+  #supabase-status { font-family: sans-serif; font-size: 0.8rem; padding: 6px 12px; border-radius: 4px; margin-bottom: 16px; display: none; }
+  #supabase-status.ok { display:block; background: var(--green-bg); color: var(--green); }
+  #supabase-status.err { display:block; background: var(--red-bg); color: var(--red); }
+  #submissions-section { display: none; background: var(--white); border: 2px solid var(--teacher-border); border-radius: 10px; padding: 24px 28px; margin-top: 28px; }
+  #submissions-section.visible { display: block; }
+  #submissions-section h3 { color: #92400e; margin-bottom: 14px; font-family: sans-serif; }
+  #submissions-table { width: 100%; border-collapse: collapse; font-family: sans-serif; font-size: 0.85rem; }
+  #submissions-table th { background: #92400e; color: white; padding: 8px 12px; text-align: left; }
+  #submissions-table td { padding: 7px 12px; border-bottom: 1px solid var(--border); }
+  #submissions-table tr:hover td { background: var(--teacher-bg); }
+  .example-row { color: var(--grey); font-style: italic; font-size: 0.85rem; margin-bottom: 10px; font-family: sans-serif; }
+  @media (max-width: 600px) { .section { padding: 18px 16px; } .mcq-options label { min-width: 100%; } .p4-gap-input { min-width: 160px; } }
+</style>
+</head>
+<body>
+
+<header>
+  <div>
+    <h1>CAE – Reading and Use of English (1 hour 30 minutes)</h1>
+    <h2>Test 1 &nbsp;|&nbsp; Parts 1–4</h2>
+  </div>
+  <div class="header-right">
+    <button id="teacher-toggle-btn" onclick="toggleTeacher()">🔒 Teacher Mode</button>
+  </div>
+</header>
+
+<div id="pw-modal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:999;align-items:center;justify-content:center;">
+  <div style="background:white;padding:32px;border-radius:10px;width:320px;font-family:sans-serif;">
+    <h3 style="margin-bottom:16px;color:#1a2a4a;">Teacher Access</h3>
+    <input type="password" id="pw-input" placeholder="Enter password" style="width:100%;padding:9px 12px;border:1px solid #d1d5db;border-radius:4px;font-size:1rem;margin-bottom:12px;">
+    <p id="pw-error" style="color:#dc2626;font-size:0.85rem;margin-bottom:10px;display:none;">Incorrect password</p>
+    <div style="display:flex;gap:10px;">
+      <button onclick="checkPassword()" style="flex:1;padding:9px;background:#1a2a4a;color:white;border:none;border-radius:4px;cursor:pointer;font-size:0.95rem;">Enter</button>
+      <button onclick="closeModal()" style="flex:1;padding:9px;background:#6b7280;color:white;border:none;border-radius:4px;cursor:pointer;font-size:0.95rem;">Cancel</button>
+    </div>
+  </div>
+</div>
+
+<div class="main">
+
+  <div id="teacher-banner">
+    ✅ <strong>Teacher Mode Active</strong> — Correct answers are shown below each item. Student submissions appear at the bottom.
+  </div>
+
+  <div id="supabase-status"></div>
+
+  <div class="name-row">
+    <label for="student-name"><strong>Student name:</strong></label>
+    <input type="text" id="student-name" placeholder="Enter your name before submitting">
+  </div>
+
+  <!-- ═══ PART 1 ═══ -->
+  <div class="section">
+    <div class="section-header">
+      <h3>Part 1 – Multiple Choice Cloze</h3>
+      <p>Questions 1–8 &nbsp;|&nbsp; 1 mark each</p>
+    </div>
+    <div class="instructions">
+      For questions <strong>1–8</strong>, read the text below and decide which answer (<strong>A, B, C</strong> or <strong>D</strong>) best fits each gap. There is an example at the beginning (0).
+    </div>
+    <div class="example-row">Example: <strong>0</strong>&nbsp; A esteemed &nbsp; B viewed &nbsp; C regarded &nbsp; <strong>D believed</strong></div>
+
+    <div class="passage">
+      <h4>The camera never lies</h4>
+      <p>Arthur Conan Doyle, creator of the Sherlock Holmes stories, (0) believed himself to be a rational man, a scientist even. But in 1920, when he saw photographs of fairies taken in a garden <span class="gap">(1)</span>, he thought he was seeing scientific proof that these tiny creatures really existed. He published the photographs alongside an article he wrote, <span class="gap">(2)</span> fairies as supernatural wonders. It was not until 1939 that the two ladies who took the photos admitted these were <span class="gap">(3)</span>. They simply cut out pictures of fairies from a book and <span class="gap">(4)</span> them among flowers. The results are <span class="gap">(5)</span> beautiful. But the simplicity of the trick <span class="gap">(6)</span> a basic principle of photography, that the camera cannot lie.</p>
+      <br>
+      <p>But it can, and always could. Today, we are used to computer software <span class="gap">(7)</span> us to rework our digital images and it is a <span class="gap">(8)</span> that photography ever had a true age of innocence. From the moment cameras began capturing reality, that reality was being altered.</p>
+    </div>
+
+    <div class="mcq-grid" id="part1-questions">
+
+      <div class="mcq-item" data-q="1" data-answer="B">
+        <span class="qnum">1</span>
+        <div class="mcq-options">
+          <label><input type="radio" name="q1" value="A"> A&nbsp; venue</label>
+          <label><input type="radio" name="q1" value="B"> B&nbsp; setting</label>
+          <label><input type="radio" name="q1" value="C"> C&nbsp; background</label>
+          <label><input type="radio" name="q1" value="D"> D&nbsp; surrounding</label>
+        </div>
+        <div class="answer-reveal">✓ Answer: B – setting</div>
+      </div>
+
+      <div class="mcq-item" data-q="2" data-answer="D">
+        <span class="qnum">2</span>
+        <div class="mcq-options">
+          <label><input type="radio" name="q2" value="A"> A&nbsp; calling</label>
+          <label><input type="radio" name="q2" value="B"> B&nbsp; naming</label>
+          <label><input type="radio" name="q2" value="C"> C&nbsp; attributing</label>
+          <label><input type="radio" name="q2" value="D"> D&nbsp; acknowledging</label>
+        </div>
+        <div class="answer-reveal">✓ Answer: D – acknowledging</div>
+      </div>
+
+      <div class="mcq-item" data-q="3" data-answer="C">
+        <span class="qnum">3</span>
+        <div class="mcq-options">
+          <label><input type="radio" name="q3" value="A"> A&nbsp; false</label>
+          <label><input type="radio" name="q3" value="B"> B&nbsp; faulty</label>
+          <label><input type="radio" name="q3" value="C"> C&nbsp; fake</label>
+          <label><input type="radio" name="q3" value="D"> D&nbsp; fictional</label>
+        </div>
+        <div class="answer-reveal">✓ Answer: C – fake</div>
+      </div>
+
+      <div class="mcq-item" data-q="4" data-answer="A">
+        <span class="qnum">4</span>
+        <div class="mcq-options">
+          <label><input type="radio" name="q4" value="A"> A&nbsp; arranged</label>
+          <label><input type="radio" name="q4" value="B"> B&nbsp; spaced</label>
+          <label><input type="radio" name="q4" value="C"> C&nbsp; settled</label>
+          <label><input type="radio" name="q4" value="D"> D&nbsp; distributed</label>
+        </div>
+        <div class="answer-reveal">✓ Answer: A – arranged</div>
+      </div>
+
+      <div class="mcq-item" data-q="5" data-answer="D">
+        <span class="qnum">5</span>
+        <div class="mcq-options">
+          <label><input type="radio" name="q5" value="A"> A&nbsp; categorically</label>
+          <label><input type="radio" name="q5" value="B"> B&nbsp; unavoidably</label>
+          <label><input type="radio" name="q5" value="C"> C&nbsp; substantially</label>
+          <label><input type="radio" name="q5" value="D"> D&nbsp; undeniably</label>
+        </div>
+        <div class="answer-reveal">✓ Answer: D – undeniably</div>
+      </div>
+
+      <div class="mcq-item" data-q="6" data-answer="B">
+        <span class="qnum">6</span>
+        <div class="mcq-options">
+          <label><input type="radio" name="q6" value="A"> A&nbsp; weakens</label>
+          <label><input type="radio" name="q6" value="B"> B&nbsp; undermines</label>
+          <label><input type="radio" name="q6" value="C"> C&nbsp; demolishes</label>
+          <label><input type="radio" name="q6" value="D"> D&nbsp; dismantles</label>
+        </div>
+        <div class="answer-reveal">✓ Answer: B – undermines</div>
+      </div>
+
+      <div class="mcq-item" data-q="7" data-answer="C">
+        <span class="qnum">7</span>
+        <div class="mcq-options">
+          <label><input type="radio" name="q7" value="A"> A&nbsp; letting</label>
+          <label><input type="radio" name="q7" value="B"> B&nbsp; supporting</label>
+          <label><input type="radio" name="q7" value="C"> C&nbsp; enabling</label>
+          <label><input type="radio" name="q7" value="D"> D&nbsp; empowering</label>
+        </div>
+        <div class="answer-reveal">✓ Answer: C – enabling</div>
+      </div>
+
+      <div class="mcq-item" data-q="8" data-answer="D">
+        <span class="qnum">8</span>
+        <div class="mcq-options">
+          <label><input type="radio" name="q8" value="A"> A&nbsp; fantasy</label>
+          <label><input type="radio" name="q8" value="B"> B&nbsp; legend</label>
+          <label><input type="radio" name="q8" value="C"> C&nbsp; dream</label>
+          <label><input type="radio" name="q8" value="D"> D&nbsp; myth</label>
+        </div>
+        <div class="answer-reveal">✓ Answer: D – myth</div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ═══ PART 2 ═══ -->
+  <div class="section">
+    <div class="section-header">
+      <h3>Part 2 – Open Cloze</h3>
+      <p>Questions 9–16 &nbsp;|&nbsp; 1 mark each</p>
+    </div>
+    <div class="instructions">
+      For questions <strong>9–16</strong>, read the text below and think of the word which best fits each gap. Use only <strong>one</strong> word in each gap. Write your answers <strong>IN CAPITAL LETTERS</strong>.
+    </div>
+
+    <div class="passage p2-passage">
+      <h4>Online passwords – what everyone should know</h4>
+      <p>When (0) <strong>IT</strong> comes to online security, we all know what we ought to do: choose a different, random set of letters and numbers for every email account, shopping site or bank account. But hardly (9)&nbsp;<input class="p2-input" data-q="9" data-answer="ANYBODY,ANYONE" placeholder="9">&nbsp;does this, because memorising them all is impossible. So we use the same familiar words for every site, (10)&nbsp;<input class="p2-input" data-q="10" data-answer="LIKE" placeholder="10">&nbsp;a pet's name or, even worse, the word 'password', occasionally remembering to replace the letter O with a zero, or choosing to (11)&nbsp;<input class="p2-input" data-q="11" data-answer="MAKE" placeholder="11">&nbsp;use of a capital letter.</p>
+      <br>
+      <p>Even if we opt (12)&nbsp;<input class="p2-input" data-q="12" data-answer="FOR" placeholder="12">&nbsp;a random group of letters such as 'fpqzy', there is now software available which can make a thousand guesses per second, enabling a hacker to get to your password in just under four hours.</p>
+      <br>
+      <p>Interestingly, (13)&nbsp;<input class="p2-input" data-q="13" data-answer="BY" placeholder="13">&nbsp;increasing your password to twenty random letters, you increase a hacker's guessing time to 6.5 thousand trillion centuries. The problem is that you would (14)&nbsp;<input class="p2-input" data-q="14" data-answer="HAVE,STAND" placeholder="14">&nbsp;no chance of ever remembering those 20 letters. The solution, apparently, is to come (15)&nbsp;<input class="p2-input" data-q="15" data-answer="UP" placeholder="15">&nbsp;with three or four short, unrelated words and work (16)&nbsp;<input class="p2-input" data-q="16" data-answer="OUT,ON" placeholder="16">&nbsp;a way to remember them. Easy!</p>
+    </div>
+  </div>
+
+  <!-- ═══ PART 3 ═══ -->
+  <div class="section">
+    <div class="section-header">
+      <h3>Part 3 – Word Formation</h3>
+      <p>Questions 17–24 &nbsp;|&nbsp; 1 mark each</p>
+    </div>
+    <div class="instructions">
+      For questions <strong>17–24</strong>, read the text below. Use the word given in capitals at the end of some lines to form a word that fits the gap <strong>in the same line</strong>. Write your answers <strong>IN CAPITAL LETTERS</strong>.
+    </div>
+
+    <div class="passage" style="padding:0;overflow:hidden;">
+      <table class="p3-table">
+        <thead>
+          <tr><th style="width:55%">Text</th><th style="width:20%">Answer</th><th style="width:25%">Word given</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="linetext" colspan="3" style="background:#f0f4ff;font-style:italic;padding:10px 14px;">
+              <strong>Too many climbers on Mount Everest</strong><br>
+              Mount Everest in Nepal is becoming (0) <strong>INCREASINGLY</strong> popular as a destination for adventure tourism. During the month of May…
+            </td>
+          </tr>
+          <tr>
+            <td class="linetext">(17) <input class="p3-input" data-q="17" data-answer="FAVOURABLE,FAVORABLE" placeholder="17"> weather presents a number of safe opportunities to make the climb.</td>
+            <td><div class="answer-reveal">✓ FAVOURABLE / FAVORABLE</div></td>
+            <td class="stem">FAVOUR</td>
+          </tr>
+          <tr>
+            <td class="linetext">As a result, the sheer number of climbers has brought an (18) <input class="p3-input" data-q="18" data-answer="UNEXPECTED" placeholder="18"> problem, potentially even more dangerous than low temperatures and changeable weather – overcrowded conditions.</td>
+            <td><div class="answer-reveal">✓ UNEXPECTED</div></td>
+            <td class="stem">EXPECT</td>
+          </tr>
+          <tr>
+            <td class="linetext">The fact that there are so many climbers, many of them complete (19) <input class="p3-input" data-q="19" data-answer="BEGINNERS" placeholder="19">, means that at times people are queuing for hours to reach the summit.</td>
+            <td><div class="answer-reveal">✓ BEGINNERS</div></td>
+            <td class="stem">BEGIN</td>
+          </tr>
+          <tr>
+            <td class="linetext">This hazard has led to calls for stricter assessments of new learner climbers, as in their (20) <input class="p3-input" data-q="20" data-answer="DESPERATION" placeholder="20"> to reach the mountain's summit such inexperienced climbers are sometimes ignoring the advice of their Nepalese guides,</td>
+            <td><div class="answer-reveal">✓ DESPERATION</div></td>
+            <td class="stem">DESPERATE</td>
+          </tr>
+          <tr>
+            <td class="linetext">which may (21) <input class="p3-input" data-q="21" data-answer="ENDANGER" placeholder="21"> everyone's lives.</td>
+            <td><div class="answer-reveal">✓ ENDANGER</div></td>
+            <td class="stem">DANGER</td>
+          </tr>
+          <tr>
+            <td class="linetext">Perhaps one (22) <input class="p3-input" data-q="22" data-answer="SOLUTION" placeholder="22"> would be to make the charges for climbing the mountain so high that only a few people could afford the climb.</td>
+            <td><div class="answer-reveal">✓ SOLUTION</div></td>
+            <td class="stem">SOLVE</td>
+          </tr>
+          <tr>
+            <td class="linetext">Or (23) <input class="p3-input" data-q="23" data-answer="ALTERNATIVELY" placeholder="23">, one could ban the use of artificial oxygen and local guides, leaving Everest to the very best</td>
+            <td><div class="answer-reveal">✓ ALTERNATIVELY</div></td>
+            <td class="stem">ALTERNATE</td>
+          </tr>
+          <tr>
+            <td class="linetext">(24) <input class="p3-input" data-q="24" data-answer="MOUNTAINEERS,MOUNTAINEER" placeholder="24">. Extreme, maybe, but it may just prove necessary.</td>
+            <td><div class="answer-reveal">✓ MOUNTAINEER(S)</div></td>
+            <td class="stem">MOUNTAIN</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- ═══ PART 4 ═══ -->
+  <div class="section">
+    <div class="section-header">
+      <h3>Part 4 – Key Word Transformation</h3>
+      <p>Questions 25–30 &nbsp;|&nbsp; 2 marks each</p>
+    </div>
+    <div class="instructions">
+      For questions <strong>25–30</strong>, complete the second sentence so that it has a similar meaning to the first sentence, using the word given. <strong>Do not change the word given.</strong> You must use between <strong>three</strong> and <strong>six</strong> words, including the word given. Write only the missing words <strong>IN CAPITAL LETTERS</strong>.
+    </div>
+
+    <div class="p4-item" data-q="25" data-answer="NOT TO LET HER THE CHILDREN KIDS WATCH">
+      <span class="p4-qnum">25</span> 'You should stop your children watching so much television,' Mary's sister told her.
+      <div><span class="p4-keyword">LET</span></div>
+      <div class="p4-sentence">Mary's sister advised her <input class="p4-gap-input" data-q="25" placeholder="type answer here"> so much television.</div>
+      <div class="answer-reveal">✓ not to LET | her / the children / kids watch</div>
+    </div>
+
+    <div class="p4-item" data-q="26" data-answer="MAKE IT ILLEGAL TO DRIVE">
+      <span class="p4-qnum">26</span> The local council wants to impose a ban on driving at more than 30 kilometres per hour anywhere in this area.
+      <div><span class="p4-keyword">ILLEGAL</span></div>
+      <div class="p4-sentence">The local council wants to <input class="p4-gap-input" data-q="26" placeholder="type answer here"> at more than 30 kilometres per hour anywhere in this area.</div>
+      <div class="answer-reveal">✓ make it ILLEGAL | to drive</div>
+    </div>
+
+    <div class="p4-item" data-q="27" data-answer="TOM HE HAD LEFT ON IN TIME,TOM HE HAD BEEN ON IN TIME LEAVING">
+      <span class="p4-qnum">27</span> Tom missed his plane because he was late leaving for the airport.
+      <div><span class="p4-keyword">TIME</span></div>
+      <div class="p4-sentence">If only <input class="p4-gap-input" data-q="27" placeholder="type answer here"> for the airport, he wouldn't have missed his plane.</div>
+      <div class="answer-reveal">✓ Tom/he had left | on/in TIME &nbsp;OR&nbsp; Tom/he had been on/in TIME | leaving</div>
+    </div>
+
+    <div class="p4-item" data-q="28" data-answer="TO BE A THOROUGH REVISION TO OF REVISING OF">
+      <span class="p4-qnum">28</span> The guidelines for the appointment of new staff need to be thoroughly revised.
+      <div><span class="p4-keyword">THOROUGH</span></div>
+      <div class="p4-sentence">There needs <input class="p4-gap-input" data-q="28" placeholder="type answer here"> the guidelines for the appointment of new staff.</div>
+      <div class="answer-reveal">✓ to be | (a) THOROUGH revision to/of / revising of</div>
+    </div>
+
+    <div class="p4-item" data-q="29" data-answer="WAS A GRADUAL RISE INCREASE IMPROVEMENT IN">
+      <span class="p4-qnum">29</span> The employment rate rose gradually as the economy began to recover.
+      <div><span class="p4-keyword">GRADUAL</span></div>
+      <div class="p4-sentence">There <input class="p4-gap-input" data-q="29" placeholder="type answer here"> the employment rate as the economy began to recover.</div>
+      <div class="answer-reveal">✓ was a GRADUAL | rise / increase / improvement in</div>
+    </div>
+
+    <div class="p4-item" data-q="30" data-answer="WAS OF NO CONSEQUENCE,WAS NOT WASN'T OF ANY CONSEQUENCE">
+      <span class="p4-qnum">30</span> The change in the company's logo didn't make any difference to the majority of its customers.
+      <div><span class="p4-keyword">CONSEQUENCE</span></div>
+      <div class="p4-sentence">The change in the company's logo <input class="p4-gap-input" data-q="30" placeholder="type answer here"> to the majority of its customers.</div>
+      <div class="answer-reveal">✓ was of | no CONSEQUENCE &nbsp;OR&nbsp; was not/wasn't of | (any) CONSEQUENCE</div>
+    </div>
+
+  </div>
+
+  <!-- Buttons & Score -->
+  <div class="btn-row">
+    <button class="btn btn-primary" onclick="checkAll()">✓ Check Answers</button>
+    <button class="btn btn-reset" onclick="resetAll()">↺ Reset</button>
+    <button class="btn btn-primary" style="background:#16a34a;" onclick="submitToSupabase()">⬆ Submit</button>
+  </div>
+
+  <div class="score-block" id="score-block">
+    <h4>Your Score</h4>
+    <div class="score-breakdown" id="score-breakdown"></div>
+    <div class="score-total" id="score-total"></div>
+  </div>
+
+  <div id="submissions-section">
+    <h3>📋 Student Submissions</h3>
+    <button class="btn btn-primary" style="margin-bottom:14px;font-size:0.85rem;" onclick="loadSubmissions()">🔄 Refresh</button>
+    <div id="submissions-container"><em style="font-family:sans-serif;font-size:0.85rem;color:#6b7280;">Click Refresh to load submissions.</em></div>
+  </div>
+
+</div>
+
+<script>
+const SUPABASE_URL = 'https://your-project.supabase.co';
+const SUPABASE_KEY = 'your-anon-key';
+const TABLE_NAME   = 'cae1_p1to4_subs';
+
+const TEACHER_PASSWORD = '1996';
+let teacherMode = false;
+
+function toggleTeacher() {
+  if (teacherMode) { exitTeacher(); }
+  else {
+    document.getElementById('pw-modal').style.display = 'flex';
+    setTimeout(() => document.getElementById('pw-input').focus(), 100);
+  }
+}
+function checkPassword() {
+  if (document.getElementById('pw-input').value === TEACHER_PASSWORD) {
+    closeModal(); enterTeacher();
+  } else {
+    document.getElementById('pw-error').style.display = 'block';
+  }
+}
+document.getElementById('pw-input').addEventListener('keydown', e => { if (e.key === 'Enter') checkPassword(); });
+function closeModal() {
+  document.getElementById('pw-modal').style.display = 'none';
+  document.getElementById('pw-input').value = '';
+  document.getElementById('pw-error').style.display = 'none';
+}
+function enterTeacher() {
+  teacherMode = true;
+  document.body.classList.add('teacher-mode');
+  document.getElementById('teacher-toggle-btn').textContent = '🔓 Exit Teacher Mode';
+  document.getElementById('teacher-toggle-btn').classList.add('active');
+  document.getElementById('teacher-banner').classList.add('visible');
+  document.getElementById('submissions-section').classList.add('visible');
+  loadSubmissions();
+}
+function exitTeacher() {
+  teacherMode = false;
+  document.body.classList.remove('teacher-mode');
+  document.getElementById('teacher-toggle-btn').textContent = '🔒 Teacher Mode';
+  document.getElementById('teacher-toggle-btn').classList.remove('active');
+  document.getElementById('teacher-banner').classList.remove('visible');
+  document.getElementById('submissions-section').classList.remove('visible');
+}
+
+function normalise(str) { return str.trim().toUpperCase().replace(/\s+/g, ' '); }
+
+function checkAnswerMulti(userVal, answerStr) {
+  const alts = answerStr.split(',').map(s => s.trim().toUpperCase());
+  const userNorm = normalise(userVal);
+  return alts.some(alt => {
+    if (userNorm === alt) return true;
+    const words = alt.split(/[\s|]+/).filter(Boolean);
+    return words.every(w => userNorm.includes(w));
+  });
+}
+
+function checkAll() {
+  let s1=0, s2=0, s3=0, s4=0;
+
+  document.querySelectorAll('#part1-questions .mcq-item').forEach(item => {
+    const q = item.dataset.q;
+    const correct = item.dataset.answer;
+    const chosen = document.querySelector(`input[name="q${q}"]:checked`);
+    item.querySelectorAll('.mcq-options label').forEach(l => l.classList.remove('correct','wrong','show-correct'));
+    if (chosen) {
+      const lbl = chosen.closest('label');
+      if (chosen.value === correct) { lbl.classList.add('correct'); s1++; }
+      else {
+        lbl.classList.add('wrong');
+        item.querySelectorAll('.mcq-options label').forEach(l => { if (l.querySelector('input').value === correct) l.classList.add('show-correct'); });
+      }
+    }
+  });
+
+  document.querySelectorAll('.p2-input').forEach(inp => {
+    inp.classList.remove('correct','wrong');
+    const val = normalise(inp.value);
+    if (!val) return;
+    const ok = inp.dataset.answer.split(',').some(a => val === a.trim().toUpperCase());
+    inp.classList.add(ok ? 'correct' : 'wrong');
+    if (ok) s2++;
+  });
+
+  document.querySelectorAll('.p3-input').forEach(inp => {
+    inp.classList.remove('correct','wrong');
+    const val = normalise(inp.value);
+    if (!val) return;
+    const ok = inp.dataset.answer.split(',').some(a => val === a.trim().toUpperCase());
+    inp.classList.add(ok ? 'correct' : 'wrong');
+    if (ok) s3++;
+  });
+
+  document.querySelectorAll('.p4-gap-input').forEach(inp => {
+    inp.classList.remove('correct','wrong');
+    const val = normalise(inp.value);
+    if (!val) return;
+    const ok = checkAnswerMulti(val, inp.dataset.answer);
+    inp.classList.add(ok ? 'correct' : 'wrong');
+    if (ok) s4 += 2;
+  });
+
+  const total = s1 + s2 + s3 + s4;
+  document.getElementById('score-block').classList.add('visible');
+  document.getElementById('score-breakdown').innerHTML =
+    `Part 1: ${s1}/8 &nbsp;|&nbsp; Part 2: ${s2}/8 &nbsp;|&nbsp; Part 3: ${s3}/8 &nbsp;|&nbsp; Part 4: ${s4}/12`;
+  document.getElementById('score-total').textContent = `Total: ${total} / 36`;
+  document.getElementById('score-block').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+}
+
+function resetAll() {
+  document.querySelectorAll('input[type=radio]').forEach(r => r.checked = false);
+  document.querySelectorAll('.mcq-options label').forEach(l => l.classList.remove('correct','wrong','show-correct'));
+  document.querySelectorAll('.p2-input,.p3-input,.p4-gap-input').forEach(i => { i.value=''; i.classList.remove('correct','wrong'); });
+  document.getElementById('score-block').classList.remove('visible');
+  document.getElementById('supabase-status').className = '';
+}
+
+function gatherAnswers() {
+  const ans = {};
+  for (let q=1;q<=8;q++) { const s=document.querySelector(`input[name="q${q}"]:checked`); ans[`p1_q${q}`]=s?s.value:''; }
+  document.querySelectorAll('.p2-input').forEach(i => { ans[`p2_q${i.dataset.q}`]=i.value.toUpperCase().trim(); });
+  document.querySelectorAll('.p3-input').forEach(i => { ans[`p3_q${i.dataset.q}`]=i.value.toUpperCase().trim(); });
+  document.querySelectorAll('.p4-gap-input').forEach(i => { ans[`p4_q${i.dataset.q}`]=i.value.toUpperCase().trim(); });
+  return ans;
+}
+
+async function submitToSupabase() {
+  const name = document.getElementById('student-name').value.trim();
+  if (!name) { alert('Please enter your name before submitting.'); return; }
+  const statusEl = document.getElementById('supabase-status');
+  statusEl.className = ''; statusEl.textContent = 'Submitting…'; statusEl.style.display = 'block';
+  try {
+    const res = await fetch(`${SUPABASE_URL}/rest/v1/${TABLE_NAME}`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}`, 'Prefer': 'return=minimal' },
+      body: JSON.stringify({ student_name: name, submitted_at: new Date().toISOString(), answers: gatherAnswers() })
+    });
+    if (res.ok) { statusEl.className = 'ok'; statusEl.textContent = '✅ Answers submitted successfully!'; }
+    else { statusEl.className = 'err'; statusEl.textContent = `❌ Submission failed: ${await res.text()}`; }
+  } catch(e) { statusEl.className = 'err'; statusEl.textContent = `❌ Network error: ${e.message}`; }
+}
+
+async function loadSubmissions() {
+  const container = document.getElementById('submissions-container');
+  container.innerHTML = '<em style="font-family:sans-serif;font-size:0.85rem;color:#6b7280;">Loading…</em>';
+  try {
+    const res = await fetch(`${SUPABASE_URL}/rest/v1/${TABLE_NAME}?select=*&order=submitted_at.desc`, {
+      headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}` }
+    });
+    if (!res.ok) throw new Error(await res.text());
+    const rows = await res.json();
+    if (!rows.length) { container.innerHTML = '<em style="font-family:sans-serif;font-size:0.85rem;color:#6b7280;">No submissions yet.</em>'; return; }
+    let html = `<table id="submissions-table"><thead><tr><th>#</th><th>Student</th><th>Submitted</th><th>P1 (Q1-8)</th><th>P2 (Q9-16)</th><th>P3 (Q17-24)</th><th>P4 (Q25-30)</th></tr></thead><tbody>`;
+    rows.forEach((row, idx) => {
+      const a = row.answers || {};
+      const date = new Date(row.submitted_at).toLocaleString('en-GB');
+      const p1 = [1,2,3,4,5,6,7,8].map(q => a[`p1_q${q}`]||'–').join(' ');
+      const p2 = [9,10,11,12,13,14,15,16].map(q => a[`p2_q${q}`]||'–').join(' | ');
+      const p3 = [17,18,19,20,21,22,23,24].map(q => a[`p3_q${q}`]||'–').join(' | ');
+      const p4 = [25,26,27,28,29,30].map(q => a[`p4_q${q}`]||'–').join(' | ');
+      html += `<tr><td>${rows.length-idx}</td><td><strong>${row.student_name||'Anonymous'}</strong></td><td>${date}</td><td style="font-family:monospace;font-size:0.82rem;">${p1}</td><td style="font-family:monospace;font-size:0.8rem;">${p2}</td><td style="font-family:monospace;font-size:0.8rem;">${p3}</td><td style="font-family:monospace;font-size:0.8rem;">${p4}</td></tr>`;
+    });
+    html += '</tbody></table>';
+    container.innerHTML = html;
+  } catch(e) { container.innerHTML = `<span style="color:#dc2626;font-family:sans-serif;font-size:0.85rem;">❌ Could not load: ${e.message}</span>`; }
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,488 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CAE Test 4 – Reading & Use of English Parts 1–4</title>
+<style>
+  :root {
+    --navy: #1a2a4a; --blue: #2563eb; --light-blue: #dbeafe;
+    --green: #16a34a; --green-bg: #dcfce7; --red: #dc2626; --red-bg: #fee2e2;
+    --grey: #6b7280; --border: #d1d5db; --bg: #f8fafc; --white: #ffffff;
+    --teacher-bg: #fffbeb; --teacher-border: #f59e0b;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Georgia', serif; background: var(--bg); color: #1f2937; line-height: 1.7; }
+  header { background: var(--navy); color: white; padding: 20px 32px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px; }
+  header h1 { font-size: 1.2rem; font-weight: normal; letter-spacing: 0.05em; }
+  header h2 { font-size: 1rem; opacity: 0.75; font-weight: normal; }
+  #teacher-toggle-btn { background: transparent; border: 1px solid rgba(255,255,255,0.4); color: white; padding: 6px 14px; border-radius: 4px; cursor: pointer; font-size: 0.85rem; }
+  #teacher-toggle-btn.active { background: var(--teacher-border); border-color: var(--teacher-border); color: #1a1a1a; }
+  .main { max-width: 860px; margin: 0 auto; padding: 32px 24px 60px; }
+  #teacher-banner { display: none; background: var(--teacher-bg); border: 2px solid var(--teacher-border); border-radius: 8px; padding: 12px 20px; margin-bottom: 28px; font-size: 0.9rem; color: #92400e; font-family: sans-serif; }
+  #teacher-banner.visible { display: block; }
+  .section { background: var(--white); border: 1px solid var(--border); border-radius: 10px; padding: 28px 32px; margin-bottom: 32px; box-shadow: 0 1px 4px rgba(0,0,0,0.05); }
+  .section-header { border-bottom: 2px solid var(--navy); padding-bottom: 10px; margin-bottom: 20px; }
+  .section-header h3 { font-size: 1.1rem; font-weight: bold; color: var(--navy); text-transform: uppercase; letter-spacing: 0.08em; }
+  .section-header p { font-size: 0.88rem; color: var(--grey); margin-top: 4px; font-family: sans-serif; }
+  .instructions { background: var(--light-blue); border-left: 3px solid var(--blue); padding: 12px 16px; margin-bottom: 20px; font-size: 0.9rem; font-family: sans-serif; border-radius: 0 4px 4px 0; }
+  .passage { background: #f9fafb; border: 1px solid var(--border); border-radius: 6px; padding: 20px 24px; margin-bottom: 22px; font-size: 0.97rem; line-height: 1.85; }
+  .passage h4 { text-align: center; font-size: 1.05rem; margin-bottom: 14px; color: var(--navy); }
+  .gap { font-weight: bold; color: var(--navy); }
+  .mcq-grid { display: flex; flex-direction: column; gap: 12px; margin-top: 16px; }
+  .mcq-item { border: 1px solid var(--border); border-radius: 6px; padding: 12px 16px; font-family: sans-serif; font-size: 0.9rem; }
+  .mcq-item .qnum { font-weight: bold; color: var(--navy); margin-right: 8px; }
+  .mcq-options { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 8px; }
+  .mcq-options label { display: flex; align-items: center; gap: 6px; cursor: pointer; padding: 5px 12px; border: 1px solid var(--border); border-radius: 4px; min-width: 160px; transition: background 0.15s; }
+  .mcq-options label:hover { background: var(--light-blue); border-color: var(--blue); }
+  .mcq-options input[type=radio] { accent-color: var(--blue); }
+  .mcq-options label.correct { background: var(--green-bg); border-color: var(--green); }
+  .mcq-options label.wrong { background: var(--red-bg); border-color: var(--red); }
+  .mcq-options label.show-correct { background: var(--green-bg); border-color: var(--green); }
+  .p2-input { border: none; border-bottom: 2px solid var(--navy); width: 130px; font-size: 0.95rem; font-family: Georgia,serif; text-align: center; background: transparent; outline: none; padding: 0 4px; color: var(--navy); text-transform: uppercase; vertical-align: bottom; }
+  .p2-input.correct { border-bottom-color: var(--green); background: var(--green-bg); }
+  .p2-input.wrong { border-bottom-color: var(--red); background: var(--red-bg); }
+  .p3-table { width: 100%; border-collapse: collapse; }
+  .p3-table td, .p3-table th { padding: 10px 14px; border: 1px solid var(--border); font-size: 0.92rem; }
+  .p3-table th { background: var(--navy); color: white; font-family: sans-serif; font-size: 0.83rem; text-transform: uppercase; }
+  .p3-table tr:nth-child(even) td { background: #f9fafb; }
+  .p3-table td.stem { font-weight: bold; color: var(--navy); font-family: sans-serif; text-transform: uppercase; }
+  .p3-input { border: 1px solid var(--border); border-radius: 4px; padding: 4px 8px; width: 170px; font-size: 0.92rem; font-family: sans-serif; text-transform: uppercase; outline: none; }
+  .p3-input:focus { border-color: var(--blue); }
+  .p3-input.correct { border-color: var(--green); background: var(--green-bg); }
+  .p3-input.wrong { border-color: var(--red); background: var(--red-bg); }
+  .p4-item { border: 1px solid var(--border); border-radius: 6px; padding: 16px 20px; margin-bottom: 14px; font-family: sans-serif; font-size: 0.92rem; }
+  .p4-qnum { font-weight: bold; color: var(--navy); margin-right: 6px; }
+  .p4-keyword { display: inline-block; font-weight: bold; text-transform: uppercase; color: var(--navy); background: var(--light-blue); padding: 2px 10px; border-radius: 3px; margin: 8px 0; font-size: 0.88rem; letter-spacing: 0.05em; }
+  .p4-sentence { line-height: 1.8; margin: 6px 0; }
+  .p4-gap-input { border: none; border-bottom: 2px solid var(--navy); min-width: 220px; font-size: 0.92rem; font-family: sans-serif; background: transparent; outline: none; padding: 0 6px; text-transform: uppercase; vertical-align: bottom; color: var(--navy); }
+  .p4-gap-input.correct { border-bottom-color: var(--green); background: var(--green-bg); }
+  .p4-gap-input.wrong { border-bottom-color: var(--red); background: var(--red-bg); }
+  .answer-reveal { display: none; font-size: 0.8rem; color: var(--green); font-family: sans-serif; margin-top: 4px; font-style: italic; }
+  body.teacher-mode .answer-reveal { display: block; }
+  .score-block { background: var(--light-blue); border: 1px solid var(--blue); border-radius: 8px; padding: 16px 22px; margin-top: 20px; font-family: sans-serif; display: none; }
+  .score-block.visible { display: block; }
+  .score-block h4 { color: var(--navy); margin-bottom: 8px; }
+  .score-breakdown { font-size: 0.88rem; color: #374151; }
+  .score-total { font-size: 1.2rem; font-weight: bold; color: var(--navy); margin-top: 8px; }
+  .btn-row { display: flex; gap: 12px; flex-wrap: wrap; margin-top: 22px; }
+  .btn { padding: 10px 24px; border-radius: 5px; border: none; font-size: 0.9rem; font-family: sans-serif; cursor: pointer; }
+  .btn-primary { background: var(--navy); color: white; }
+  .btn-reset { background: var(--grey); color: white; }
+  .name-row { display: flex; align-items: center; gap: 12px; margin-bottom: 24px; font-family: sans-serif; font-size: 0.9rem; }
+  .name-row input { border: 1px solid var(--border); border-radius: 4px; padding: 7px 12px; font-size: 0.9rem; width: 240px; }
+  #supabase-status { font-family: sans-serif; font-size: 0.8rem; padding: 6px 12px; border-radius: 4px; margin-bottom: 16px; display: none; }
+  #supabase-status.ok { display:block; background: var(--green-bg); color: var(--green); }
+  #supabase-status.err { display:block; background: var(--red-bg); color: var(--red); }
+  #submissions-section { display: none; background: var(--white); border: 2px solid var(--teacher-border); border-radius: 10px; padding: 24px 28px; margin-top: 28px; }
+  #submissions-section.visible { display: block; }
+  #submissions-section h3 { color: #92400e; margin-bottom: 14px; font-family: sans-serif; }
+  #submissions-table { width: 100%; border-collapse: collapse; font-family: sans-serif; font-size: 0.85rem; }
+  #submissions-table th { background: #92400e; color: white; padding: 8px 12px; text-align: left; }
+  #submissions-table td { padding: 7px 12px; border-bottom: 1px solid var(--border); }
+  .example-row { color: var(--grey); font-style: italic; font-size: 0.85rem; margin-bottom: 10px; font-family: sans-serif; }
+  @media (max-width: 600px) { .section { padding: 18px 16px; } .mcq-options label { min-width: 100%; } .p4-gap-input { min-width: 160px; } }
+</style>
+</head>
+<body>
+
+<header>
+  <div>
+    <h1>CAE – Reading and Use of English (1 hour 30 minutes)</h1>
+    <h2>Test 4 &nbsp;|&nbsp; Parts 1–4</h2>
+  </div>
+  <button id="teacher-toggle-btn" onclick="toggleTeacher()">🔒 Teacher Mode</button>
+</header>
+
+<div id="pw-modal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:999;align-items:center;justify-content:center;">
+  <div style="background:white;padding:32px;border-radius:10px;width:320px;font-family:sans-serif;">
+    <h3 style="margin-bottom:16px;color:#1a2a4a;">Teacher Access</h3>
+    <input type="password" id="pw-input" placeholder="Enter password" style="width:100%;padding:9px 12px;border:1px solid #d1d5db;border-radius:4px;font-size:1rem;margin-bottom:12px;">
+    <p id="pw-error" style="color:#dc2626;font-size:0.85rem;margin-bottom:10px;display:none;">Incorrect password</p>
+    <div style="display:flex;gap:10px;">
+      <button onclick="checkPassword()" style="flex:1;padding:9px;background:#1a2a4a;color:white;border:none;border-radius:4px;cursor:pointer;">Enter</button>
+      <button onclick="closeModal()" style="flex:1;padding:9px;background:#6b7280;color:white;border:none;border-radius:4px;cursor:pointer;">Cancel</button>
+    </div>
+  </div>
+</div>
+
+<div class="main">
+  <div id="teacher-banner">✅ <strong>Teacher Mode Active</strong> — Correct answers shown below each item. Submissions at the bottom.</div>
+  <div id="supabase-status"></div>
+  <div class="name-row">
+    <label for="student-name"><strong>Student name:</strong></label>
+    <input type="text" id="student-name" placeholder="Enter your name before submitting">
+  </div>
+
+  <!-- PART 1 -->
+  <div class="section">
+    <div class="section-header">
+      <h3>Part 1 – Multiple Choice Cloze</h3>
+      <p>Questions 1–8 &nbsp;|&nbsp; 1 mark each</p>
+    </div>
+    <div class="instructions">For questions <strong>1–8</strong>, read the text below and decide which answer (<strong>A, B, C</strong> or <strong>D</strong>) best fits each gap. There is an example at the beginning (0).</div>
+    <div class="example-row">Example: <strong>0</strong>&nbsp; A assessment &nbsp; B account &nbsp; <strong>C expression</strong> &nbsp; D estimate</div>
+
+    <div class="passage">
+      <h4>Dressing for success</h4>
+      <p>Whether you like it or not, when you go for a job interview your personal appearance will be judged as an (0) <strong>expression</strong> of who you are. Just from looking at you, the interviewer will start <span class="gap">(1)</span> an opinion about your capabilities, your attitude to work and how well you might <span class="gap">(2)</span> their organisation. The right image is one that helps the interviewer <span class="gap">(3)</span> you as one of their team and <span class="gap">(4)</span> them that you could represent their company. So, find out about the company dress code prior to the interview, or see how people are dressed on their corporate website.</p>
+      <br>
+      <p>However, even if you <span class="gap">(5)</span> the image right, it may not <span class="gap">(6)</span> be remarked on. The interviewer will just sense that you 'look right', and feel <span class="gap">(7)</span> to being convinced that you are the right person for the job. But if you get it wrong, it can be very difficult to <span class="gap">(8)</span> the negative impression you may already have made.</p>
+    </div>
+
+    <div class="mcq-grid" id="part1-questions">
+
+      <div class="mcq-item" data-q="1" data-answer="D"><span class="qnum">1</span>
+        <div class="mcq-options">
+          <label><input type="radio" name="q1" value="A"> A&nbsp; shaping</label>
+          <label><input type="radio" name="q1" value="B"> B&nbsp; making</label>
+          <label><input type="radio" name="q1" value="C"> C&nbsp; creating</label>
+          <label><input type="radio" name="q1" value="D"> D&nbsp; forming</label>
+        </div><div class="answer-reveal">✓ D – forming</div>
+      </div>
+
+      <div class="mcq-item" data-q="2" data-answer="C"><span class="qnum">2</span>
+        <div class="mcq-options">
+          <label><input type="radio" name="q2" value="A"> A&nbsp; put up with</label>
+          <label><input type="radio" name="q2" value="B"> B&nbsp; settle down to</label>
+          <label><input type="radio" name="q2" value="C"> C&nbsp; fit in with</label>
+          <label><input type="radio" name="q2" value="D"> D&nbsp; live up to</label>
+        </div><div class="answer-reveal">✓ C – fit in with</div>
+      </div>
+
+      <div class="mcq-item" data-q="3" data-answer="A"><span class="qnum">3</span>
+        <div class="mcq-options">
+          <label><input type="radio" name="q3" value="A"> A&nbsp; visualise</label>
+          <label><input type="radio" name="q3" value="B"> B&nbsp; reflect</label>
+          <label><input type="radio" name="q3" value="C"> C&nbsp; observe</label>
+          <label><input type="radio" name="q3" value="D"> D&nbsp; foresee</label>
+        </div><div class="answer-reveal">✓ A – visualise</div>
+      </div>
+
+      <div class="mcq-item" data-q="4" data-answer="A"><span class="qnum">4</span>
+        <div class="mcq-options">
+          <label><input type="radio" name="q4" value="A"> A&nbsp; reassures</label>
+          <label><input type="radio" name="q4" value="B"> B&nbsp; clarifies</label>
+          <label><input type="radio" name="q4" value="C"> C&nbsp; encourages</label>
+          <label><input type="radio" name="q4" value="D"> D&nbsp; supports</label>
+        </div><div class="answer-reveal">✓ A – reassures</div>
+      </div>
+
+      <div class="mcq-item" data-q="5" data-answer="B"><span class="qnum">5</span>
+        <div class="mcq-options">
+          <label><input type="radio" name="q5" value="A"> A&nbsp; put</label>
+          <label><input type="radio" name="q5" value="B"> B&nbsp; get</label>
+          <label><input type="radio" name="q5" value="C"> C&nbsp; hit</label>
+          <label><input type="radio" name="q5" value="D"> D&nbsp; set</label>
+        </div><div class="answer-reveal">✓ B – get</div>
+      </div>
+
+      <div class="mcq-item" data-q="6" data-answer="B"><span class="qnum">6</span>
+        <div class="mcq-options">
+          <label><input type="radio" name="q6" value="A"> A&nbsp; significantly</label>
+          <label><input type="radio" name="q6" value="B"> B&nbsp; necessarily</label>
+          <label><input type="radio" name="q6" value="C"> C&nbsp; appropriately</label>
+          <label><input type="radio" name="q6" value="D"> D&nbsp; strictly</label>
+        </div><div class="answer-reveal">✓ B – necessarily</div>
+      </div>
+
+      <div class="mcq-item" data-q="7" data-answer="A"><span class="qnum">7</span>
+        <div class="mcq-options">
+          <label><input type="radio" name="q7" value="A"> A&nbsp; open</label>
+          <label><input type="radio" name="q7" value="B"> B&nbsp; free</label>
+          <label><input type="radio" name="q7" value="C"> C&nbsp; alert</label>
+          <label><input type="radio" name="q7" value="D"> D&nbsp; aware</label>
+        </div><div class="answer-reveal">✓ A – open</div>
+      </div>
+
+      <div class="mcq-item" data-q="8" data-answer="D"><span class="qnum">8</span>
+        <div class="mcq-options">
+          <label><input type="radio" name="q8" value="A"> A&nbsp; overtake</label>
+          <label><input type="radio" name="q8" value="B"> B&nbsp; overthrow</label>
+          <label><input type="radio" name="q8" value="C"> C&nbsp; overdo</label>
+          <label><input type="radio" name="q8" value="D"> D&nbsp; overcome</label>
+        </div><div class="answer-reveal">✓ D – overcome</div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- PART 2 -->
+  <div class="section">
+    <div class="section-header">
+      <h3>Part 2 – Open Cloze</h3>
+      <p>Questions 9–16 &nbsp;|&nbsp; 1 mark each</p>
+    </div>
+    <div class="instructions">For questions <strong>9–16</strong>, read the text below and think of the word which best fits each gap. Use only <strong>one</strong> word in each gap. Write your answers <strong>IN CAPITAL LETTERS</strong>.</div>
+
+    <div class="passage" style="line-height:2.2;">
+      <h4>How technology is helping people to talk</h4>
+      <p>The term 'eye-gaze technology' may (0) <strong>NOT</strong> mean much to most people, but it can be life-changing for anyone suffering from a severe speech problem. (9)&nbsp;<input class="p2-input" data-q="9" data-answer="HAVING" placeholder="9">&nbsp;been invited to try one such hi-tech communication aid, I find (10)&nbsp;<input class="p2-input" data-q="10" data-answer="MYSELF" placeholder="10">&nbsp;sitting staring at a computer screen. As a journalist, this is nothing new for me (11)&nbsp;<input class="p2-input" data-q="11" data-answer="EXCEPT,BUT" placeholder="11">&nbsp;for the fact that this screen features a red dot which tracks the movement of my eyes.</p>
+      <br>
+      <p>I start by looking at a letter from an on-screen keyboard. However, I could, (12)&nbsp;<input class="p2-input" data-q="12" data-answer="IF,WHEN,WHENEVER,WHENVER" placeholder="12">&nbsp;I wanted to, select alternative screens (13)&nbsp;<input class="p2-input" data-q="13" data-answer="MADE" placeholder="13">&nbsp;up of vocabulary and expressions, which, for experienced users, would (14)&nbsp;<input class="p2-input" data-q="14" data-answer="NO,WITHOUT" placeholder="14">&nbsp;doubt speed things up. The letter or word I've selected pops up at the top of the screen, and slowly I build up my message. More speed would be good as this isn't a fast way to communicate, (15)&nbsp;<input class="p2-input" data-q="15" data-answer="EVEN" placeholder="15">&nbsp;with the aid of predictive text. After (16)&nbsp;<input class="p2-input" data-q="16" data-answer="WHAT" placeholder="16">&nbsp;seems like a long time, my phrase 'this is an amazing machine' is complete. I stare at the phrase and it comes back to me in a synthesised voice.</p>
+    </div>
+  </div>
+
+  <!-- PART 3 -->
+  <div class="section">
+    <div class="section-header">
+      <h3>Part 3 – Word Formation</h3>
+      <p>Questions 17–24 &nbsp;|&nbsp; 1 mark each</p>
+    </div>
+    <div class="instructions">For questions <strong>17–24</strong>, use the word given in capitals to form a word that fits the gap <strong>in the same line</strong>. Write your answers <strong>IN CAPITAL LETTERS</strong>.</div>
+
+    <div class="passage" style="padding:0;overflow:hidden;">
+      <table class="p3-table">
+        <thead><tr><th style="width:55%">Text</th><th style="width:20%">Answer</th><th style="width:25%">Word given</th></tr></thead>
+        <tbody>
+          <tr><td colspan="3" style="background:#f0f4ff;font-style:italic;padding:10px 14px;"><strong>Two sleeps per night</strong><br>Sometimes we wake up in the middle of the night and try (0) <strong>DESPERATELY</strong> hard to get back to sleep, but instead we spend a really…</td></tr>
+          <tr>
+            <td>(17) <input class="p3-input" data-q="17" data-answer="UNCOMFORTABLE" placeholder="17"> night tossing and turning until morning.</td>
+            <td><div class="answer-reveal">✓ UNCOMFORTABLE</div></td>
+            <td class="stem">COMFORT</td>
+          </tr>
+          <tr>
+            <td>This situation could be (18) <input class="p3-input" data-q="18" data-answer="SYMPTOMATIC" placeholder="18"> of a stressful week, but it could also be because of a sleep pattern we have inherited.</td>
+            <td><div class="answer-reveal">✓ SYMPTOMATIC</div></td>
+            <td class="stem">SYMPTOM</td>
+          </tr>
+          <tr>
+            <td>Research shows that our ancestors, rather than enjoying an (19) <input class="p3-input" data-q="19" data-answer="UNINTERRUPTED" placeholder="19"> period of sleep at night, had two sleeps broken up by some time awake.</td>
+            <td><div class="answer-reveal">✓ UNINTERRUPTED</div></td>
+            <td class="stem">INTERRUPT</td>
+          </tr>
+          <tr>
+            <td>The eight-hours-a-night pattern that has become almost (20) <input class="p3-input" data-q="20" data-answer="ESSENTIAL" placeholder="20"> to modern humans</td>
+            <td><div class="answer-reveal">✓ ESSENTIAL</div></td>
+            <td class="stem">ESSENCE</td>
+          </tr>
+          <tr>
+            <td>has only been (21) <input class="p3-input" data-q="21" data-answer="CUSTOMARY" placeholder="21"> in industrialised countries since the 19th century.</td>
+            <td><div class="answer-reveal">✓ CUSTOMARY</div></td>
+            <td class="stem">CUSTOM</td>
+          </tr>
+          <tr>
+            <td>Then (22) <input class="p3-input" data-q="22" data-answer="AFFORDABLE" placeholder="22"> electricity was introduced, which resulted in a division between night and day that became</td>
+            <td><div class="answer-reveal">✓ AFFORDABLE</div></td>
+            <td class="stem">AFFORD</td>
+          </tr>
+          <tr>
+            <td>(23) <input class="p3-input" data-q="23" data-answer="PROGRESSIVELY" placeholder="23"> blurred. What had until then been daytime activities could now be enjoyed after darkness, and as a result, we went to bed later.</td>
+            <td><div class="answer-reveal">✓ PROGRESSIVELY</div></td>
+            <td class="stem">PROGRESS</td>
+          </tr>
+          <tr>
+            <td>We were therefore more tired, and this (24) <input class="p3-input" data-q="24" data-answer="ENABLED" placeholder="24"> us to sleep through the night.</td>
+            <td><div class="answer-reveal">✓ ENABLED</div></td>
+            <td class="stem">ABLE</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- PART 4 -->
+  <div class="section">
+    <div class="section-header">
+      <h3>Part 4 – Key Word Transformation</h3>
+      <p>Questions 25–30 &nbsp;|&nbsp; 2 marks each</p>
+    </div>
+    <div class="instructions">For questions <strong>25–30</strong>, complete the second sentence using the word given. <strong>Do not change the word given.</strong> Use between <strong>three</strong> and <strong>six</strong> words including the word given. Write only the missing words <strong>IN CAPITAL LETTERS</strong>.</div>
+
+    <div class="p4-item" data-q="25" data-answer="ANY OBJECTIONS AN OBJECTION TO JOHN JOINING">
+      <span class="p4-qnum">25</span> Do you mind if John joins us for the meeting?
+      <div><span class="p4-keyword">TO</span></div>
+      <div class="p4-sentence">Do you have <input class="p4-gap-input" data-q="25" placeholder="type answer here"> us for the meeting?</div>
+      <div class="answer-reveal">✓ any objection(s) / an objection TO | John('s) joining</div>
+    </div>
+
+    <div class="p4-item" data-q="26" data-answer="ILLNESS SICKNESS RESULTED IN HIM HIS ABANDONING THE ABANDONMENT OF">
+      <span class="p4-qnum">26</span> Dan abandoned his studies at university because he was ill.
+      <div><span class="p4-keyword">RESULTED</span></div>
+      <div class="p4-sentence">Dan's <input class="p4-gap-input" data-q="26" placeholder="type answer here"> his studies at university.</div>
+      <div class="answer-reveal">✓ illness/sickness RESULTED in | him/his abandoning / the abandonment of</div>
+    </div>
+
+    <div class="p4-item" data-q="27" data-answer="SOONER HAD THE TENNIS PLAYERS GONE GOT COME">
+      <span class="p4-qnum">27</span> As soon as the tennis players went onto the court, it started raining.
+      <div><span class="p4-keyword">HAD</span></div>
+      <div class="p4-sentence">No <input class="p4-gap-input" data-q="27" placeholder="type answer here"> onto the court than it started raining.</div>
+      <div class="answer-reveal">✓ sooner HAD | the tennis players gone/got/come</div>
+    </div>
+
+    <div class="p4-item" data-q="28" data-answer="WOULD HAVE NEED TO BE PUT CALLED OFF,HAD TO BE PUT CALLED OFF">
+      <span class="p4-qnum">28</span> 'We'll have to postpone the meeting until next week, as a lot of people are on leave,' the manager said.
+      <div><span class="p4-keyword">OFF</span></div>
+      <div class="p4-sentence">The manager said the meeting <input class="p4-gap-input" data-q="28" placeholder="type answer here"> until the following week, as a lot of people were on leave.</div>
+      <div class="answer-reveal">✓ would have/need to be | put/called OFF &nbsp;OR&nbsp; had to be | put/called OFF</div>
+    </div>
+
+    <div class="p4-item" data-q="29" data-answer="NO OTHER CHOICE ALTERNATIVE OPTION BUT TO">
+      <span class="p4-qnum">29</span> As visibility was getting worse and worse, Bob and Jane had to cut short their sailing trip.
+      <div><span class="p4-keyword">BUT</span></div>
+      <div class="p4-sentence">As visibility was getting worse and worse, Bob and Jane had <input class="p4-gap-input" data-q="29" placeholder="type answer here"> cut short their sailing trip.</div>
+      <div class="answer-reveal">✓ no (other) choice/alternative/option | BUT to</div>
+    </div>
+
+    <div class="p4-item" data-q="30" data-answer="D WOULD RATHER NOT BE">
+      <span class="p4-qnum">30</span> Please tick this box if you don't want us to inform you about future events.
+      <div><span class="p4-keyword">RATHER</span></div>
+      <div class="p4-sentence">Please tick this box if you <input class="p4-gap-input" data-q="30" placeholder="type answer here"> sent any information about future events.</div>
+      <div class="answer-reveal">✓ 'd/would RATHER | not be</div>
+    </div>
+
+  </div>
+
+  <div class="btn-row">
+    <button class="btn btn-primary" onclick="checkAll()">✓ Check Answers</button>
+    <button class="btn btn-reset" onclick="resetAll()">↺ Reset</button>
+    <button class="btn btn-primary" style="background:#16a34a;" onclick="submitToSupabase()">⬆ Submit</button>
+  </div>
+
+  <div class="score-block" id="score-block">
+    <h4>Your Score</h4>
+    <div class="score-breakdown" id="score-breakdown"></div>
+    <div class="score-total" id="score-total"></div>
+  </div>
+
+  <div id="submissions-section">
+    <h3>📋 Student Submissions</h3>
+    <button class="btn btn-primary" style="margin-bottom:14px;font-size:0.85rem;" onclick="loadSubmissions()">🔄 Refresh</button>
+    <div id="submissions-container"><em style="font-family:sans-serif;font-size:0.85rem;color:#6b7280;">Click Refresh to load submissions.</em></div>
+  </div>
+</div>
+
+<script>
+const SUPABASE_URL = 'https://your-project.supabase.co';
+const SUPABASE_KEY = 'your-anon-key';
+const TABLE_NAME   = 'cae4_p1to4_subs';
+const TEACHER_PASSWORD = '1996';
+let teacherMode = false;
+
+function toggleTeacher() {
+  if (teacherMode) { exitTeacher(); return; }
+  document.getElementById('pw-modal').style.display = 'flex';
+  setTimeout(() => document.getElementById('pw-input').focus(), 100);
+}
+function checkPassword() {
+  if (document.getElementById('pw-input').value === TEACHER_PASSWORD) { closeModal(); enterTeacher(); }
+  else { document.getElementById('pw-error').style.display = 'block'; }
+}
+document.getElementById('pw-input').addEventListener('keydown', e => { if (e.key==='Enter') checkPassword(); });
+function closeModal() { document.getElementById('pw-modal').style.display='none'; document.getElementById('pw-input').value=''; document.getElementById('pw-error').style.display='none'; }
+function enterTeacher() {
+  teacherMode=true; document.body.classList.add('teacher-mode');
+  document.getElementById('teacher-toggle-btn').textContent='🔓 Exit Teacher Mode';
+  document.getElementById('teacher-toggle-btn').classList.add('active');
+  document.getElementById('teacher-banner').classList.add('visible');
+  document.getElementById('submissions-section').classList.add('visible');
+  loadSubmissions();
+}
+function exitTeacher() {
+  teacherMode=false; document.body.classList.remove('teacher-mode');
+  document.getElementById('teacher-toggle-btn').textContent='🔒 Teacher Mode';
+  document.getElementById('teacher-toggle-btn').classList.remove('active');
+  document.getElementById('teacher-banner').classList.remove('visible');
+  document.getElementById('submissions-section').classList.remove('visible');
+}
+
+function normalise(s) { return s.trim().toUpperCase().replace(/\s+/g,' '); }
+function checkAnswerMulti(userVal, answerStr) {
+  const userNorm = normalise(userVal);
+  return answerStr.split(',').some(alt => {
+    const a = alt.trim().toUpperCase();
+    if (userNorm === a) return true;
+    return a.split(/[\s|]+/).filter(Boolean).every(w => userNorm.includes(w));
+  });
+}
+
+function checkAll() {
+  let s1=0,s2=0,s3=0,s4=0;
+  document.querySelectorAll('#part1-questions .mcq-item').forEach(item => {
+    const q=item.dataset.q, correct=item.dataset.answer, chosen=document.querySelector(`input[name="q${q}"]:checked`);
+    item.querySelectorAll('.mcq-options label').forEach(l=>l.classList.remove('correct','wrong','show-correct'));
+    if(chosen){
+      const lbl=chosen.closest('label');
+      if(chosen.value===correct){lbl.classList.add('correct');s1++;}
+      else{lbl.classList.add('wrong');item.querySelectorAll('.mcq-options label').forEach(l=>{if(l.querySelector('input').value===correct)l.classList.add('show-correct');});}
+    }
+  });
+  document.querySelectorAll('.p2-input').forEach(inp=>{
+    inp.classList.remove('correct','wrong'); const val=normalise(inp.value); if(!val)return;
+    const ok=inp.dataset.answer.split(',').some(a=>val===a.trim().toUpperCase());
+    inp.classList.add(ok?'correct':'wrong'); if(ok)s2++;
+  });
+  document.querySelectorAll('.p3-input').forEach(inp=>{
+    inp.classList.remove('correct','wrong'); const val=normalise(inp.value); if(!val)return;
+    const ok=inp.dataset.answer.split(',').some(a=>val===a.trim().toUpperCase());
+    inp.classList.add(ok?'correct':'wrong'); if(ok)s3++;
+  });
+  document.querySelectorAll('.p4-gap-input').forEach(inp=>{
+    inp.classList.remove('correct','wrong'); const val=normalise(inp.value); if(!val)return;
+    const ok=checkAnswerMulti(val,inp.dataset.answer);
+    inp.classList.add(ok?'correct':'wrong'); if(ok)s4+=2;
+  });
+  const total=s1+s2+s3+s4;
+  document.getElementById('score-block').classList.add('visible');
+  document.getElementById('score-breakdown').innerHTML=`Part 1: ${s1}/8 &nbsp;|&nbsp; Part 2: ${s2}/8 &nbsp;|&nbsp; Part 3: ${s3}/8 &nbsp;|&nbsp; Part 4: ${s4}/12`;
+  document.getElementById('score-total').textContent=`Total: ${total} / 36`;
+  document.getElementById('score-block').scrollIntoView({behavior:'smooth',block:'nearest'});
+}
+
+function resetAll() {
+  document.querySelectorAll('input[type=radio]').forEach(r=>r.checked=false);
+  document.querySelectorAll('.mcq-options label').forEach(l=>l.classList.remove('correct','wrong','show-correct'));
+  document.querySelectorAll('.p2-input,.p3-input,.p4-gap-input').forEach(i=>{i.value='';i.classList.remove('correct','wrong');});
+  document.getElementById('score-block').classList.remove('visible');
+  document.getElementById('supabase-status').className='';
+}
+
+function gatherAnswers() {
+  const ans={};
+  for(let q=1;q<=8;q++){const s=document.querySelector(`input[name="q${q}"]:checked`);ans[`p1_q${q}`]=s?s.value:'';}
+  document.querySelectorAll('.p2-input').forEach(i=>{ans[`p2_q${i.dataset.q}`]=i.value.toUpperCase().trim();});
+  document.querySelectorAll('.p3-input').forEach(i=>{ans[`p3_q${i.dataset.q}`]=i.value.toUpperCase().trim();});
+  document.querySelectorAll('.p4-gap-input').forEach(i=>{ans[`p4_q${i.dataset.q}`]=i.value.toUpperCase().trim();});
+  return ans;
+}
+
+async function submitToSupabase() {
+  const name=document.getElementById('student-name').value.trim();
+  if(!name){alert('Please enter your name before submitting.');return;}
+  const statusEl=document.getElementById('supabase-status');
+  statusEl.className='';statusEl.textContent='Submitting…';statusEl.style.display='block';
+  try {
+    const res=await fetch(`${SUPABASE_URL}/rest/v1/${TABLE_NAME}`,{
+      method:'POST',
+      headers:{'Content-Type':'application/json','apikey':SUPABASE_KEY,'Authorization':`Bearer ${SUPABASE_KEY}`,'Prefer':'return=minimal'},
+      body:JSON.stringify({student_name:name,submitted_at:new Date().toISOString(),answers:gatherAnswers()})
+    });
+    if(res.ok){statusEl.className='ok';statusEl.textContent='✅ Answers submitted successfully!';}
+    else{statusEl.className='err';statusEl.textContent=`❌ Submission failed: ${await res.text()}`;}
+  }catch(e){statusEl.className='err';statusEl.textContent=`❌ Network error: ${e.message}`;}
+}
+
+async function loadSubmissions() {
+  const container=document.getElementById('submissions-container');
+  container.innerHTML='<em style="font-family:sans-serif;font-size:0.85rem;color:#6b7280;">Loading…</em>';
+  try {
+    const res=await fetch(`${SUPABASE_URL}/rest/v1/${TABLE_NAME}?select=*&order=submitted_at.desc`,{headers:{'apikey':SUPABASE_KEY,'Authorization':`Bearer ${SUPABASE_KEY}`}});
+    if(!res.ok)throw new Error(await res.text());
+    const rows=await res.json();
+    if(!rows.length){container.innerHTML='<em style="font-family:sans-serif;font-size:0.85rem;color:#6b7280;">No submissions yet.</em>';return;}
+    let html=`<table id="submissions-table"><thead><tr><th>#</th><th>Student</th><th>Submitted</th><th>P1</th><th>P2</th><th>P3</th><th>P4</th></tr></thead><tbody>`;
+    rows.forEach((row,idx)=>{
+      const a=row.answers||{}, date=new Date(row.submitted_at).toLocaleString('en-GB');
+      const p1=[1,2,3,4,5,6,7,8].map(q=>a[`p1_q${q}`]||'–').join(' ');
+      const p2=[9,10,11,12,13,14,15,16].map(q=>a[`p2_q${q}`]||'–').join(' | ');
+      const p3=[17,18,19,20,21,22,23,24].map(q=>a[`p3_q${q}`]||'–').join(' | ');
+      const p4=[25,26,27,28,29,30].map(q=>a[`p4_q${q}`]||'–').join(' | ');
+      html+=`<tr><td>${rows.length-idx}</td><td><strong>${row.student_name||'Anonymous'}</strong></td><td>${date}</td><td style="font-family:monospace;font-size:0.82rem;">${p1}</td><td style="font-family:monospace;font-size:0.8rem;">${p2}</td><td style="font-family:monospace;font-size:0.8rem;">${p3}</td><td style="font-family:monospace;font-size:0.8rem;">${p4}</td></tr>`;
+    });
+    html+='</tbody></table>';
+    container.innerHTML=html;
+  }catch(e){container.innerHTML=`<span style="color:#dc2626;font-family:sans-serif;font-size:0.85rem;">❌ Could not load: ${e.message}</span>`;}
+}
+</script>
+</body>
+</html>
