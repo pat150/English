@@ -1,0 +1,626 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FCE Speaking Part 1 – Question Practice</title>
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,300;0,400;0,600;1,400&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --navy: #1a2c4e;
+    --navy-light: #243659;
+    --gold: #c9a84c;
+    --gold-light: #e0c070;
+    --cream: #f8f3e8;
+    --cream-dark: #ede6d4;
+    --text: #1a2c4e;
+    --text-muted: #5a6a82;
+    --white: #ffffff;
+    --card-w: 680px;
+    --card-h: 380px;
+    --radius: 16px;
+    --shadow: 0 20px 60px rgba(26,44,78,0.18), 0 4px 16px rgba(26,44,78,0.10);
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--cream);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 32px 16px 48px;
+    color: var(--text);
+  }
+
+  /* ── Header ── */
+  header {
+    text-align: center;
+    margin-bottom: 36px;
+  }
+  .badge {
+    display: inline-block;
+    background: var(--navy);
+    color: var(--gold);
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    padding: 5px 14px;
+    border-radius: 20px;
+    margin-bottom: 12px;
+  }
+  header h1 {
+    font-family: 'Source Serif 4', serif;
+    font-size: clamp(1.6rem, 4vw, 2.4rem);
+    font-weight: 600;
+    color: var(--navy);
+    line-height: 1.2;
+  }
+  header p {
+    margin-top: 8px;
+    color: var(--text-muted);
+    font-size: 15px;
+  }
+
+  /* ── Counter ── */
+  .counter {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 28px;
+  }
+  .counter-track {
+    display: flex;
+    gap: 5px;
+  }
+  .pip {
+    width: 28px;
+    height: 5px;
+    border-radius: 3px;
+    background: var(--cream-dark);
+    transition: background 0.3s;
+  }
+  .pip.active { background: var(--gold); }
+  .pip.done   { background: var(--navy); }
+  .counter-label {
+    font-size: 13px;
+    color: var(--text-muted);
+    font-weight: 500;
+    margin-left: 6px;
+  }
+
+  /* ── Card wrapper (flip perspective) ── */
+  .card-scene {
+    width: var(--card-w);
+    max-width: 100%;
+    height: var(--card-h);
+    perspective: 1200px;
+    cursor: pointer;
+    margin-bottom: 28px;
+  }
+
+  .card-inner {
+    width: 100%;
+    height: 100%;
+    position: relative;
+    transform-style: preserve-3d;
+    transition: transform 0.62s cubic-bezier(0.45, 0.05, 0.25, 1.00);
+  }
+  .card-scene.flipped .card-inner {
+    transform: rotateY(180deg);
+  }
+
+  .card-face {
+    position: absolute;
+    inset: 0;
+    border-radius: var(--radius);
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 36px 40px;
+    box-shadow: var(--shadow);
+  }
+
+  /* Front face – question */
+  .card-front {
+    background: var(--navy);
+    border: 2px solid var(--navy-light);
+  }
+  .card-front::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: var(--radius);
+    background:
+      radial-gradient(ellipse at 20% 20%, rgba(201,168,76,0.12) 0%, transparent 60%),
+      radial-gradient(ellipse at 80% 80%, rgba(201,168,76,0.08) 0%, transparent 60%);
+    pointer-events: none;
+  }
+  .q-number {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 18px;
+    opacity: 0.8;
+  }
+  .q-text {
+    font-family: 'Source Serif 4', serif;
+    font-size: clamp(1.15rem, 3vw, 1.5rem);
+    font-weight: 400;
+    color: var(--white);
+    text-align: center;
+    line-height: 1.55;
+  }
+  .flip-hint {
+    position: absolute;
+    bottom: 18px;
+    right: 22px;
+    font-size: 11px;
+    color: rgba(255,255,255,0.35);
+    letter-spacing: 0.5px;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+  }
+  .flip-hint svg { opacity: 0.5; }
+
+  /* Back face – vocabulary */
+  .card-back {
+    background: var(--cream);
+    border: 2px solid var(--cream-dark);
+    transform: rotateY(180deg);
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 28px 36px;
+  }
+  .vocab-header {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 14px;
+  }
+  .vocab-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 9px;
+    width: 100%;
+  }
+  .vocab-item {
+    background: var(--navy);
+    color: var(--cream);
+    border-radius: 8px;
+    padding: 7px 14px;
+    font-size: 13.5px;
+    font-weight: 500;
+    line-height: 1.3;
+  }
+  .vocab-item em {
+    display: block;
+    font-size: 10.5px;
+    font-style: normal;
+    color: var(--gold-light);
+    font-weight: 400;
+    margin-top: 2px;
+  }
+  .back-q {
+    font-family: 'Source Serif 4', serif;
+    font-size: 13px;
+    font-style: italic;
+    color: var(--text-muted);
+    margin-top: auto;
+    padding-top: 16px;
+    border-top: 1px solid var(--cream-dark);
+    width: 100%;
+  }
+
+  /* ── Controls ── */
+  .controls {
+    display: flex;
+    gap: 14px;
+    align-items: center;
+  }
+  .btn {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    padding: 12px 24px;
+    border-radius: 10px;
+    border: none;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: transform 0.15s, box-shadow 0.15s, background 0.15s;
+    letter-spacing: 0.3px;
+  }
+  .btn:hover { transform: translateY(-2px); }
+  .btn:active { transform: translateY(0); }
+  .btn-prev {
+    background: var(--white);
+    color: var(--navy);
+    border: 2px solid var(--cream-dark);
+    box-shadow: 0 2px 8px rgba(26,44,78,0.07);
+  }
+  .btn-prev:hover { background: var(--cream-dark); }
+  .btn-next {
+    background: var(--navy);
+    color: var(--gold);
+    box-shadow: 0 4px 16px rgba(26,44,78,0.25);
+  }
+  .btn-next:hover { background: var(--navy-light); }
+  .btn-shuffle {
+    background: var(--gold);
+    color: var(--navy);
+    box-shadow: 0 4px 16px rgba(201,168,76,0.3);
+  }
+  .btn-shuffle:hover { background: var(--gold-light); }
+  .btn:disabled { opacity: 0.35; pointer-events: none; }
+
+  /* ── Tip strip ── */
+  .tip-strip {
+    margin-top: 32px;
+    background: var(--white);
+    border: 1px solid var(--cream-dark);
+    border-left: 4px solid var(--gold);
+    border-radius: 10px;
+    padding: 14px 20px;
+    max-width: var(--card-w);
+    width: 100%;
+    font-size: 13px;
+    color: var(--text-muted);
+    line-height: 1.6;
+  }
+  .tip-strip strong { color: var(--navy); font-weight: 600; }
+
+  @media (max-width: 500px) {
+    :root { --card-h: 340px; }
+    .card-back { padding: 20px 22px; }
+    .card-front { padding: 28px 24px; }
+    .controls { flex-wrap: wrap; justify-content: center; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="badge">B2 First (FCE)</div>
+  <h1>Speaking Part 1 – Question Practice</h1>
+  <p>Click a card to flip it and see useful vocabulary.</p>
+</header>
+
+<div class="counter">
+  <div class="counter-track" id="pips"></div>
+  <span class="counter-label" id="counterLabel">1 / 20</span>
+</div>
+
+<div class="card-scene" id="cardScene" onclick="flipCard()">
+  <div class="card-inner" id="cardInner">
+    <div class="card-face card-front" id="cardFront">
+      <div class="q-number" id="qNumber">Question 1</div>
+      <div class="q-text" id="qText"></div>
+      <div class="flip-hint">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 4v6h6"/><path d="M23 20v-6h-6"/><path d="M20.49 9A9 9 0 0 0 5.64 5.64L1 10m22 4l-4.64 4.36A9 9 0 0 1 3.51 15"/></svg>
+        flip for vocab
+      </div>
+    </div>
+    <div class="card-face card-back" id="cardBack">
+      <div class="vocab-header">💡 Useful Vocabulary</div>
+      <div class="vocab-grid" id="vocabGrid"></div>
+      <div class="back-q" id="backQ"></div>
+    </div>
+  </div>
+</div>
+
+<div class="controls">
+  <button class="btn btn-prev" id="prevBtn" onclick="navigate(-1)">
+    ← Prev
+  </button>
+  <button class="btn btn-shuffle" onclick="shuffleCards()">
+    ⇄ Shuffle
+  </button>
+  <button class="btn btn-next" id="nextBtn" onclick="navigate(1)">
+    Next →
+  </button>
+</div>
+
+<div class="tip-strip">
+  <strong>Part 1 reminder:</strong> The examiner asks about familiar topics — your life, interests, and opinions. Aim for <strong>2–3 sentences</strong> per answer. Avoid one-word answers, and don't prepare a speech — keep it natural and conversational.
+</div>
+
+<script>
+const cards = [
+  {
+    q: "Can you tell me a bit about where you live?",
+    vocab: [
+      { w: "neighbourhood", g: "noun" },
+      { w: "outskirts", g: "noun" },
+      { w: "lively / quiet", g: "adjectives" },
+      { w: "convenient for", g: "phrase" },
+      { w: "within walking distance", g: "phrase" },
+    ]
+  },
+  {
+    q: "What do you enjoy doing in your free time?",
+    vocab: [
+      { w: "tend to", g: "phrase" },
+      { w: "keen on + -ing", g: "grammar" },
+      { w: "unwind / relax", g: "verbs" },
+      { w: "occasionally / now and then", g: "adverbs" },
+      { w: "take up a hobby", g: "phrase" },
+    ]
+  },
+  {
+    q: "Tell me about the kind of music you like.",
+    vocab: [
+      { w: "prefer X to Y", g: "structure" },
+      { w: "upbeat / mellow", g: "adjectives" },
+      { w: "lyrics / melody", g: "nouns" },
+      { w: "it puts me in a good mood", g: "phrase" },
+      { w: "it depends on", g: "phrase" },
+    ]
+  },
+  {
+    q: "Do you prefer spending time indoors or outdoors? Why?",
+    vocab: [
+      { w: "it depends on the weather", g: "phrase" },
+      { w: "on the whole", g: "linking" },
+      { w: "fresh air / natural light", g: "nouns" },
+      { w: "cosy / peaceful", g: "adjectives" },
+      { w: "tend to prefer", g: "phrase" },
+    ]
+  },
+  {
+    q: "How important is food to you?",
+    vocab: [
+      { w: "a big part of my life", g: "phrase" },
+      { w: "home-cooked / homemade", g: "adjectives" },
+      { w: "experiment with recipes", g: "phrase" },
+      { w: "it matters a great deal", g: "phrase" },
+      { w: "I'm quite fussy about", g: "phrase" },
+    ]
+  },
+  {
+    q: "What do you find most challenging about learning English?",
+    vocab: [
+      { w: "struggle with", g: "phrase" },
+      { w: "find it difficult to", g: "structure" },
+      { w: "pronunciation / vocabulary", g: "nouns" },
+      { w: "making progress", g: "phrase" },
+      { w: "it takes time and effort", g: "phrase" },
+    ]
+  },
+  {
+    q: "Tell me about a TV series or film you've enjoyed recently.",
+    vocab: [
+      { w: "gripping / entertaining", g: "adjectives" },
+      { w: "set in + place/time", g: "structure" },
+      { w: "it kept me hooked", g: "phrase" },
+      { w: "the plot / storyline", g: "nouns" },
+      { w: "I'd highly recommend it", g: "phrase" },
+    ]
+  },
+  {
+    q: "Do you think it's important to keep fit? Why / Why not?",
+    vocab: [
+      { w: "physical / mental wellbeing", g: "noun phrases" },
+      { w: "stay active", g: "phrase" },
+      { w: "it's worth doing", g: "phrase" },
+      { w: "on a regular basis", g: "adverbial" },
+      { w: "there's no doubt that", g: "linking" },
+    ]
+  },
+  {
+    q: "How do you usually get to school or work?",
+    vocab: [
+      { w: "public transport", g: "noun" },
+      { w: "it takes roughly + time", g: "structure" },
+      { w: "convenient / time-consuming", g: "adjectives" },
+      { w: "rush hour", g: "noun" },
+      { w: "I tend to…", g: "phrase" },
+    ]
+  },
+  {
+    q: "What kind of books or reading do you enjoy?",
+    vocab: [
+      { w: "fiction / non-fiction", g: "nouns" },
+      { w: "I find it hard to get into", g: "phrase" },
+      { w: "gripping / thought-provoking", g: "adjectives" },
+      { w: "lose myself in a book", g: "phrase" },
+      { w: "to be honest", g: "discourse marker" },
+    ]
+  },
+  {
+    q: "What are your plans for the future?",
+    vocab: [
+      { w: "I'm hoping to + infinitive", g: "structure" },
+      { w: "in the long run", g: "phrase" },
+      { w: "pursue a career in", g: "phrase" },
+      { w: "eventually / at some point", g: "adverbs" },
+      { w: "I haven't decided yet, but…", g: "phrase" },
+    ]
+  },
+  {
+    q: "How do you spend your weekends?",
+    vocab: [
+      { w: "catch up with friends", g: "phrase" },
+      { w: "recharge / switch off", g: "verbs" },
+      { w: "it varies from week to week", g: "phrase" },
+      { w: "run errands", g: "phrase" },
+      { w: "make the most of", g: "phrase" },
+    ]
+  },
+  {
+    q: "Is social media a positive or negative thing in your opinion?",
+    vocab: [
+      { w: "on balance", g: "linking" },
+      { w: "keep in touch with", g: "phrase" },
+      { w: "time-consuming / addictive", g: "adjectives" },
+      { w: "it has its advantages and disadvantages", g: "phrase" },
+      { w: "in my view / personally", g: "discourse markers" },
+    ]
+  },
+  {
+    q: "Tell me about someone in your family who is important to you.",
+    vocab: [
+      { w: "get on well with", g: "phrase" },
+      { w: "supportive / reliable", g: "adjectives" },
+      { w: "look up to", g: "phrasal verb" },
+      { w: "we have a lot in common", g: "phrase" },
+      { w: "means a great deal to me", g: "phrase" },
+    ]
+  },
+  {
+    q: "Do you prefer studying alone or with other people?",
+    vocab: [
+      { w: "concentrate / focus", g: "verbs" },
+      { w: "on my own / independently", g: "phrases" },
+      { w: "bounce ideas off someone", g: "phrase" },
+      { w: "it depends on the subject", g: "phrase" },
+      { w: "I find it easier to…", g: "structure" },
+    ]
+  },
+  {
+    q: "What kind of weather do you prefer and why?",
+    vocab: [
+      { w: "I can't stand + -ing", g: "structure" },
+      { w: "it lifts my spirits", g: "phrase" },
+      { w: "mild / humid / crisp", g: "adjectives" },
+      { w: "it makes a real difference", g: "phrase" },
+      { w: "affects my mood", g: "phrase" },
+    ]
+  },
+  {
+    q: "Have you learned any new skills recently?",
+    vocab: [
+      { w: "pick up a skill", g: "phrase" },
+      { w: "give it a go", g: "phrase" },
+      { w: "I've been + -ing lately", g: "grammar" },
+      { w: "make steady progress", g: "phrase" },
+      { w: "challenging but rewarding", g: "adjectives" },
+    ]
+  },
+  {
+    q: "How do you feel about travelling?",
+    vocab: [
+      { w: "broaden your horizons", g: "phrase" },
+      { w: "experience different cultures", g: "phrase" },
+      { w: "I'd love to visit…", g: "structure" },
+      { w: "it can be exhausting", g: "phrase" },
+      { w: "the highlight of a trip", g: "phrase" },
+    ]
+  },
+  {
+    q: "What do you think makes a good friend?",
+    vocab: [
+      { w: "trustworthy / loyal", g: "adjectives" },
+      { w: "be there for someone", g: "phrase" },
+      { w: "have a lot in common", g: "phrase" },
+      { w: "I value + noun/-ing", g: "structure" },
+      { w: "as far as I'm concerned", g: "discourse marker" },
+    ]
+  },
+  {
+    q: "What subject did you enjoy most at school and why?",
+    vocab: [
+      { w: "I was good at / keen on", g: "phrases" },
+      { w: "it came naturally to me", g: "phrase" },
+      { w: "inspired by my teacher", g: "phrase" },
+      { w: "found it fascinating", g: "phrase" },
+      { w: "practical / theoretical", g: "adjectives" },
+    ]
+  }
+];
+
+let order = [...Array(cards.length).keys()];
+let current = 0;
+let isFlipped = false;
+
+function buildPips() {
+  const track = document.getElementById('pips');
+  track.innerHTML = '';
+  order.forEach((_, i) => {
+    const pip = document.createElement('div');
+    pip.className = 'pip';
+    pip.id = `pip-${i}`;
+    track.appendChild(pip);
+  });
+}
+
+function updatePips() {
+  order.forEach((_, i) => {
+    const pip = document.getElementById(`pip-${i}`);
+    pip.className = 'pip' + (i < current ? ' done' : i === current ? ' active' : '');
+  });
+}
+
+function renderCard() {
+  const card = cards[order[current]];
+  const scene = document.getElementById('cardScene');
+  // un-flip immediately (no transition glitch)
+  scene.classList.remove('flipped');
+  isFlipped = false;
+
+  // small delay so the un-flip happens before content swap
+  setTimeout(() => {
+    document.getElementById('qNumber').textContent = `Question ${current + 1}`;
+    document.getElementById('qText').textContent = card.q;
+    document.getElementById('backQ').textContent = card.q;
+
+    const grid = document.getElementById('vocabGrid');
+    grid.innerHTML = card.vocab.map(v =>
+      `<div class="vocab-item">${v.w}<em>${v.g}</em></div>`
+    ).join('');
+
+    document.getElementById('counterLabel').textContent = `${current + 1} / ${order.length}`;
+    document.getElementById('prevBtn').disabled = current === 0;
+    document.getElementById('nextBtn').disabled = current === order.length - 1;
+    updatePips();
+  }, current === 0 ? 0 : 50);
+}
+
+function flipCard() {
+  const scene = document.getElementById('cardScene');
+  isFlipped = !isFlipped;
+  scene.classList.toggle('flipped', isFlipped);
+}
+
+function navigate(dir) {
+  // un-flip first if needed
+  const scene = document.getElementById('cardScene');
+  if (isFlipped) {
+    scene.classList.remove('flipped');
+    isFlipped = false;
+    setTimeout(() => { current += dir; renderCard(); }, 320);
+  } else {
+    current += dir;
+    renderCard();
+  }
+}
+
+function shuffleCards() {
+  // Fisher-Yates shuffle
+  for (let i = order.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [order[i], order[j]] = [order[j], order[i]];
+  }
+  current = 0;
+  buildPips();
+  renderCard();
+}
+
+// Init
+buildPips();
+renderCard();
+</script>
+</body>
+</html>

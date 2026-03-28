@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FCE Reading & Use of English – Part 6 · Test 1</title>
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,300;0,400;0,600;1,400&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --navy: #1a2744; --navy-mid: #243258; --gold: #c8973a; --gold-light: #e8b86d;
+    --cream: #f9f6f0; --cream-dark: #efe9df; --text: #1e1e1e; --text-muted: #6b6b6b;
+    --correct: #2d7a4f; --correct-bg: #eaf5ee; --wrong: #b83232; --wrong-bg: #fdf0f0; --radius: 8px;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'DM Sans', sans-serif; background: var(--cream); color: var(--text); min-height: 100vh; }
+  header { background: var(--navy); color: white; }
+  .header-inner { max-width: 960px; margin: 0 auto; padding: 28px 24px 22px; display: flex; align-items: flex-end; justify-content: space-between; gap: 16px; }
+  .header-left .exam-label { font-size: 11px; letter-spacing: 2px; text-transform: uppercase; color: var(--gold-light); margin-bottom: 6px; }
+  .header-left h1 { font-family: 'Source Serif 4', serif; font-size: 26px; font-weight: 600; }
+  .header-left h1 span { color: var(--gold-light); }
+  .header-right { text-align: right; font-size: 13px; color: rgba(255,255,255,0.6); line-height: 1.6; flex-shrink: 0; }
+  .gold-bar { height: 3px; background: linear-gradient(90deg, var(--gold), var(--gold-light), transparent); }
+  main { max-width: 960px; margin: 0 auto; padding: 32px 24px 60px; }
+  .screen { display: none; } .screen.active { display: block; }
+
+  .entry-card { background: white; border-radius: var(--radius); border: 1px solid var(--cream-dark); padding: 40px; max-width: 480px; margin: 40px auto 0; box-shadow: 0 2px 16px rgba(26,39,68,0.07); }
+  .entry-card h2 { font-family: 'Source Serif 4', serif; font-size: 20px; font-weight: 600; margin-bottom: 8px; color: var(--navy); }
+  .entry-card p { font-size: 14px; color: var(--text-muted); margin-bottom: 28px; line-height: 1.6; }
+  .field { margin-bottom: 20px; }
+  .field label { display: block; font-size: 12px; font-weight: 600; letter-spacing: 0.8px; text-transform: uppercase; color: var(--navy); margin-bottom: 7px; }
+  .field input { width: 100%; padding: 11px 14px; border: 1.5px solid var(--cream-dark); border-radius: var(--radius); font-family: 'DM Sans', sans-serif; font-size: 15px; color: var(--text); background: var(--cream); transition: border-color 0.2s; outline: none; }
+  .field input:focus { border-color: var(--navy); background: white; }
+  .entry-error { font-size: 13px; color: var(--wrong); margin-bottom: 16px; display: none; }
+  .btn-primary { width: 100%; padding: 13px; background: var(--navy); color: white; border: none; border-radius: var(--radius); font-family: 'DM Sans', sans-serif; font-size: 15px; font-weight: 600; cursor: pointer; transition: background 0.2s; }
+  .btn-primary:hover { background: var(--navy-mid); }
+
+  .exam-meta { display: flex; align-items: center; gap: 12px; margin-bottom: 24px; flex-wrap: wrap; }
+  .meta-pill { background: var(--navy); color: white; font-size: 12px; font-weight: 600; letter-spacing: 0.6px; padding: 5px 12px; border-radius: 20px; }
+  .meta-student { font-size: 13px; color: var(--text-muted); margin-left: auto; }
+
+  .part6-layout { display: grid; grid-template-columns: 2fr 1fr; gap: 24px; }
+  @media (max-width: 800px) { .part6-layout { grid-template-columns: 1fr; } }
+
+  .article-card { background: white; border: 1px solid var(--cream-dark); border-radius: var(--radius); padding: 28px; box-shadow: 0 1px 8px rgba(26,39,68,0.05); }
+  .article-card h2 { font-family: 'Source Serif 4', serif; font-size: 22px; font-weight: 600; margin-bottom: 16px; color: var(--navy); }
+  .article-text { font-family: 'Source Serif 4', serif; font-size: 15px; line-height: 1.85; color: var(--text); }
+  .gap-input { width: 38px; text-align: center; font-weight: 700; font-size: 15px; margin: 0 4px; border: 2px solid var(--navy); border-radius: 4px; background: #f9f6f0; }
+
+  .paragraphs-panel { background: white; border: 1px solid var(--cream-dark); border-radius: var(--radius); padding: 20px; height: fit-content; position: sticky; top: 20px; }
+  .paragraphs-panel h3 { font-family: 'Source Serif 4', serif; font-size: 16px; margin-bottom: 12px; color: var(--navy); }
+  .para { margin-bottom: 18px; }
+  .para-label { font-weight: 700; color: var(--gold); display: inline-block; width: 22px; }
+
+  .submit-row { margin-top: 24px; display: flex; align-items: center; gap: 20px; }
+  .submit-row .btn-primary { width: auto; padding: 12px 32px; }
+  .progress-note { font-size: 13px; color: var(--text-muted); }
+
+  .results-header { display: flex; align-items: center; gap: 28px; background: var(--navy); color: white; border-radius: var(--radius); padding: 28px 32px; margin-bottom: 24px; }
+  .score-circle { width: 90px; height: 90px; border-radius: 50%; border: 3px solid var(--gold); display: flex; flex-direction: column; align-items: center; justify-content: center; flex-shrink: 0; }
+  .score-num { font-family: 'Source Serif 4', serif; font-size: 34px; font-weight: 600; line-height: 1; }
+  .score-denom { font-size: 12px; color: rgba(255,255,255,0.6); margin-top: 2px; }
+  .results-info h2 { font-family: 'Source Serif 4', serif; font-size: 22px; font-weight: 600; margin-bottom: 4px; }
+  .results-info p { font-size: 13px; color: rgba(255,255,255,0.7); margin-bottom: 8px; }
+  .pct { font-size: 28px; font-weight: 700; color: var(--gold-light); }
+  .results-list { display: flex; flex-direction: column; gap: 8px; }
+  .result-item { display: grid; grid-template-columns: 28px 1fr 28px; gap: 12px; align-items: center; padding: 12px 16px; border-radius: var(--radius); }
+  .result-item.correct { background: var(--correct-bg); } .result-item.wrong { background: var(--wrong-bg); }
+  .result-num { font-weight: 700; font-size: 14px; color: var(--navy); }
+  .correct-answer { color: var(--correct); font-weight: 600; } .wrong-answer { color: var(--wrong); }
+  .result-badge { font-size: 16px; text-align: center; }
+  .result-item.correct .result-badge { color: var(--correct); } .result-item.wrong .result-badge { color: var(--wrong); }
+  .save-status { margin-top: 20px; font-size: 13px; color: var(--text-muted); text-align: center; padding: 12px; background: white; border-radius: var(--radius); border: 1px solid var(--cream-dark); }
+  .save-status.saved { color: var(--correct); } .save-status.error { color: var(--wrong); }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-inner">
+    <div class="header-left">
+      <div class="exam-label">Cambridge English · First</div>
+      <h1>Reading & Use of English &nbsp;<span>Part 6</span></h1>
+    </div>
+    <div class="header-right">Test 1<br>Questions 37–42</div>
+  </div>
+  <div class="gold-bar"></div>
+</header>
+
+<main>
+  <!-- ENTRY -->
+  <div id="screen-entry" class="screen active">
+    <div class="entry-card">
+      <h2>Student login</h2>
+      <p>Enter your details before beginning the exercise.</p>
+      <div class="field"><label>Full name</label><input type="text" id="input-name" placeholder="e.g. Ana García" autocomplete="off"></div>
+      <div class="field"><label>Class code</label><input type="text" id="input-class" placeholder="e.g. FCE-B2" autocomplete="off"></div>
+      <div class="entry-error" id="entry-error">Please enter your name and class code.</div>
+      <button class="btn-primary" onclick="startExam()">Start exercise</button>
+    </div>
+  </div>
+
+  <!-- EXAM -->
+  <div id="screen-exam" class="screen">
+    <div class="exam-meta">
+      <div class="meta-pill">FCE · Part 6</div>
+      <div class="meta-pill">Gapped Text</div>
+      <div class="meta-student" id="meta-student"></div>
+    </div>
+
+    <div class="part6-layout">
+      <!-- Article with gaps -->
+      <div class="article-card">
+        <h2>Blind Runner</h2>
+        <div class="article-text">
+          Paul Hardy reports on a blind runner called Simon Wheatcroft who enjoys taking part in marathon and ultra-marathon races, running distances between 42 km and 160 km.<br><br>
+          Running marathons, a race of 42 km, has become increasingly popular. This distance poses extreme physical and mental challenges for anyone, but for Simon Wheatcroft there is another hurdle; he has been blind since he was 18 years old.<br><br>
+          For the past two years Simon, now 29, has been overcoming his disability to compete in marathons and ultra-marathons by training with runners who act as his guides, and also, rather uniquely, by teaching himself to run solo, out on the streets. 'I got bored exercising indoors, so thought, "I'll have a go at running outside",' he explains.<br><br>
+          <span class="q-label">37</span> <input class="gap-input" id="gap-37" maxlength="1" style="text-transform:uppercase"> Then he got bored again and wanted to try running on the roads.<br><br>
+          Weeks of gradual exploration followed, walking a route alone.<br><br>
+          <span class="q-label">38</span> <input class="gap-input" id="gap-38" maxlength="1" style="text-transform:uppercase"> It took him along little-used pavements alongside a busy main road. He also recruited technology to help him form his mental map of the area using a smartphone app, to provide feedback through headphones about his pace and distance. This information could then be cross-referenced with his knowledge of the route and any obstacles.<br><br>
+          Now, having covered hundreds of km alone on the route, Simon has been able, gradually, to phase out the app. 'When I first started I had to really concentrate to an unbelievable level to know where my feet were falling. Now it has become quite automated.'<br><br>
+          <span class="q-label">39</span> <input class="gap-input" id="gap-39" maxlength="1" style="text-transform:uppercase"> 'I did make a few mistakes early on – like running into posts. But you only run into a post once before you think "Right, I'm going to remember where that is next time",' he laughs.<br><br>
+          Joining Simon for a training session, it's striking how natural and fluid his movement is; he takes shorter, shallower, more gentle steps than most runners, using his feet to feel his way. His landmarks are minute changes in gradient and slight variations in the running surface.<br><br>
+          <span class="q-label">40</span> <input class="gap-input" id="gap-40" maxlength="1" style="text-transform:uppercase"> 'I have to believe this route is going to stay consistent, and there won't be things like roadwork signs or big rocks,' he says.<br><br>
+          <span class="q-label">41</span> <input class="gap-input" id="gap-41" maxlength="1" style="text-transform:uppercase"> 'I try to concentrate on the millions of footsteps that go right and think positively,' he explains. When it comes to racing in ultra-distance events, Simon has to use guides to run sections of the course with him; after all, it would be almost impossible to memorise a 150 km stretch of countryside by heart. However, the physical and practical advantages of training in the fresh air, on his own terms, are vast and have boosted his confidence in his running ability as well as providing inspiration to others.<br><br>
+          But for Simon the real thrill and motivation for training come from simply being able to compete on equal terms.<br><br>
+          <span class="q-label">42</span> <input class="gap-input" id="gap-42" maxlength="1" style="text-transform:uppercase"> 'I can't hide the fact I'm blind,' he says, 'but at the same time I would rather compete with everybody else and not be put into a special group. Being visually impaired doesn't mean you can't run.'
+        </div>
+      </div>
+
+      <!-- Paragraphs panel -->
+      <div class="paragraphs-panel">
+        <h3>Choose from paragraphs A–G</h3>
+        <div id="paragraphs-container"></div>
+        <div style="margin-top:16px;font-size:12px;color:var(--text-muted);font-style:italic;">One paragraph is extra and not used.</div>
+      </div>
+    </div>
+
+    <div class="submit-row">
+      <button class="btn-primary" onclick="submitExam()">Submit answers</button>
+      <div class="progress-note">Answered: <span id="answered-count">0</span> / 6</div>
+    </div>
+  </div>
+
+  <!-- RESULTS -->
+  <div id="screen-results" class="screen">
+    <div class="results-header">
+      <div class="score-circle">
+        <div class="score-num" id="res-score">0</div>
+        <div class="score-denom">out of 6</div>
+      </div>
+      <div class="results-info">
+        <h2 id="res-name">Results</h2>
+        <p id="res-class"></p>
+        <div class="pct" id="res-pct"></div>
+      </div>
+    </div>
+    <div class="results-list" id="results-list"></div>
+    <div class="save-status" id="save-status">Saving results…</div>
+  </div>
+</main>
+
+<script>
+const EXAM = {
+  title: "FCE Part 6 – Test 1",
+  level: "FCE",
+  part: 6,
+  gaps: [37,38,39,40,41,42],
+  answers: { 37:"D", 38:"G", 39:"F", 40:"A", 41:"C", 42:"E" },
+  paragraphs: {
+    A: "These provide the familiarity and consistency essential for the blind runner.",
+    B: "Their support gave him extra confidence regarding his changing surroundings.",
+    C: "Simon believes the feelings of liberation and independence he gets from running solo far outweigh any anxiety over such dangers.",
+    D: "He began by training on football pitches behind his house, running between the goalposts.",
+    E: "It gives him a great opportunity to run with everyone.",
+    F: "That's not to say the learning curve has been without incident.",
+    G: "As a result of this slow experimentation, he was able to memorise a set five-kilometre course."
+  }
+};
+
+const SUPABASE_URL = "https://rgcjrkvkwonfmvmxpyxu.supabase.co";
+const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJnY2pya3Zrd29uZm12bXhweXh1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQzMDg5MTYsImV4cCI6MjA4OTg4NDkxNn0.9O7F5TfO2NNgGSDBNXlwNV2P5d52fh3OArqvehsxHGk";
+
+let studentName = "", classCode = "", selections = {};
+
+function buildParagraphs() {
+  const container = document.getElementById("paragraphs-container");
+  container.innerHTML = "";
+  Object.keys(EXAM.paragraphs).forEach(letter => {
+    const div = document.createElement("div");
+    div.className = "para";
+    div.innerHTML = `<span class="para-label">${letter}</span> ${EXAM.paragraphs[letter]}`;
+    container.appendChild(div);
+  });
+}
+
+function startExam() {
+  const name = document.getElementById("input-name").value.trim();
+  const code = document.getElementById("input-class").value.trim().toUpperCase();
+  const err = document.getElementById("entry-error");
+  if (!name || !code) { err.style.display = "block"; return; }
+  err.style.display = "none";
+  studentName = name; classCode = code;
+  document.getElementById("meta-student").textContent = `${name}  ·  ${code}`;
+  buildParagraphs();
+  showScreen("screen-exam");
+}
+
+function submitExam() {
+  const answered = EXAM.gaps.filter(g => document.getElementById(`gap-${g}`).value.trim() !== "").length;
+  if (answered < EXAM.gaps.length) {
+    if (!confirm(`Only ${answered} of ${EXAM.gaps.length} gaps filled. Submit anyway?`)) return;
+  }
+  showResults();
+}
+
+function showResults() {
+  let score = 0;
+  const list = document.getElementById("results-list");
+  list.innerHTML = "";
+  EXAM.gaps.forEach(gapNum => {
+    const input = document.getElementById(`gap-${gapNum}`);
+    const chosen = input ? input.value.trim().toUpperCase() : "";
+    const correct = EXAM.answers[gapNum];
+    const isCorrect = chosen === correct;
+    if (isCorrect) score++;
+    const item = document.createElement("div");
+    item.className = `result-item ${isCorrect ? "correct" : "wrong"}`;
+    let detailHTML = isCorrect 
+      ? `<span class="correct-answer">✓ ${correct}</span>` 
+      : (chosen 
+        ? `<span class="wrong-answer">${chosen}</span> → <span class="correct-answer">✓ ${correct}</span>` 
+        : `<span style="color:var(--text-muted);font-style:italic;">Not answered</span> → <span class="correct-answer">✓ ${correct}</span>`);
+    item.innerHTML = `<div class="result-num">${gapNum}</div><div class="result-detail">${detailHTML}</div><div class="result-badge">${isCorrect ? "✓" : "✗"}</div>`;
+    list.appendChild(item);
+  });
+  const pct = Math.round((score / EXAM.gaps.length) * 100);
+  document.getElementById("res-score").textContent = score;
+  document.getElementById("res-name").textContent = studentName;
+  document.getElementById("res-class").textContent = `Class: ${classCode} · ${EXAM.title}`;
+  document.getElementById("res-pct").textContent = `${pct}%`;
+  showScreen("screen-results");
+  saveToSupabase(score, pct);
+}
+
+async function saveToSupabase(score, pct) {
+  const status = document.getElementById("save-status");
+  const answers = EXAM.gaps.map(g => ({
+    question_number: g,
+    student_answer: document.getElementById(`gap-${g}`).value.trim().toUpperCase() || null,
+    correct_answer: EXAM.answers[g],
+    is_correct: document.getElementById(`gap-${g}`).value.trim().toUpperCase() === EXAM.answers[g]
+  }));
+  const payload = {
+    student_name: studentName, class_code: classCode, exam_title: EXAM.title,
+    exam_level: EXAM.level, exam_part: EXAM.part, score, total_questions: EXAM.gaps.length,
+    percentage: pct, answers, submitted_at: new Date().toISOString()
+  };
+  try {
+    const res = await fetch(`${SUPABASE_URL}/rest/v1/exam_results`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json", "apikey": SUPABASE_KEY, "Authorization": `Bearer ${SUPABASE_KEY}`, "Prefer": "return=minimal" },
+      body: JSON.stringify(payload)
+    });
+    if (res.ok) { status.textContent = "✓ Results saved successfully."; status.className = "save-status saved"; }
+    else { status.textContent = "Results could not be saved. Please notify your teacher."; status.className = "save-status error"; }
+  } catch (e) {
+    status.textContent = "Results could not be saved (network error). Please notify your teacher.";
+    status.className = "save-status error";
+  }
+}
+
+function showScreen(id) {
+  document.querySelectorAll(".screen").forEach(s => s.classList.remove("active"));
+  document.getElementById(id).classList.add("active");
+  window.scrollTo(0, 0);
+}
+</script>
+</body>
+</html>
